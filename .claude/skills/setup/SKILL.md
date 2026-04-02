@@ -11,45 +11,6 @@ Run setup steps automatically. Only pause when user action is required (channel 
 
 **UX Note:** Use `AskUserQuestion` for multiple-choice questions only (e.g. "Docker or Apple Container?", "which channels?"). Do NOT use it when free-text input is needed (e.g. phone numbers, tokens, paths) — just ask the question in plain text and wait for the user's reply.
 
-## 0. Git & Fork Setup
-
-Check the git remote configuration to ensure the user has a fork and upstream is configured.
-
-Run:
-- `git remote -v`
-
-**Case A — `origin` points to `qwibitai/nanoclaw` (user cloned directly):**
-
-The user cloned instead of forking. AskUserQuestion: "You cloned AEGIS directly. We recommend forking so you can push your customizations. Would you like to set up a fork?"
-- Fork now (recommended) — walk them through it
-- Continue without fork — they'll only have local changes
-
-If fork: instruct the user to fork `qwibitai/nanoclaw` on GitHub (they need to do this in their browser), then ask them for their GitHub username. Run:
-```bash
-git remote rename origin upstream
-git remote add origin https://github.com/<their-username>/nanoclaw.git
-git push --force origin main
-```
-Verify with `git remote -v`.
-
-If continue without fork: add upstream so they can still pull updates:
-```bash
-git remote add upstream https://github.com/qwibitai/nanoclaw.git
-```
-
-**Case B — `origin` points to user's fork, no `upstream` remote:**
-
-Add upstream:
-```bash
-git remote add upstream https://github.com/qwibitai/nanoclaw.git
-```
-
-**Case C — both `origin` (user's fork) and `upstream` (qwibitai) exist:**
-
-Already configured. Continue.
-
-**Verify:** `git remote -v` should show `origin` → user's repo, `upstream` → `qwibitai/nanoclaw.git`.
-
 ## 1. Bootstrap (Node.js + Dependencies)
 
 Run `bash setup.sh` and parse the status block.
@@ -121,6 +82,10 @@ Run `npx tsx setup/index.ts --step container -- --runtime <chosen>` and parse th
 - Dockerfile syntax or missing files: diagnose from the log and fix, then retry.
 
 **If TEST_OK=false but BUILD_OK=true:** The image built but won't run. Check logs — common cause is runtime not fully started. Wait a moment and retry the test.
+
+### 3d. Configure Model
+
+After a successful container build, configure Opus 4.6 as the default model. This ensures every new group automatically uses the best available model. The model configuration is set in `src/container-runner.ts` where per-group `settings.json` is written — it should include `"model": "claude-opus-4-6"`.
 
 ## 4. Credential System
 
@@ -304,7 +269,7 @@ Run `npx tsx setup/index.ts --step verify` and parse the status block.
 - REGISTERED_GROUPS=0 → re-invoke the channel skills from step 5
 - MOUNT_ALLOWLIST=missing → `npx tsx setup/index.ts --step mounts -- --empty`
 
-Tell user to test: send a message in their registered chat. Show: `tail -f logs/aegis.log`
+Tell the user: **AEGIS is ready!** Send a message in their registered chat to test. Show: `tail -f logs/aegis.log`
 
 ## Troubleshooting
 
