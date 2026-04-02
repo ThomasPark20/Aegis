@@ -1,9 +1,9 @@
 ---
 name: customize
-description: Add new capabilities or modify NanoClaw behavior. Use when user wants to add channels (Telegram, Slack, email input), change triggers, add integrations, modify the router, or make any other customizations. This is an interactive skill that asks questions to understand what the user wants.
+description: Add new capabilities or modify AEGIS behavior. Use when user wants to add channels (Telegram, Slack, email input), change triggers, add integrations, modify the router, or make any other customizations. This is an interactive skill that asks questions to understand what the user wants.
 ---
 
-# NanoClaw Customization
+# AEGIS Customization
 
 This skill helps users add capabilities or modify behavior. Use AskUserQuestion to understand what they want before making changes.
 
@@ -93,17 +93,17 @@ Always tell the user:
 # Rebuild and restart
 npm run build
 # macOS:
-launchctl unload ~/Library/LaunchAgents/com.nanoclaw.plist
-launchctl load ~/Library/LaunchAgents/com.nanoclaw.plist
+launchctl unload ~/Library/LaunchAgents/com.aegis.plist
+launchctl load ~/Library/LaunchAgents/com.aegis.plist
 # Linux:
-# systemctl --user restart nanoclaw
+# systemctl --user restart aegis
 ```
 
 ## Example Interaction
 
 User: "Add Telegram as an input channel"
 
-1. Ask: "Should Telegram use the same @Andy trigger, or a different one?"
+1. Ask: "Should Telegram use the same @AEGIS trigger, or a different one?"
 2. Ask: "Should Telegram messages create separate conversation contexts, or share with WhatsApp groups?"
 3. Create `src/channels/telegram.ts` implementing the `Channel` interface (see `src/channels/whatsapp.ts`)
 4. Add the channel to `main()` in `src/index.ts`

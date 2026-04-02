@@ -1,11 +1,11 @@
 ---
 name: add-discord
-description: Add Discord bot channel integration to NanoClaw.
+description: Add Discord bot channel integration to AEGIS.
 ---
 
 # Add Discord Channel
 
-This skill adds Discord support to NanoClaw, then walks through interactive setup.
+This skill adds Discord support to AEGIS, then walks through interactive setup.
 
 ## Phase 1: Pre-flight
 
@@ -32,7 +32,7 @@ git remote -v
 If `discord` is missing, add it:
 
 ```bash
-git remote add discord https://github.com/qwibitai/nanoclaw-discord.git
+git remote add discord https://github.com/qwibitai/aegis-discord.git
 ```
 
 ### Merge the skill branch
@@ -74,7 +74,7 @@ If the user doesn't have a bot token, tell them:
 > I need you to create a Discord bot:
 >
 > 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-> 2. Click **New Application** and give it a name (e.g., "Andy Assistant")
+> 2. Click **New Application** and give it a name (e.g., "AEGIS Assistant")
 > 3. Go to the **Bot** tab on the left sidebar
 > 4. Click **Reset Token** to generate a new bot token — copy it immediately (you can only see it once)
 > 5. Under **Privileged Gateway Intents**, enable:
@@ -109,7 +109,7 @@ The container reads environment from `data/env/env`, not `.env` directly.
 
 ```bash
 npm run build
-launchctl kickstart -k gui/$(id -u)/com.nanoclaw
+launchctl kickstart -k gui/$(id -u)/com.aegis
 ```
 
 ## Phase 4: Registration
@@ -159,7 +159,7 @@ Tell the user:
 ### Check logs if needed
 
 ```bash
-tail -f logs/nanoclaw.log
+tail -f logs/aegis.log
 ```
 
 ## Troubleshooting
@@ -169,7 +169,7 @@ tail -f logs/nanoclaw.log
 1. Check `DISCORD_BOT_TOKEN` is set in `.env` AND synced to `data/env/env`
 2. Check channel is registered: `sqlite3 store/messages.db "SELECT * FROM registered_groups WHERE jid LIKE 'dc:%'"`
 3. For non-main channels: message must include trigger pattern (@mention the bot)
-4. Service is running: `launchctl list | grep nanoclaw`
+4. Service is running: `launchctl list | grep aegis`
 5. Verify the bot has been invited to the server (check OAuth2 URL was used)
 
 ### Bot only responds to @mentions
@@ -184,7 +184,7 @@ If the bot connects but can't read messages, ensure:
 1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Select your application > **Bot** tab
 3. Under **Privileged Gateway Intents**, enable **Message Content Intent**
-4. Restart NanoClaw
+4. Restart AEGIS
 
 ### Getting Channel ID
 
@@ -198,6 +198,6 @@ The Discord bot supports:
 - Text messages in registered channels
 - Attachment descriptions (images, videos, files shown as placeholders)
 - Reply context (shows who the user is replying to)
-- @mention translation (Discord `<@botId>` → NanoClaw trigger format)
+- @mention translation (Discord `<@botId>` → AEGIS trigger format)
 - Message splitting for responses over 2000 characters
 - Typing indicators while the agent processes
