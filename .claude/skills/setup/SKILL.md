@@ -11,45 +11,6 @@ Run setup steps automatically. Only pause when user action is required (channel 
 
 **UX Note:** Use `AskUserQuestion` for multiple-choice questions only (e.g. "Docker or Apple Container?", "which channels?"). Do NOT use it when free-text input is needed (e.g. phone numbers, tokens, paths) — just ask the question in plain text and wait for the user's reply.
 
-## 0. Git & Fork Setup
-
-Check the git remote configuration to ensure the user has a fork and upstream is configured.
-
-Run:
-- `git remote -v`
-
-**Case A — `origin` points to `qwibitai/aegis` (user cloned directly):**
-
-The user cloned instead of forking. AskUserQuestion: "You cloned AEGIS directly. We recommend forking so you can push your customizations. Would you like to set up a fork?"
-- Fork now (recommended) — walk them through it
-- Continue without fork — they'll only have local changes
-
-If fork: instruct the user to fork `qwibitai/aegis` on GitHub (they need to do this in their browser), then ask them for their GitHub username. Run:
-```bash
-git remote rename origin upstream
-git remote add origin https://github.com/<their-username>/aegis.git
-git push --force origin main
-```
-Verify with `git remote -v`.
-
-If continue without fork: add upstream so they can still pull updates:
-```bash
-git remote add upstream https://github.com/qwibitai/aegis.git
-```
-
-**Case B — `origin` points to user's fork, no `upstream` remote:**
-
-Add upstream:
-```bash
-git remote add upstream https://github.com/qwibitai/aegis.git
-```
-
-**Case C — both `origin` (user's fork) and `upstream` (qwibitai) exist:**
-
-Already configured. Continue.
-
-**Verify:** `git remote -v` should show `origin` → user's repo, `upstream` → `qwibitai/aegis.git`.
-
 ## 1. Bootstrap (Node.js + Dependencies)
 
 Run `bash setup.sh` and parse the status block.
@@ -262,7 +223,17 @@ AskUserQuestion: Agent access to external directories?
 **No:** `npx tsx setup/index.ts --step mounts -- --empty`
 **Yes:** Collect paths/permissions. `npx tsx setup/index.ts --step mounts -- --json '{"allowedRoots":[...],"blockedPatterns":[],"nonMainReadOnly":true}'`
 
-## 7. Start Service
+## 7. Configure Model
+
+AEGIS uses Claude Opus 4.6 by default. The model is configured in `src/container-runner.ts` (settings.json written per group). Verify:
+
+```bash
+grep 'claude-opus-4-6' src/container-runner.ts
+```
+
+If not present, this was already set during the AEGIS build. No user action needed.
+
+## 8. Start Service
 
 If service already running: unload first.
 - macOS: `launchctl unload ~/Library/LaunchAgents/com.aegis.plist`
@@ -292,7 +263,7 @@ Replace `USERNAME` with the actual username (from `whoami`). Run the two `sudo` 
 - Linux: check `systemctl --user status aegis`.
 - Re-run the service step after fixing.
 
-## 8. Verify
+## 9. Verify
 
 Run `npx tsx setup/index.ts --step verify` and parse the status block.
 
@@ -319,7 +290,7 @@ Tell user to test: send a message in their registered chat. Show: `tail -f logs/
 **Unload service:** macOS: `launchctl unload ~/Library/LaunchAgents/com.aegis.plist` | Linux: `systemctl --user stop aegis`
 
 
-## 9. Diagnostics
+## 10. Diagnostics
 
 1. Use the Read tool to read `.claude/skills/setup/diagnostics.md`.
 2. Follow every step in that file before completing setup.
