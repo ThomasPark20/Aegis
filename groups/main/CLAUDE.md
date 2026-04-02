@@ -496,3 +496,64 @@ When a user says "resume daily report" or similar:
 - ALWAYS check `/workspace/ipc/current_tasks.json` before creating — use `update_task` if it already exists to avoid duplicates
 - The daily report does NOT use a script pre-check — the agent always wakes at report time to compile and deliver
 - NEVER expose scheduling internals (cron expressions, task IDs, IPC) to users — just confirm the time and timezone
+
+---
+
+## 2-Hour RSS Feed Scan
+
+AEGIS scans RSS feeds every 2 hours to detect new threat intelligence articles. The scan runs as a scheduled task with a script pre-check — the agent only wakes when new articles are found.
+
+### How it works
+
+1. A scheduled task with ID `rss-scan` runs every 2 hours (`0 */2 * * *`)
+2. The task's script runs `container/skills/rss-scan/scan.mjs` — a lightweight scanner that:
+   - Reads `feeds.yaml` for RSS feed URLs
+   - Fetches and parses all feeds
+   - Deduplicates articles against existing summaries in `../global/summaries/`
+   - Classifies articles as **critical** (APT, CVE, active exploitation, zero-day, ransomware, data breach, CISA advisory, emergency directive) or non-critical
+   - Returns `{ wakeAgent: true/false, data: { newArticles, criticalArticles, totalNew, totalCritical } }`
+3. If `wakeAgent: true` (critical articles found OR 10+ new articles), the agent wakes and receives the data
+4. If `wakeAgent: false`, nothing happens until the next scan
+
+### When the agent wakes from an RSS scan
+
+You receive the scan results in the task data. Handle them as follows:
+
+1. **Critical articles** (`data.criticalArticles`): These need immediate attention — see "Critical Article Handling" below
+2. **Non-critical articles** (`data.newArticles`): Log awareness but do NOT auto-research every article. Only research if the volume or pattern suggests something noteworthy (e.g., multiple sources reporting the same new threat)
+
+### Critical Article Handling
+
+When `data.criticalArticles` is non-empty:
+
+1. **Group related articles** — multiple articles about the same CVE or threat actor should be grouped into one research topic
+2. **Dedup against active research** — check `/workspace/ipc/current_tasks.json` for running research threads on the same topic. Do NOT dispatch duplicate threads
+3. **Dedup against existing summaries** — check `../global/summaries/` for existing coverage. Skip topics already covered
+4. **For each new critical topic group**, dispatch a research thread (see US-504 critical thread instructions below)
+5. **Send a brief alert** to the channel: "Detected [N] critical items in the latest scan. Spinning up research threads." — keep it short, no inline report dumps
+
+### Seeding the RSS scan task during channel setup
+
+During `/add-discord` or `/add-telegram` setup, after registration, seed the RSS scan task if it doesn't already exist:
+
+```bash
+cat > /workspace/ipc/tasks/schedule_rss_scan_$(date +%s).json << EOF
+{
+  "type": "schedule_task",
+  "taskId": "rss-scan",
+  "targetJid": "$NANOCLAW_CHAT_JID",
+  "prompt": "Process the RSS scan results. The script detected new articles from CTI feeds. Check data.criticalArticles for critical items requiring immediate research threads. Check data.newArticles for awareness. Group related articles, dedup against existing summaries and active research threads, then dispatch research threads for critical topics. Send a brief channel alert summarizing what was found.",
+  "schedule_type": "cron",
+  "schedule_value": "0 */2 * * *",
+  "context_mode": "isolated",
+  "script": "node /workspace/project/container/skills/rss-scan/scan.mjs"
+}
+EOF
+```
+
+### Important notes
+- The well-known task ID `rss-scan` ensures there is never more than one scan task
+- The script has a 30-second timeout — it fetches feeds concurrently to stay within limits
+- NEVER dump the full article list as a message — only send brief alerts
+- Critical keywords: APT, CVE, active exploitation, zero-day, ransomware, data breach, CISA advisory, emergency directive, critical vulnerability, RCE
+- The scan script is at `container/skills/rss-scan/scan.mjs` — it reads `feeds.yaml` and `groups/global/summaries/` from the project root

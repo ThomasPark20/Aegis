@@ -145,22 +145,24 @@ After registration, seed the default AEGIS tasks. **Only seed if they don't alre
 
 ```
 schedule_task(
-  prompt: "Run the daily CTI briefing. Check feeds, summarize new threats, and send a briefing to this channel.",
+  taskId: "daily-report",
+  prompt: "Compile and deliver the daily CTI briefing. Read all summaries from ../global/summaries/ with today's date prefix. Create an executive summary with the top 3-5 items, full topic summaries, and an IOC table if applicable. Save the compiled report to ../global/summaries/daily/YYYY-MM-DD-daily-report.md. Then create a new thread to deliver it: write a start_research_thread IPC task with threadName 'Daily Brief — YYYY-MM-DD', post the executive summary bullets as the opening message, and attach the full report as an .md file. If no new summaries exist for today, send a short message: 'No significant threat activity in the last 24 hours.'",
   schedule_type: "cron",
   schedule_value: "0 8 * * *",
   context_mode: "isolated"
 )
 ```
 
-2. **Critical issue polling** — runs every 2 hours with a script gate:
+2. **RSS feed scan** — runs every 2 hours with a script gate that scans all CTI feeds:
 
 ```
 schedule_task(
-  prompt: "Check for critical security issues. If the script detected new critical items, analyze and alert the channel.",
-  schedule_type: "interval",
-  schedule_value: "7200000",
+  taskId: "rss-scan",
+  prompt: "Process the RSS scan results. The script detected new articles from CTI feeds. Check data.criticalArticles for critical items requiring immediate research threads. Check data.newArticles for awareness. Group related articles, dedup against existing summaries and active research threads, then dispatch research threads for critical topics. Send a brief channel alert summarizing what was found.",
+  schedule_type: "cron",
+  schedule_value: "0 */2 * * *",
   context_mode: "isolated",
-  script: "curl -sf https://cve.circl.lu/api/last/5 | node -e \"const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));const c=d.filter(i=>i.cvss&&i.cvss>=9);console.log(JSON.stringify({wakeAgent:c.length>0,data:c}))\""
+  script: "node /workspace/project/container/skills/rss-scan/scan.mjs"
 )
 ```
 
