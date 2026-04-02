@@ -406,3 +406,93 @@ If a user wants tasks running more than ~2x daily and a script can't reduce agen
 - Suggest restructuring with a script that checks the condition first
 - If the user needs an LLM to evaluate data, suggest using an API key with direct Anthropic API calls inside the script
 - Help the user find the minimum viable frequency
+
+---
+
+## Daily Report Scheduling
+
+Users can configure when they receive their daily CTI briefing using natural language. The TIMEZONE environment variable (from config.ts) determines the timezone for all scheduling.
+
+### Handling "set daily report at X" requests
+
+When a user says something like "set daily report at 9am", "schedule my report for 7:30am", "I want my briefing at 8am", or similar:
+
+1. Parse the requested time from the natural language (e.g. "9am" → 09:00, "7:30pm" → 19:30)
+2. Convert to a cron expression: hour and minute fields, daily (`0 9 * * *` for 9:00 AM)
+3. Check if a task with ID `daily-report` already exists by reading `/workspace/ipc/current_tasks.json`
+4. **If task exists:** Use IPC `update_task` to change the schedule:
+   ```bash
+   cat > /workspace/ipc/tasks/update_daily_report_$(date +%s).json << EOF
+   {
+     "type": "update_task",
+     "taskId": "daily-report",
+     "schedule_value": "0 9 * * *"
+   }
+   EOF
+   ```
+5. **If task does NOT exist:** Use IPC `schedule_task` to create it:
+   ```bash
+   cat > /workspace/ipc/tasks/schedule_daily_report_$(date +%s).json << EOF
+   {
+     "type": "schedule_task",
+     "taskId": "daily-report",
+     "targetJid": "$NANOCLAW_CHAT_JID",
+     "prompt": "Compile and deliver the daily CTI briefing. Read all summaries from ../global/summaries/ with today's date prefix. Create an executive summary with the top 3-5 items, full topic summaries, and an IOC table if applicable. Save the compiled report to ../global/summaries/daily/$(date +%Y-%m-%d)-daily-report.md. Then create a new thread to deliver it: write a start_research_thread IPC task with threadName 'Daily Brief — $(date +%Y-%m-%d)', post the executive summary bullets as the opening message, and attach the full report as an .md file. If no new summaries exist for today, send a short message: 'No significant threat activity in the last 24 hours.'",
+     "schedule_type": "cron",
+     "schedule_value": "0 9 * * *",
+     "context_mode": "isolated"
+   }
+   EOF
+   ```
+6. Confirm to the user: "Daily report scheduled for 9:00 AM (America/New_York)" — use the actual TIMEZONE value in your confirmation.
+
+### Handling "cancel daily report" requests
+
+When a user says "cancel daily report", "stop the daily briefing", "turn off daily reports", or similar:
+
+1. Use IPC `cancel_task` to remove the scheduled task:
+   ```bash
+   cat > /workspace/ipc/tasks/cancel_daily_report_$(date +%s).json << EOF
+   {
+     "type": "cancel_task",
+     "taskId": "daily-report"
+   }
+   EOF
+   ```
+2. Confirm: "Daily report cancelled. Say 'set daily report at [time]' to re-enable it."
+
+### Handling "pause daily report" requests
+
+When a user says "pause daily report", "hold the daily briefing", or similar:
+
+1. Use IPC `pause_task`:
+   ```bash
+   cat > /workspace/ipc/tasks/pause_daily_report_$(date +%s).json << EOF
+   {
+     "type": "pause_task",
+     "taskId": "daily-report"
+   }
+   EOF
+   ```
+2. Confirm: "Daily report paused. Say 'resume daily report' to re-enable it."
+
+### Handling "resume daily report" requests
+
+When a user says "resume daily report" or similar:
+
+1. Use IPC `resume_task`:
+   ```bash
+   cat > /workspace/ipc/tasks/resume_daily_report_$(date +%s).json << EOF
+   {
+     "type": "resume_task",
+     "taskId": "daily-report"
+   }
+   EOF
+   ```
+2. Confirm: "Daily report resumed."
+
+### Important notes
+- The well-known task ID `daily-report` ensures there is never more than one daily report task
+- ALWAYS check `/workspace/ipc/current_tasks.json` before creating — use `update_task` if it already exists to avoid duplicates
+- The daily report does NOT use a script pre-check — the agent always wakes at report time to compile and deliver
+- NEVER expose scheduling internals (cron expressions, task IDs, IPC) to users — just confirm the time and timezone
