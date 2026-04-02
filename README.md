@@ -29,4 +29,4 @@ Git, Node.js 22+, Docker, [Claude Code](https://docs.anthropic.com/en/docs/claud
 
 ## License
 
-ISC
+MIT
