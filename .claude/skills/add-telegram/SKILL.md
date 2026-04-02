@@ -75,9 +75,22 @@ Tell the user:
 
 ```bash
 npm run build
-launchctl kickstart -k gui/$(id -u)/com.aegis  # macOS
-# Linux: systemctl --user restart aegis
 ```
+
+Restart the service. Use whichever matches the current state:
+
+```bash
+# macOS — if service is already loaded:
+launchctl kickstart -k gui/$(id -u)/com.nanoclaw
+
+# macOS — if service is NOT loaded yet (fresh install):
+launchctl load ~/Library/LaunchAgents/com.nanoclaw.plist
+
+# Linux:
+systemctl --user restart nanoclaw
+```
+
+To check if the service is loaded: `launchctl list | grep nanoclaw`. If no output, it's not loaded — use `load`.
 
 ## Phase 3: Registration
 
