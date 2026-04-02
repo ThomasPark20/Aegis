@@ -11,8 +11,9 @@ git clone https://github.com/ThomasPark20/Aegis.git
 cd Aegis
 claude
 /setup
-/add-discord    # or /add-telegram
 ```
+
+`/setup` walks you through everything: dependencies, Docker, API credentials, and channel setup (Discord/Telegram). It'll ask which channels you want and guide you through bot creation, permissions, and registration — all in one flow.
 
 ## What It Does
 
@@ -20,8 +21,7 @@ claude
 - **Generates validated detection rules** — Sigma, YARA, Snort — validated with real CLI tools
 - **Daily briefing at 8am ET** — RSS + Reddit feeds, filtered, deduplicated, researched
 - **Critical alerts every 2 hours** — zero-day, CVSS 9+, active exploitation
-- **Never blocks chat** — research runs in parallel containers
-- **Thread-aware** — follow-up questions just work
+- **Research threads** — each research request spins up a Discord thread with its own agent. Follow up, add context, ask questions — all in the thread. Main chat stays clean.
 
 ## Prerequisites
 
