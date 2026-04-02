@@ -172,7 +172,10 @@ function registerGroup(jid: string, group: RegisteredGroup): void {
       let content = fs.readFileSync(templateFile, 'utf-8');
       if (ASSISTANT_NAME !== 'AEGIS') {
         content = content.replace(/^# AEGIS$/m, `# ${ASSISTANT_NAME}`);
-        content = content.replace(/You are AEGIS/g, `You are ${ASSISTANT_NAME}`);
+        content = content.replace(
+          /You are AEGIS/g,
+          `You are ${ASSISTANT_NAME}`,
+        );
       }
       fs.writeFileSync(groupMdFile, content);
       logger.info({ folder: group.folder }, 'Created CLAUDE.md from template');
@@ -444,7 +447,7 @@ async function startMessageLoop(): Promise<void> {
   }
   messageLoopRunning = true;
 
-  logger.info(`NanoClaw running (default trigger: ${DEFAULT_TRIGGER})`);
+  logger.info(`AEGIS running (default trigger: ${DEFAULT_TRIGGER})`);
 
   while (true) {
     try {
@@ -762,7 +765,7 @@ const isDirectRun =
 
 if (isDirectRun) {
   main().catch((err) => {
-    logger.error({ err }, 'Failed to start NanoClaw');
+    logger.error({ err }, 'Failed to start AEGIS');
     process.exit(1);
   });
 }

@@ -1,13 +1,13 @@
 ---
-name: update-nanoclaw
-description: Efficiently bring upstream NanoClaw updates into a customized install, with preview, selective cherry-pick, and low token usage.
+name: update-aegis
+description: Efficiently bring upstream AEGIS updates into a customized install, with preview, selective cherry-pick, and low token usage.
 ---
 
 # About
 
-Your NanoClaw fork drifts from upstream as you customize it. This skill pulls upstream changes into your install without losing your modifications.
+Your AEGIS fork drifts from upstream as you customize it. This skill pulls upstream changes into your install without losing your modifications.
 
-Run `/update-nanoclaw` in Claude Code.
+Run `/update-aegis` in Claude Code.
 
 ## How it works
 
@@ -50,7 +50,7 @@ Only opens files with actual conflicts. Uses `git log`, `git diff`, and `git sta
 ---
 
 # Goal
-Help a user with a customized NanoClaw install safely incorporate upstream changes without a fresh reinstall and without blowing tokens.
+Help a user with a customized AEGIS install safely incorporate upstream changes without a fresh reinstall and without blowing tokens.
 
 # Operating principles
 - Never proceed with a dirty working tree.
@@ -231,11 +231,11 @@ Tell the user:
 - To rollback: `git reset --hard <backup-tag-from-step-1>`
 - Backup branch also exists: `backup/pre-update-<HASH>-<TIMESTAMP>`
 - Restart the service to apply changes:
-  - If using launchd: `launchctl unload ~/Library/LaunchAgents/com.nanoclaw.plist && launchctl load ~/Library/LaunchAgents/com.nanoclaw.plist`
+  - If using launchd: `launchctl unload ~/Library/LaunchAgents/com.aegis.plist && launchctl load ~/Library/LaunchAgents/com.aegis.plist`
   - If running manually: restart `npm run dev`
 
 
 ## Diagnostics
 
-1. Use the Read tool to read `.claude/skills/update-nanoclaw/diagnostics.md`.
+1. Use the Read tool to read `.claude/skills/update-aegis/diagnostics.md`.
 2. Follow every step in that file before finishing.
