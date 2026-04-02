@@ -1,212 +1,207 @@
-<p align="center">
-  <img src="assets/nanoclaw-logo.png" alt="NanoClaw" width="400">
-</p>
+# AEGIS — CTI Research & Detection Platform
 
-<p align="center">
-  An AI assistant that runs agents securely in their own containers. Lightweight, built to be easily understood and completely customized for your needs.
-</p>
-
-<p align="center">
-  <a href="https://nanoclaw.dev">nanoclaw.dev</a>&nbsp; • &nbsp;
-  <a href="https://docs.nanoclaw.dev">docs</a>&nbsp; • &nbsp;
-  <a href="README_zh.md">中文</a>&nbsp; • &nbsp;
-  <a href="README_ja.md">日本語</a>&nbsp; • &nbsp;
-  <a href="https://discord.gg/VDdww8qS42"><img src="https://img.shields.io/discord/1470188214710046894?label=Discord&logo=discord&v=2" alt="Discord" valign="middle"></a>&nbsp; • &nbsp;
-  <a href="repo-tokens"><img src="repo-tokens/badge.svg" alt="34.9k tokens, 17% of context window" valign="middle"></a>
-</p>
-
----
-
-## Why I Built NanoClaw
-
-[OpenClaw](https://github.com/openclaw/openclaw) is an impressive project, but I wouldn't have been able to sleep if I had given complex software I didn't understand full access to my life. OpenClaw has nearly half a million lines of code, 53 config files, and 70+ dependencies. Its security is at the application level (allowlists, pairing codes) rather than true OS-level isolation. Everything runs in one Node process with shared memory.
-
-NanoClaw provides that same core functionality, but in a codebase small enough to understand: one process and a handful of files. Claude agents run in their own Linux containers with filesystem isolation, not merely behind permission checks.
+AEGIS is a cyber threat intelligence (CTI) research and detection engineering platform. It monitors RSS feeds for emerging threats, researches them using primary sources, generates validated Sigma/YARA/Snort detection rules, and delivers reports to your team via Discord or Telegram — all automatically.
 
 ## Quick Start
 
 ```bash
-gh repo fork qwibitai/nanoclaw --clone
-cd nanoclaw
+git clone git@github.com:ThomasPark20/Aegis.git
+cd aegis
 claude
+# Then run:
+/setup
+# After setup, connect a channel:
+/add-discord   # or /add-telegram
 ```
 
-<details>
-<summary>Without GitHub CLI</summary>
+## Prerequisites
 
-1. Fork [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) on GitHub (click the Fork button)
-2. `git clone https://github.com/<your-username>/nanoclaw.git`
-3. `cd nanoclaw`
-4. `claude`
+- **Git** — to clone the repo
+- **Node.js 22+** — runtime (`node --version` to check)
+- **Docker** — for running agent containers (`docker --version` to check)
+- **Anthropic API key or Claude Pro/Max subscription** — for the AI backend
+- **Claude Code CLI** — `npm install -g @anthropic-ai/claude-code`
 
-</details>
+## What `/setup` Does
 
-Then run `/setup`. Claude Code handles everything: dependencies, authentication, container setup and service configuration.
+The setup skill walks you through everything:
 
-> **Note:** Commands prefixed with `/` (like `/setup`, `/add-whatsapp`) are [Claude Code skills](https://code.claude.com/docs/en/skills). Type them inside the `claude` CLI prompt, not in your regular terminal. If you don't have Claude Code installed, get it at [claude.com/product/claude-code](https://claude.com/product/claude-code).
+1. **Dependencies** — installs Node.js packages, builds native modules
+2. **Container build** — builds the agent Docker image with Chromium, sigma-cli, yarac, and snort
+3. **Model configuration** — sets Claude Opus 4.6 as the default model
+4. **Credential system** — configures OneCLI for secure API key management
+5. **Service start** — installs and starts the background service (launchd on macOS, systemd on Linux)
 
-## Philosophy
+## Connecting Discord
 
-**Small enough to understand.** One process, a few source files and no microservices. If you want to understand the full NanoClaw codebase, just ask Claude Code to walk you through it.
+Full walkthrough — no external docs needed:
 
-**Secure by isolation.** Agents run in Linux containers (Apple Container on macOS, or Docker) and they can only see what's explicitly mounted. Bash access is safe because commands run inside the container, not on your host.
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click **New Application**, give it a name (e.g., "AEGIS")
+3. Go to **Bot** tab → **Reset Token** → copy the token
+4. Under **Privileged Gateway Intents**, enable:
+   - **Message Content Intent** (required)
+   - **Server Members Intent** (optional)
+5. Go to **OAuth2** → **URL Generator**:
+   - Scopes: `bot`
+   - Permissions: `Send Messages`, `Read Message History`, `View Channels`, `Attach Files`
+   - Copy the URL, open in browser, invite bot to your server
+6. In Claude Code, run `/add-discord`
+7. Paste your bot token when prompted
+8. Enable **Developer Mode** in Discord (Settings → Advanced)
+9. Right-click the target channel → **Copy Channel ID**
+10. Provide the channel ID to complete registration
 
-**Built for the individual user.** NanoClaw isn't a monolithic framework; it's software that fits each user's exact needs. Instead of becoming bloatware, NanoClaw is designed to be bespoke. You make your own fork and have Claude Code modify it to match your needs.
+## Connecting Telegram
 
-**Customization = code changes.** No configuration sprawl. Want different behavior? Modify the code. The codebase is small enough that it's safe to make changes.
-
-**AI-native.**
-- No installation wizard; Claude Code guides setup.
-- No monitoring dashboard; ask Claude what's happening.
-- No debugging tools; describe the problem and Claude fixes it.
-
-**Skills over features.** Instead of adding features (e.g. support for Telegram) to the codebase, contributors submit [claude code skills](https://code.claude.com/docs/en/skills) like `/add-telegram` that transform your fork. You end up with clean code that does exactly what you need.
-
-**Best harness, best model.** NanoClaw runs on the Claude Agent SDK, which means you're running Claude Code directly. Claude Code is highly capable and its coding and problem-solving capabilities allow it to modify and expand NanoClaw and tailor it to each user.
-
-## What It Supports
-
-- **Multi-channel messaging** - Talk to your assistant from WhatsApp, Telegram, Discord, Slack, or Gmail. Add channels with skills like `/add-whatsapp` or `/add-telegram`. Run one or many at the same time.
-- **Isolated group context** - Each group has its own `CLAUDE.md` memory, isolated filesystem, and runs in its own container sandbox with only that filesystem mounted to it.
-- **Main channel** - Your private channel (self-chat) for admin control; every group is completely isolated
-- **Scheduled tasks** - Recurring jobs that run Claude and can message you back
-- **Web access** - Search and fetch content from the Web
-- **Container isolation** - Agents are sandboxed in Docker (macOS/Linux), [Docker Sandboxes](docs/docker-sandboxes.md) (micro VM isolation), or Apple Container (macOS)
-- **Credential security** - Agents never hold raw API keys. Outbound requests route through [OneCLI's Agent Vault](https://github.com/onecli/onecli), which injects credentials at request time and enforces per-agent policies and rate limits.
-- **Agent Swarms** - Spin up teams of specialized agents that collaborate on complex tasks
-- **Optional integrations** - Add Gmail (`/add-gmail`) and more via skills
-
-## Usage
-
-Talk to your assistant with the trigger word (default: `@Andy`):
-
-```
-@Andy send an overview of the sales pipeline every weekday morning at 9am (has access to my Obsidian vault folder)
-@Andy review the git history for the past week each Friday and update the README if there's drift
-@Andy every Monday at 8am, compile news on AI developments from Hacker News and TechCrunch and message me a briefing
-```
-
-From the main channel (your self-chat), you can manage groups and tasks:
-```
-@Andy list all scheduled tasks across groups
-@Andy pause the Monday briefing task
-@Andy join the Family Chat group
-```
-
-## Customizing
-
-NanoClaw doesn't use configuration files. To make changes, just tell Claude Code what you want:
-
-- "Change the trigger word to @Bob"
-- "Remember in the future to make responses shorter and more direct"
-- "Add a custom greeting when I say good morning"
-- "Store conversation summaries weekly"
-
-Or run `/customize` for guided changes.
-
-The codebase is small enough that Claude can safely modify it.
-
-## Contributing
-
-**Don't add features. Add skills.**
-
-If you want to add Telegram support, don't create a PR that adds Telegram to the core codebase. Instead, fork NanoClaw, make the code changes on a branch, and open a PR. We'll create a `skill/telegram` branch from your PR that other users can merge into their fork.
-
-Users then run `/add-telegram` on their fork and get clean code that does exactly what they need, not a bloated system trying to support every use case.
-
-### RFS (Request for Skills)
-
-Skills we'd like to see:
-
-**Communication Channels**
-- `/add-signal` - Add Signal as a channel
-
-## Requirements
-
-- macOS, Linux, or Windows (via WSL2)
-- Node.js 20+
-- [Claude Code](https://claude.ai/download)
-- [Apple Container](https://github.com/apple/container) (macOS) or [Docker](https://docker.com/products/docker-desktop) (macOS/Linux)
+1. Open Telegram, search for `@BotFather`
+2. Send `/newbot`, follow the prompts:
+   - Bot name: e.g., "AEGIS Assistant"
+   - Bot username: must end in "bot" (e.g., `aegis_cti_bot`)
+3. Copy the bot token
+4. In Claude Code, run `/add-telegram`
+5. Paste the token when prompted
+6. Send `/chatid` in the chat to get the chat ID
+7. Provide the chat ID to complete registration
 
 ## Architecture
 
 ```
-Channels --> SQLite --> Polling loop --> Container (Claude Agent SDK) --> Response
+Discord / Telegram
+       │
+       ▼
+┌──────────────────────┐
+│   AEGIS Host Process  │  Node.js — routes messages, manages containers
+│   (src/index.ts)      │
+└──────┬───────┬───────┘
+       │       │
+       ▼       ▼
+┌──────────┐  ┌──────────────┐
+│ Chat     │  │ Research     │  Each runs in its own Docker container
+│ Container│  │ Container    │  with isolated filesystem + Claude Agent SDK
+│          │  │              │
+│ Responds │  │ Investigates │
+│ instantly│  │ async, posts │
+│ to users │  │ reports when │
+│          │  │ done         │
+└──────────┘  └──────────────┘
+                     │
+              ┌──────┴──────┐
+              │  Scheduled  │  Cron-triggered containers
+              │  Tasks      │  for daily briefings and
+              │             │  critical alert polling
+              └─────────────┘
 ```
 
-Single Node.js process. Channels are added via skills and self-register at startup — the orchestrator connects whichever ones have credentials present. Agents execute in isolated Linux containers with filesystem isolation. Only mounted directories are accessible. Per-group message queue with concurrency control. IPC via filesystem.
+## Core Features
 
-For the full architecture details, see the [documentation site](https://docs.nanoclaw.dev/concepts/architecture).
+1. **Research on demand** — Ask AEGIS to research any threat topic. It dispatches a background container that investigates, follows primary sources, and produces a full report.
 
-Key files:
-- `src/index.ts` - Orchestrator: state, message loop, agent invocation
-- `src/channels/registry.ts` - Channel registry (self-registration at startup)
-- `src/ipc.ts` - IPC watcher and task processing
-- `src/router.ts` - Message formatting and outbound routing
-- `src/group-queue.ts` - Per-group queue with global concurrency limit
-- `src/container-runner.ts` - Spawns streaming agent containers
-- `src/task-scheduler.ts` - Runs scheduled tasks
-- `src/db.ts` - SQLite operations (messages, groups, sessions, state)
-- `groups/*/CLAUDE.md` - Per-group memory
+2. **Validated detection rules** — Every report includes Sigma, YARA, and/or Snort rules. Each rule is validated using CLI tools (`sigma check`, `yarac`, `snort -T`) before inclusion.
 
-## FAQ
+3. **Reports as file attachments** — Long reports are sent as `.md` file attachments, not wall-of-text messages. Short answers go inline.
 
-**Why Docker?**
+4. **Non-blocking chat** — Research runs asynchronously in separate containers. The chat agent stays responsive to new messages while research is in progress.
 
-Docker provides cross-platform support (macOS, Linux and even Windows via WSL2) and a mature ecosystem. On macOS, you can optionally switch to Apple Container via `/convert-to-apple-container` for a lighter-weight native runtime. For additional isolation, [Docker Sandboxes](docs/docker-sandboxes.md) run each container inside a micro VM.
+5. **Daily briefing at 8 AM ET** — Every morning, AEGIS fetches RSS feeds, filters noise, deduplicates, researches new topics, generates rules, and delivers a consolidated briefing report.
 
-**Can I run this on Linux or Windows?**
+6. **Critical alerts every 2 hours** — A lightweight script polls CISA KEV and other feeds for CVSS ≥ 9, active exploitation, or zero-day indicators. Only wakes the agent if something critical is found.
 
-Yes. Docker is the default runtime and works on macOS, Linux, and Windows (via WSL2). Just run `/setup`.
+7. **Thread-aware follow-ups** — Ask follow-up questions in a thread and AEGIS reads the full context. "What TTPs did they use?" works after a research report.
 
-**Is this secure?**
+8. **/status command** — Check what AEGIS is working on, recent reports, and system health.
 
-Agents run in containers, not behind application-level permission checks. They can only access explicitly mounted directories. Credentials never enter the container — outbound API requests route through [OneCLI's Agent Vault](https://github.com/onecli/onecli), which injects authentication at the proxy level and supports rate limits and access policies. You should still review what you're running, but the codebase is small enough that you actually can. See the [security documentation](https://docs.nanoclaw.dev/concepts/security) for the full security model.
+## Adding RSS Feeds
 
-**Why no configuration files?**
+Edit `feeds.yaml` to add or remove RSS/Atom feed sources:
 
-We don't want configuration sprawl. Every user should customize NanoClaw so that the code does exactly what they want, rather than configuring a generic system. If you prefer having config files, you can tell Claude to add them.
+```yaml
+feeds:
+  - name: CISA Advisories
+    url: https://www.cisa.gov/cybersecurity-advisories/all.xml
+    category: advisories
 
-**Can I use third-party or open-source models?**
+  - name: Your Custom Feed
+    url: https://example.com/feed.xml
+    category: custom
+```
 
-Yes. NanoClaw supports any Claude API-compatible model endpoint. Set these environment variables in your `.env` file:
+## Adding Custom Skills
+
+Create a directory under `container/skills/` with a `SKILL.md` file:
+
+```
+container/skills/my-skill/SKILL.md
+```
+
+Skills are automatically loaded into agent containers at runtime.
+
+## Updating AEGIS
 
 ```bash
-ANTHROPIC_BASE_URL=https://your-api-endpoint.com
-ANTHROPIC_AUTH_TOKEN=your-token-here
+git pull upstream main
+npm install
+cd container && bash build.sh && cd ..
+npm run build
+# Restart the service:
+launchctl kickstart -k gui/$(id -u)/com.aegis  # macOS
+# systemctl --user restart aegis               # Linux
 ```
 
-This allows you to use:
-- Local models via [Ollama](https://ollama.ai) with an API proxy
-- Open-source models hosted on [Together AI](https://together.ai), [Fireworks](https://fireworks.ai), etc.
-- Custom model deployments with Anthropic-compatible APIs
+## Project Structure
 
-Note: The model must support the Anthropic API format for best compatibility.
+```
+aegis/
+├── .claude/skills/      # Claude Code skills (/setup, /add-discord, etc.)
+├── container/
+│   ├── Dockerfile       # Agent container with Chromium + detection tools
+│   ├── build.sh         # Container build script
+│   └── agent-runner/    # MCP server running inside containers
+│       └── src/
+│           └── ipc-mcp-stdio.ts  # send_file, send_message, schedule_task tools
+├── docs/                # Detection rule reference docs
+│   ├── sigma-spec.md
+│   ├── yara-ref.md
+│   └── snort-ref.md
+├── feeds.yaml           # RSS feed sources
+├── groups/
+│   ├── main/CLAUDE.md   # Chat agent identity (deployed to new main groups)
+│   └── global/CLAUDE.md # Research agent instructions (mounted in all containers)
+├── setup/               # Setup step implementations
+├── setup.sh             # Bootstrap script
+├── src/                 # Host process source code
+│   ├── index.ts         # Orchestrator
+│   ├── container-runner.ts  # Spawns agent containers
+│   ├── ipc.ts           # IPC watcher (file-based message passing)
+│   ├── task-scheduler.ts    # Cron + one-shot task scheduling
+│   └── config.ts        # Configuration (ASSISTANT_NAME, paths, etc.)
+├── templates/
+│   └── topic-summary.md # Report template
+└── store/               # SQLite database (messages, groups, tasks)
+```
 
-**How do I debug issues?**
+## Troubleshooting
 
-Ask Claude Code. "Why isn't the scheduler running?" "What's in the recent logs?" "Why did this message not get a response?" That's the AI-native approach that underlies NanoClaw.
+### Bot not responding
+- Check service is running: `launchctl list | grep aegis` (macOS) or `systemctl --user status aegis` (Linux)
+- Check logs: `tail -f logs/aegis.log`
+- Verify credentials: `onecli secrets list`
+- Ensure bot token is in `.env` AND synced: `cp .env data/env/env`
 
-**Why isn't the setup working for me?**
+### Research not returning results
+- Check container logs: `ls groups/*/logs/container-*.log`
+- Verify Docker is running: `docker info`
+- Rebuild container: `cd container && bash build.sh`
 
-If you have issues, during setup, Claude will try to dynamically fix them. If that doesn't work, run `claude`, then run `/debug`. If Claude finds an issue that is likely affecting other users, open a PR to modify the setup SKILL.md.
+### Rules failing validation
+- sigma-cli, yarac, and snort are installed in the container
+- Check with: `docker run --rm --entrypoint bash nanoclaw-agent:latest -c 'sigma -h'`
+- Rules that fail validation 3 times are marked `<!-- UNVALIDATED -->` with the error
 
-**What changes will be accepted into the codebase?**
+### Duplicate responses
+- The dedup fix prevents re-piping messages to active containers
+- If still occurring, check for multiple service instances: `ps aux | grep aegis`
 
-Only security fixes, bug fixes, and clear improvements will be accepted to the base configuration. That's all.
+---
 
-Everything else (new capabilities, OS compatibility, hardware support, enhancements) should be contributed as skills.
-
-This keeps the base system minimal and lets every user customize their installation without inheriting features they don't want.
-
-## Community
-
-Questions? Ideas? [Join the Discord](https://discord.gg/VDdww8qS42).
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for breaking changes, or the [full release history](https://docs.nanoclaw.dev/changelog) on the documentation site.
-
-## License
-
-MIT
+Built on [NanoClaw](https://github.com/qwibitai/nanoclaw)
