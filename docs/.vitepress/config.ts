@@ -5,7 +5,6 @@ export default defineConfig({
   description: 'Autonomous CTI Research & Detection Platform',
   base: '/Aegis/',
   ignoreDeadLinks: true,
-  appearance: 'dark',
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/shield.svg' }],
   ],
