@@ -491,11 +491,45 @@ When a user says "resume daily report" or similar:
    ```
 2. Confirm: "Daily report resumed."
 
+### When the daily-report task fires (compilation and delivery)
+
+When you wake from the `daily-report` scheduled task, compile and deliver the daily CTI briefing:
+
+1. **Gather today's summaries** — List files in `../global/summaries/` with today's date prefix (`YYYY-MM-DD-*.md`). Also include any critical summaries from `../global/summaries/daily/` for today. Skip if today's daily report already exists in `../global/summaries/daily/YYYY-MM-DD-daily-report.md`.
+
+2. **If no new summaries exist** — Send a short message: "No significant threat activity in the last 24 hours." Do NOT create an empty report. Stop.
+
+3. **Compile the report** — Read each summary and compile into a structured daily brief:
+   - **Executive summary**: Top 3-5 items as bullet points, ordered by severity
+   - **Topic summaries**: 3-5 sentence overview per topic with severity, detection rule counts, and link to the full summary
+   - **IOC table**: Consolidated table of all IOCs extracted today (defanged). Omit if none
+   - **Detection rules summary**: Count of rules by type per topic
+
+4. **Save the report** to `../global/summaries/daily/$(date +%Y-%m-%d)-daily-report.md` (create the `daily/` subdirectory if it doesn't exist via `mkdir -p`)
+
+5. **Deliver via thread** — Create a delivery thread using `start_research_thread` IPC:
+   ```bash
+   cat > /workspace/ipc/tasks/daily_brief_$(date +%s).json << EOF
+   {
+     "type": "start_research_thread",
+     "parentJid": "$NANOCLAW_CHAT_JID",
+     "threadName": "Daily Brief — $(date +%Y-%m-%d)",
+     "idleExpiryMs": 600000,
+     "prompt": "Deliver the daily CTI briefing. Read ../global/summaries/daily/$(date +%Y-%m-%d)-daily-report.md. Post the executive summary bullets as the opening message. Attach the full report as an .md file via send_file. Do not research anything new."
+   }
+   EOF
+   ```
+
+6. **Send a brief channel notification**: "Daily brief is ready — check the 'Daily Brief — YYYY-MM-DD' thread for the full report." Keep it to one line.
+
 ### Important notes
 - The well-known task ID `daily-report` ensures there is never more than one daily report task
 - ALWAYS check `/workspace/ipc/current_tasks.json` before creating — use `update_task` if it already exists to avoid duplicates
 - The daily report does NOT use a script pre-check — the agent always wakes at report time to compile and deliver
 - NEVER expose scheduling internals (cron expressions, task IDs, IPC) to users — just confirm the time and timezone
+- NEVER dump the full daily report as an inline message — always deliver via thread with the report attached as an .md file
+- Daily reports are saved in `../global/summaries/daily/` — separate from individual topic summaries
+- If a topic was already covered by a critical research thread, include it in the daily summary anyway for completeness
 
 ---
 

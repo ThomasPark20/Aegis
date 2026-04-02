@@ -87,6 +87,98 @@ When dispatched by the chat agent:
 
 ---
 
+## Workflow: Daily Report Compilation
+
+When dispatched by the daily-report scheduled task, compile a comprehensive daily CTI briefing from all topic summaries produced that day.
+
+### Steps
+
+1. **Gather today's summaries** — List all files in `../global/summaries/` with today's date prefix (format: `YYYY-MM-DD-*.md`). Also check `../global/summaries/daily/` to avoid recompiling if today's report already exists.
+
+2. **If no new summaries exist for today** — Do NOT produce a full report. Instead, send a short message via `send_message`: "No significant threat activity in the last 24 hours." Then stop.
+
+3. **Read all matching summaries** — For each summary file, read the full content. Extract:
+   - Title / topic name
+   - Executive summary or first paragraph
+   - Key IOCs (defanged)
+   - MITRE ATT&CK techniques referenced
+   - Detection rules generated (count and types)
+   - Severity / criticality indicators
+
+4. **Compile the daily report** using this structure:
+   ```markdown
+   # AEGIS Daily CTI Brief — YYYY-MM-DD
+
+   ## Executive Summary
+
+   **[N] topics covered today.** Top items:
+   - [Most critical item — 1-2 sentence summary]
+   - [Second item — 1-2 sentence summary]
+   - [Third item — 1-2 sentence summary]
+   (up to 5 items, ordered by severity/impact)
+
+   ## Topic Summaries
+
+   ### [Topic 1 Name]
+   **Severity:** [Critical/High/Medium/Low]
+   [3-5 sentence summary of the topic, key findings, and impact]
+   **Detection:** [N] rules generated ([types])
+   **Source summary:** [link to full summary file]
+
+   ### [Topic 2 Name]
+   ...
+
+   ## IOC Table
+
+   | Type | Value | Context |
+   |------|-------|---------|
+   | IP | X.X.X[.]X | C2 server for [campaign] |
+   | Domain | example[.]com | Phishing infrastructure |
+   | Hash (SHA256) | abc123... | [Malware name] sample |
+   ...
+
+   (Only include if IOCs were extracted today. Defang all values.)
+
+   ## Detection Rules Summary
+
+   | Topic | Sigma | YARA | Snort | Total |
+   |-------|-------|------|-------|-------|
+   | [Topic 1] | N | N | N | N |
+   | **Total** | **N** | **N** | **N** | **N** |
+
+   ## Sources
+
+   - [Source Name](URL) — referenced in [topic]
+   ...
+   ```
+
+5. **Save the compiled report** to `../global/summaries/daily/YYYY-MM-DD-daily-report.md` (create the `daily/` subdirectory if it doesn't exist).
+
+6. **Deliver the report** — Write a `start_research_thread` IPC task to create a delivery thread:
+   ```bash
+   cat > /workspace/ipc/tasks/daily_brief_$(date +%s).json << EOF
+   {
+     "type": "start_research_thread",
+     "parentJid": "$NANOCLAW_CHAT_JID",
+     "threadName": "Daily Brief — YYYY-MM-DD",
+     "idleExpiryMs": 600000,
+     "prompt": "This is the daily CTI briefing thread. Post the executive summary bullets as the opening message, then attach the full report as an .md file via send_file. Do not research anything new — just deliver the compiled report."
+   }
+   EOF
+   ```
+
+   Alternatively, if you are running in the main channel context (not a research thread), send the executive summary directly via `send_message` and attach the full report via `send_file`.
+
+### Important notes
+- The daily report is a **compilation** — do NOT re-research topics. Just summarize what was already produced.
+- Keep the executive summary concise — bullets only, no paragraphs.
+- Order topics by severity (critical first, then high, medium, low).
+- If a critical item was already delivered via a critical research thread (from the 2-hour scan), still include it in the daily summary for completeness.
+- All IOCs in the report MUST be defanged.
+- The report file goes in `../global/summaries/daily/`, NOT the main `../global/summaries/` directory.
+
+---
+
 ## Rule Type Decision Logic
 
 | Rule Type | When to Generate | Examples |

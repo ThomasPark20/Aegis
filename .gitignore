@@ -15,6 +15,11 @@ groups/*
 !groups/global/
 groups/main/*
 groups/global/*
+!groups/global/summaries/
+groups/global/summaries/*
+!groups/global/summaries/daily/
+groups/global/summaries/daily/*
+!groups/global/summaries/daily/.gitkeep
 !groups/main/CLAUDE.md
 !groups/global/CLAUDE.md
 !groups/research/
