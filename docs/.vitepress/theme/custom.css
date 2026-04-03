@@ -225,6 +225,28 @@
   padding-top: 0;
 }
 
+/* Landing page: hide VitePress chrome for clean full-screen experience */
+.landing-page .VPNav,
+.landing-page .VPSidebar,
+.landing-page .VPFooter,
+.landing-page .VPDocFooter {
+  display: none !important;
+}
+
+.landing-page .VPContent {
+  padding: 0 !important;
+}
+
+.landing-page .VPDoc .container {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+.landing-page .VPDoc .content {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
 /* Footer */
 
 .VPFooter .message, .VPFooter .copyright {
