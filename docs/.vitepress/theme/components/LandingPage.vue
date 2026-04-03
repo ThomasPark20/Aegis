@@ -602,7 +602,8 @@ claude
 .getrunning-section {
   max-width: 640px;
   margin: 0 auto;
-  padding: 30vh 2rem 6rem;
+  padding: 2rem;
+  min-height: 100vh;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -753,7 +754,8 @@ claude
   }
 
   .getrunning-section {
-    padding: 4rem 1rem;
+    padding: 2rem 1rem;
+    min-height: 100svh;
   }
 
   .code-block {
