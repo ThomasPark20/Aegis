@@ -21,7 +21,9 @@ claude
 - **Generates validated detection rules** — Sigma, YARA, Snort — validated with real CLI tools
 - **Daily briefing at 8am ET** — RSS + Reddit feeds, filtered, deduplicated, researched
 - **Critical alerts every 2 hours** — zero-day, CVSS 9+, active exploitation
-- **Research threads** — each research request spins up a Discord thread with its own agent. Follow up, add context, ask questions — all in the thread. Main chat stays clean.
+- **Dual-agent research threads** — each research request spins up a Discord thread with two agents: a fast **chat agent** for instant Q&A and a deep **research agent** running in the background. Steer research mid-flight, ask questions, add requirements — the chat agent responds in seconds while research continues uninterrupted
+- **Research requirements** — follow-up messages in threads become mandatory requirements (`requirements.md`). The research agent checks every requirement before delivering the final report
+- **Thread re-activation** — expired threads come back to life when you message them, with full context preserved
 
 ## Prerequisites
 

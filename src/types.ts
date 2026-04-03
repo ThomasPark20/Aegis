@@ -41,6 +41,8 @@ export interface RegisteredGroup {
   requiresTrigger?: boolean; // Default: true for groups, false for solo chats
   isMain?: boolean; // True for the main control group (no trigger, elevated privileges)
   idleExpiryMs?: number; // If set, group is unregistered after this many ms of inactivity (used for research threads)
+  replyToJid?: string; // If set, outbound IPC messages resolve $NANOCLAW_CHAT_JID to this JID instead of the group's own
+  parentResearchFolder?: string; // If set, this is a thread-chat sub-group; value is the research group's folder (mounted read-only)
 }
 
 export interface NewMessage {

@@ -62,6 +62,7 @@ interface SDKUserMessage {
 
 const IPC_INPUT_DIR = '/workspace/ipc/input';
 const IPC_INPUT_CLOSE_SENTINEL = path.join(IPC_INPUT_DIR, '_close');
+const REQUIREMENTS_FILE = '/workspace/group/requirements.md';
 const IPC_POLL_MS = 500;
 
 /**
@@ -402,6 +403,15 @@ async function runQuery(
     for (const text of messages) {
       log(`Piping IPC message into active query (${text.length} chars)`);
       stream.push(text);
+      // Append to requirements.md so the research agent sees user directives
+      try {
+        const entry = `- [ ] ${text.replace(/\n/g, ' ').slice(0, 500)}\n`;
+        if (!fs.existsSync(REQUIREMENTS_FILE)) {
+          fs.writeFileSync(REQUIREMENTS_FILE, `# Research Requirements\n\nUser-added requirements. Check ALL items before delivering the final report.\n\n${entry}`);
+        } else {
+          fs.appendFileSync(REQUIREMENTS_FILE, entry);
+        }
+      } catch { /* best-effort */ }
     }
     setTimeout(pollIpcDuringQuery, IPC_POLL_MS);
   };
@@ -538,6 +548,8 @@ async function runQuery(
   }
 
   ipcPolling = false;
+  // Note: requirements.md is NOT cleaned up — it persists across queries
+  // so the research agent always has the full requirements list.
   log(
     `Query done. Messages: ${messageCount}, results: ${resultCount}, lastAssistantUuid: ${lastAssistantUuid || 'none'}, closedDuringQuery: ${closedDuringQuery}`,
   );

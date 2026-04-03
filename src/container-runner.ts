@@ -113,6 +113,21 @@ function buildVolumeMounts(
         readonly: true,
       });
     }
+
+    // Thread-chat sub-groups get the parent research folder mounted
+    // so they can see in-progress research and write requirements.md
+    if (group.parentResearchFolder) {
+      const researchDir = resolveGroupFolderPath(group.parentResearchFolder);
+      if (fs.existsSync(researchDir)) {
+        // Mount research folder as read-write so chat agent can write requirements.md
+        // (research agent also reads from here)
+        mounts.push({
+          hostPath: researchDir,
+          containerPath: '/workspace/research',
+          readonly: false,
+        });
+      }
+    }
   }
 
   // Per-group Claude sessions directory (isolated from other groups)

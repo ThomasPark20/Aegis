@@ -25,6 +25,9 @@ groups/global/summaries/daily/*
 !groups/research/
 groups/research/*
 !groups/research/CLAUDE.md
+!groups/thread-chat/
+groups/thread-chat/*
+!groups/thread-chat/CLAUDE.md
 
 # Secrets
 *.keys.json

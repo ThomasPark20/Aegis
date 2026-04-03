@@ -20,6 +20,7 @@ export interface TelegramChannelOpts {
   onMessage: OnInboundMessage;
   onChatMetadata: OnChatMetadata;
   registeredGroups: () => Record<string, RegisteredGroup>;
+  tryReactivate?: (jid: string) => boolean;
 }
 
 /**
@@ -205,13 +206,18 @@ export class TelegramChannel implements Channel {
       );
 
       // Only deliver full message for registered groups
-      const group = this.opts.registeredGroups()[chatJid];
+      let group = this.opts.registeredGroups()[chatJid];
       if (!group) {
-        logger.debug(
-          { chatJid, chatName },
-          'Message from unregistered Telegram chat',
-        );
-        return;
+        if (this.opts.tryReactivate?.(chatJid)) {
+          group = this.opts.registeredGroups()[chatJid];
+        }
+        if (!group) {
+          logger.debug(
+            { chatJid, chatName },
+            'Message from unregistered Telegram chat',
+          );
+          return;
+        }
       }
 
       // Deliver message — startMessageLoop() will pick it up

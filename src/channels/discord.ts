@@ -24,6 +24,7 @@ export interface DiscordChannelOpts {
   onMessage: OnInboundMessage;
   onChatMetadata: OnChatMetadata;
   registeredGroups: () => Record<string, RegisteredGroup>;
+  tryReactivate?: (jid: string) => boolean;
 }
 
 export class DiscordChannel implements Channel {
@@ -145,13 +146,19 @@ export class DiscordChannel implements Channel {
       );
 
       // Only deliver full message for registered groups
-      const group = this.opts.registeredGroups()[chatJid];
+      let group = this.opts.registeredGroups()[chatJid];
       if (!group) {
-        logger.debug(
-          { chatJid, chatName },
-          'Message from unregistered Discord channel',
-        );
-        return;
+        // Try re-activating an expired thread group
+        if (this.opts.tryReactivate?.(chatJid)) {
+          group = this.opts.registeredGroups()[chatJid];
+        }
+        if (!group) {
+          logger.debug(
+            { chatJid, chatName },
+            'Message from unregistered Discord channel',
+          );
+          return;
+        }
       }
 
       // Deliver message — startMessageLoop() will pick it up

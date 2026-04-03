@@ -57,11 +57,12 @@ export function startIpcWatcher(deps: IpcDeps): void {
     const registeredGroups = deps.registeredGroups();
 
     // Build folder→isMain and folder→jid lookups from registered groups
+    // For thread-chat sub-groups, replyToJid overrides the JID used for $NANOCLAW_CHAT_JID resolution
     const folderIsMain = new Map<string, boolean>();
     const folderToJid = new Map<string, string>();
     for (const [jid, group] of Object.entries(registeredGroups)) {
       if (group.isMain) folderIsMain.set(group.folder, true);
-      folderToJid.set(group.folder, jid);
+      folderToJid.set(group.folder, group.replyToJid ?? jid);
     }
 
     for (const sourceGroup of groupFolders) {
@@ -593,7 +594,14 @@ export async function processTaskIpc(
         fs.writeFileSync(threadClaudePath, threadHeader + researchTemplate);
       }
 
-      // 4. Store chat metadata so the message loop can find this JID
+      // 4. Seed empty requirements.md for user-directed research requirements
+      const requirementsPath = path.join(threadGroupDir, 'requirements.md');
+      fs.writeFileSync(
+        requirementsPath,
+        '# Research Requirements\n\nUser-added requirements. Check ALL items before delivering the final report.\n\n',
+      );
+
+      // 5. Store chat metadata so the message loop can find this JID
       const now = new Date().toISOString();
       deps.storeMessage({
         id: `research-init-${Date.now()}`,

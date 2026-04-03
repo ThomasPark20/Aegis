@@ -175,6 +175,24 @@ function createSchema(database: Database.Database): void {
   } catch {
     /* column already exists */
   }
+
+  // Add reply_to_jid for thread-chat sub-groups (outbound messages go to parent thread)
+  try {
+    database.exec(
+      `ALTER TABLE registered_groups ADD COLUMN reply_to_jid TEXT`,
+    );
+  } catch {
+    /* column already exists */
+  }
+
+  // Add parent_research_folder for thread-chat sub-groups (mounts research folder read-only)
+  try {
+    database.exec(
+      `ALTER TABLE registered_groups ADD COLUMN parent_research_folder TEXT`,
+    );
+  } catch {
+    /* column already exists */
+  }
 }
 
 export function initDatabase(): void {
@@ -659,8 +677,8 @@ export function setRegisteredGroup(jid: string, group: RegisteredGroup): void {
     throw new Error(`Invalid group folder "${group.folder}" for JID ${jid}`);
   }
   db.prepare(
-    `INSERT OR REPLACE INTO registered_groups (jid, name, folder, trigger_pattern, added_at, container_config, requires_trigger, is_main, idle_expiry_ms)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT OR REPLACE INTO registered_groups (jid, name, folder, trigger_pattern, added_at, container_config, requires_trigger, is_main, idle_expiry_ms, status, reply_to_jid, parent_research_folder)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?, ?)`,
   ).run(
     jid,
     group.name,
@@ -671,6 +689,8 @@ export function setRegisteredGroup(jid: string, group: RegisteredGroup): void {
     group.requiresTrigger === undefined ? 1 : group.requiresTrigger ? 1 : 0,
     group.isMain ? 1 : 0,
     group.idleExpiryMs ?? null,
+    group.replyToJid ?? null,
+    group.parentResearchFolder ?? null,
   );
 }
 
@@ -685,6 +705,8 @@ type RegisteredGroupRow = {
   is_main: number | null;
   idle_expiry_ms: number | null;
   status: string | null;
+  reply_to_jid: string | null;
+  parent_research_folder: string | null;
 };
 
 function rowToGroup(row: RegisteredGroupRow): RegisteredGroup {
@@ -700,6 +722,8 @@ function rowToGroup(row: RegisteredGroupRow): RegisteredGroup {
       row.requires_trigger === null ? undefined : row.requires_trigger === 1,
     isMain: row.is_main === 1 ? true : undefined,
     idleExpiryMs: row.idle_expiry_ms ?? undefined,
+    replyToJid: row.reply_to_jid ?? undefined,
+    parentResearchFolder: row.parent_research_folder ?? undefined,
   };
 }
 

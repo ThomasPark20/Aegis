@@ -4,7 +4,7 @@
 Ask AEGIS to research any threat. It creates a Discord thread, runs the full pipeline, and delivers a report — all without blocking your main channel.
 
 ## [Research Threads](./threads)
-Every research request gets its own Discord thread. Follow up with questions, add context mid-research, or request detection rules — all in the thread.
+Every research request gets its own Discord thread with a dual-agent model: a fast chat agent for immediate Q&A and steering, plus a deep research agent working in the background. Threads soft-expire after inactivity and re-activate on demand.
 
 ## [Validated Detection Rules](./detection-rules)
 Sigma, YARA, and Snort rules validated with real CLI tools before delivery.

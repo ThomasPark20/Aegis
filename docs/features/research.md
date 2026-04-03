@@ -14,7 +14,7 @@ Ask AEGIS to research any topic:
 2. A research agent starts working in that thread
 3. Main channel stays clean — no research clutter
 4. When done, the report is attached as a `.md` file in the thread
-5. You can follow up with questions directly in the thread
+5. You can follow up with questions or steer the research — a fast chat agent responds immediately
 
 ## Research Pipeline
 
@@ -33,8 +33,21 @@ The research agent runs this pipeline inside an isolated container:
 
 AEGIS researches the **exact term** you give it. "teampcp" stays "teampcp" — it won't substitute what it thinks you meant. If the exact term yields nothing, it asks for clarification.
 
-## Follow-ups
+## Mid-Research Interaction
 
-Messages you send in the research thread get piped to the running agent. Ask questions, add context ("also check this URL"), or request detection rules — the agent incorporates it into the ongoing research.
+While the research agent is working, you can interact in the thread. A fast **chat agent** responds immediately:
 
-Thread agents expire after 10 minutes of inactivity. The thread stays in Discord for reference.
+- **Ask questions** — "Are Scattered Spider and ShinyHunters the same?" gets an instant answer
+- **Add requirements** — "Include FBI most wanted members" becomes a mandatory checklist item
+- **Expand scope** — "Also check Volt Typhoon overlap" added to requirements
+- **Add sources** — "Also check this URL: https://..." incorporated into the investigation
+- **Stop early** — "That's enough, wrap it up" tells the research agent to finish
+
+Requirements are written to `requirements.md` in the research workspace. The research agent **must** address every requirement before delivering the final report — it's a contract, not a suggestion.
+
+## Thread Lifecycle
+
+- **Active** — research agent working, chat agent responds to follow-ups
+- **Idle** — 10 minutes of no activity triggers soft-expiry
+- **Expired** — group unregistered, but folder and session preserved on disk
+- **Re-activated** — send a message to bring it back with full context

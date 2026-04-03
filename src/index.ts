@@ -31,6 +31,9 @@ import {
 } from './container-runtime.js';
 import {
   deleteRegisteredGroup,
+  expireGroup,
+  getExpiredThread,
+  reactivateGroup,
   getAllChats,
   getAllRegisteredGroups,
   getAllSessions,
@@ -216,6 +219,93 @@ export function _setRegisteredGroups(
 }
 
 /**
+ * Spawn a lightweight thread-chat agent for fast user acknowledgment in research threads.
+ * The chat agent can answer quick questions or steer the running research agent.
+ * It uses a virtual sub-group that shares the same Discord thread JID for output.
+ */
+async function spawnThreadChatAgent(
+  threadJid: string,
+  researchGroup: RegisteredGroup,
+  prompt: string,
+  channel: Channel,
+): Promise<void> {
+  const chatFolder = `${researchGroup.folder}_chat`;
+  const chatVirtualJid = `${threadJid}:chat`;
+
+  // Register the chat sub-group if not already present
+  if (!registeredGroups[chatVirtualJid]) {
+    const chatGroup: RegisteredGroup = {
+      name: `Chat: ${researchGroup.name}`,
+      folder: chatFolder,
+      trigger: researchGroup.trigger,
+      added_at: new Date().toISOString(),
+      requiresTrigger: false,
+      idleExpiryMs: researchGroup.idleExpiryMs,
+      replyToJid: threadJid,
+      parentResearchFolder: researchGroup.folder,
+    };
+    registeredGroups[chatVirtualJid] = chatGroup;
+    setRegisteredGroup(chatVirtualJid, chatGroup);
+    ensureOneCLIAgent(chatVirtualJid, chatGroup);
+
+    // Set up the thread-chat CLAUDE.md
+    const chatGroupDir = resolveGroupFolderPath(chatFolder);
+    fs.mkdirSync(chatGroupDir, { recursive: true });
+    const templatePath = path.join(GROUPS_DIR, 'thread-chat', 'CLAUDE.md');
+    const chatClaudePath = path.join(chatGroupDir, 'CLAUDE.md');
+    if (fs.existsSync(templatePath)) {
+      const template = fs.readFileSync(templatePath, 'utf-8');
+      const topic =
+        researchGroup.name.replace(/^Research:\s*/i, '') || 'unknown topic';
+      fs.writeFileSync(
+        chatClaudePath,
+        template.replace(/\{\{TOPIC\}\}/g, topic),
+      );
+    }
+
+    logger.info(
+      { threadJid, chatFolder, researchFolder: researchGroup.folder },
+      'Thread-chat sub-group created',
+    );
+  }
+
+  // Run the chat agent directly via the queue's task runner.
+  // We use enqueueTask (not enqueueMessageCheck) because the prompt is already
+  // available — no DB message discovery needed. This still respects concurrency
+  // limits and retry logic.
+  const chatGroup = registeredGroups[chatVirtualJid];
+  const outputJid = chatGroup.replyToJid ?? threadJid;
+  const chatChannel = findChannel(channels, outputJid);
+  if (!chatChannel) {
+    logger.warn({ outputJid }, 'No channel for thread-chat output');
+    return;
+  }
+
+  logger.info({ chatVirtualJid, outputJid }, 'Enqueueing thread-chat agent');
+
+  queue.enqueueTask(chatVirtualJid, `thread-chat-${Date.now()}`, async () => {
+    await chatChannel.setTyping?.(outputJid, true);
+    // Close stdin after first result so the chat container exits quickly
+    let gotResult = false;
+    await runAgent(chatGroup, prompt, chatVirtualJid, async (result) => {
+      if (result.result) {
+        const text = (typeof result.result === 'string' ? result.result : JSON.stringify(result.result))
+          .replace(/<internal>[\s\S]*?<\/internal>/g, '').trim();
+        if (text) {
+          await chatChannel.sendMessage(outputJid, text);
+        }
+      }
+      if (!gotResult) {
+        gotResult = true;
+        // Signal the chat container to exit — it only needs one response
+        queue.closeStdin(chatVirtualJid);
+      }
+    });
+    await chatChannel.setTyping?.(outputJid, false);
+  });
+}
+
+/**
  * Process all pending messages for a group.
  * Called by the GroupQueue when it's this group's turn.
  */
@@ -223,9 +313,12 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   const group = registeredGroups[chatJid];
   if (!group) return true;
 
-  const channel = findChannel(channels, chatJid);
+  // For thread-chat sub-groups, output goes to the parent thread JID
+  const outputJid = group.replyToJid ?? chatJid;
+
+  const channel = findChannel(channels, outputJid);
   if (!channel) {
-    logger.warn({ chatJid }, 'No channel owns JID, skipping messages');
+    logger.warn({ chatJid, outputJid }, 'No channel owns JID, skipping messages');
     return true;
   }
 
@@ -280,7 +373,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     }, IDLE_TIMEOUT);
   };
 
-  await channel.setTyping?.(chatJid, true);
+  await channel.setTyping?.(outputJid, true);
   let hadError = false;
   let outputSentToUser = false;
 
@@ -295,7 +388,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
       const text = raw.replace(/<internal>[\s\S]*?<\/internal>/g, '').trim();
       logger.info({ group: group.name }, `Agent output: ${raw.length} chars`);
       if (text) {
-        await channel.sendMessage(chatJid, text);
+        await channel.sendMessage(outputJid, text);
         outputSentToUser = true;
       }
       // Only reset idle timer on actual results, not session-update markers (result: null)
@@ -311,7 +404,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     }
   });
 
-  await channel.setTyping?.(chatJid, false);
+  await channel.setTyping?.(outputJid, false);
   if (idleTimer) clearTimeout(idleTimer);
 
   if (output === 'error' || hadError) {
@@ -390,7 +483,7 @@ async function runAgent(
         prompt,
         sessionId,
         groupFolder: group.folder,
-        chatJid,
+        chatJid: group.replyToJid ?? chatJid,
         isMain,
         assistantName: ASSISTANT_NAME,
       },
@@ -517,7 +610,26 @@ async function startMessageLoop(): Promise<void> {
           if (allPending.length === 0) continue;
           const formatted = formatMessages(allPending, TIMEZONE);
 
-          if (queue.sendMessage(chatJid, formatted)) {
+          // Research threads with active containers: route to chat agent, not research container.
+          // The chat agent handles user interaction and steers research via STEERING.md.
+          const isActiveResearchThread = group.idleExpiryMs && !group.parentResearchFolder
+            && queue.isActive(chatJid);
+          if (isActiveResearchThread) {
+            lastAgentTimestamp[chatJid] =
+              allPending[allPending.length - 1].timestamp;
+            saveState();
+            logger.debug(
+              { chatJid, count: allPending.length },
+              'Research thread follow-up — routing to chat agent',
+            );
+            spawnThreadChatAgent(chatJid, group, formatted, channel).catch(
+              (err) =>
+                logger.error(
+                  { chatJid, err },
+                  'Failed to spawn thread-chat agent',
+                ),
+            );
+          } else if (queue.sendMessage(chatJid, formatted)) {
             logger.debug(
               { chatJid, count: allPending.length },
               'Piped messages to active container',
@@ -525,7 +637,6 @@ async function startMessageLoop(): Promise<void> {
             lastAgentTimestamp[chatJid] =
               allPending[allPending.length - 1].timestamp;
             saveState();
-            // Show typing indicator while the container processes the piped message
             channel
               .setTyping?.(chatJid, true)
               ?.catch((err) =>
@@ -675,6 +786,18 @@ async function main(): Promise<void> {
       isGroup?: boolean,
     ) => storeChatMetadata(chatJid, timestamp, name, channel, isGroup),
     registeredGroups: () => registeredGroups,
+    tryReactivate: (jid: string): boolean => {
+      const expired = getExpiredThread(jid);
+      if (!expired) return false;
+      // Re-activate: put back in memory and DB
+      registeredGroups[jid] = { ...expired, added_at: new Date().toISOString() };
+      reactivateGroup(jid);
+      logger.info(
+        { jid, folder: expired.folder },
+        'Thread group re-activated by new message',
+      );
+      return true;
+    },
   };
 
   // Create and connect all registered channels.
@@ -792,10 +915,10 @@ async function main(): Promise<void> {
         : new Date(group.added_at).getTime();
       if (now - lastActivity > group.idleExpiryMs) {
         delete registeredGroups[jid];
-        deleteRegisteredGroup(jid);
+        expireGroup(jid);
         logger.info(
           { jid, folder: group.folder, idleMs: now - lastActivity },
-          'Thread group expired and unregistered',
+          'Thread group expired (soft-delete, re-activatable)',
         );
       }
     }

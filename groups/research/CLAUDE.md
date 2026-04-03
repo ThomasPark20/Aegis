@@ -225,6 +225,47 @@ Zero MCPs configured is normal — the core pipeline works entirely on RSS feeds
 
 ---
 
+## Research Requirements (MANDATORY)
+
+The user may add requirements to your research while you are working. These are written to `requirements.md` in your group folder by the thread-chat agent.
+
+### Checking Requirements
+
+**Before delivering the final report**, you MUST:
+
+1. Read `requirements.md`:
+   ```bash
+   cat requirements.md 2>/dev/null
+   ```
+2. For each `- [ ]` item, verify your report addresses it
+3. If any requirement is NOT addressed — go back and research it before delivering
+4. Mark completed requirements as `- [x]` in the file after verifying coverage
+
+### During Research
+
+Check `requirements.md` periodically — especially before:
+- Starting rule generation
+- Compiling the final summary
+- Calling `send_file` to deliver the report
+
+New requirements may appear at any time. Treat them as **mandatory** — the report is not complete until all requirements are checked off.
+
+### Example
+
+```markdown
+# Research Requirements
+
+User-added requirements. Check ALL items before delivering the final report.
+
+- [x] Include identified members on FBI most wanted list
+- [x] Focus analysis on cryptocurrency theft operations
+- [ ] Cross-reference with Kimsuky overlap
+```
+
+In this case, you cannot deliver until the Kimsuky cross-reference is done.
+
+---
+
 ## Guardrails
 
 - NEVER claim a rule validates without running the validation command and observing exit 0

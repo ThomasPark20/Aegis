@@ -20,23 +20,25 @@ Discord / Telegram
 │       ├── start_research_thread → Discord Thread  │
 │       └── register_group → Group Registry         │
 └──────────────────────────────────────────────────┘
-        │                          │
-        ▼                          ▼
-┌──────────────┐          ┌──────────────────────┐
-│  Container   │          │  Container           │
-│  (chat)      │          │  (research thread)   │
-│              │          │                      │
-│ Claude Code  │          │ Claude Code          │
-│ + sigma-cli  │          │ + sigma-cli          │
-│ + yarac      │          │ + yarac              │
-│ + snort      │          │ + snort              │
-│              │          │                      │
-│ IPC Tools:   │          │ IPC Tools:           │
-│ send_message │          │ send_message         │
-│ send_file    │          │ send_file            │
-│ schedule_task│          │ schedule_task        │
-│ start_research_thread   │                      │
-└──────────────┘          └──────────────────────┘
+        │                │                │
+        ▼                ▼                ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐
+│  Container   │ │  Container   │ │  Container           │
+│  (chat)      │ │ (thread-chat)│ │  (research)          │
+│              │ │              │ │                      │
+│ Claude Code  │ │ Claude Code  │ │ Claude Code          │
+│ + sigma-cli  │ │ (lightweight)│ │ + sigma-cli          │
+│ + yarac      │ │              │ │ + yarac              │
+│ + snort      │ │ Answers Q&A  │ │ + snort              │
+│              │ │ Writes to    │ │                      │
+│ IPC Tools:   │ │ requirements │ │ IPC Tools:           │
+│ send_message │ │ .md          │ │ send_message         │
+│ send_file    │ │              │ │ send_file            │
+│ schedule_task│ │ Reads        │ │ schedule_task        │
+│ start_       │ │ /workspace/  │ │                      │
+│ research_    │ │ research/ RW │ │ Checks requirements  │
+│ thread       │ │              │ │ .md before delivery  │
+└──────────────┘ └──────────────┘ └──────────────────────┘
 ```
 
 ## Research Thread Flow
@@ -55,17 +57,44 @@ Main channel stays              │
 clean, agent exits              ▼
                           Research Agent (new container)
                           Works inside the thread
-                          User can follow up
                                 │
-                          10 min idle → thread group expires
+User follow-up in thread ───────┤
+  │                             │
+  ├──► Piped to research agent (turn-boundary injection)
+  │
+  └──► Thread-chat agent spawns (fast response)
+       Answers questions or steers research
+                                │
+                          10 min idle → soft-expire
+                          Re-activatable on next message
                           Discord thread stays archived
 ```
 
+## Dual-Agent Thread Model
+
+Research threads use two concurrent agents:
+
+| Agent | Purpose | Speed | Container |
+|-------|---------|-------|-----------|
+| **Research agent** | Deep investigation, IOC extraction, rule generation | Slow (minutes) | Full tooling |
+| **Thread-chat agent** | User Q&A, add research requirements, report progress | Fast (seconds) | Lightweight |
+
+When a user sends a follow-up message in a research thread:
+
+1. The message is **piped** to the running research agent via IPC (arrives at next SDK turn boundary)
+2. A **thread-chat agent** spawns in a virtual sub-group to respond immediately
+3. The chat agent can answer questions directly, or append to `requirements.md` to add research requirements
+4. Both agents output to the same Discord thread
+
+The chat agent uses a virtual sub-group (`{folder}_chat`) with `replyToJid` set to the parent thread JID, so its output appears in the same Discord thread.
+
 ## Why Chat Never Blocks
 
-Each message spawns a **new container**. Research runs in its own container tied to a Discord thread. The main channel agent acknowledges immediately and exits. Multiple research threads can run concurrently.
+Each message spawns a **new container**. Research runs in its own container tied to a Discord thread. The main channel agent acknowledges immediately and exits. Multiple research threads can run concurrently. Follow-up messages in threads get fast responses from the thread-chat agent while research continues uninterrupted.
 
 ## Container Mounts
+
+### Main group
 
 | Container Path | Host Path | Access |
 |----------------|-----------|--------|
@@ -74,6 +103,25 @@ Each message spawns a **new container**. Research runs in its own container tied
 | `/workspace/global` | `groups/global/` | read-only |
 | `/home/node/.claude` | `data/sessions/{group}/.claude/` | read-write |
 | `/workspace/ipc` | `data/ipc/{group}/` | read-write |
+
+### Research thread
+
+| Container Path | Host Path | Access |
+|----------------|-----------|--------|
+| `/workspace/group` | `groups/{folder}/` | read-write |
+| `/workspace/global` | `groups/global/` | read-only |
+| `/home/node/.claude` | `data/sessions/{group}/.claude/` | read-write |
+| `/workspace/ipc` | `data/ipc/{group}/` | read-write |
+
+### Thread-chat sub-group
+
+| Container Path | Host Path | Access |
+|----------------|-----------|--------|
+| `/workspace/group` | `groups/{folder}_chat/` | read-write |
+| `/workspace/global` | `groups/global/` | read-only |
+| `/workspace/research` | `groups/{research_folder}/` | read-write (for `requirements.md`) |
+| `/home/node/.claude` | `data/sessions/{folder}_chat/.claude/` | read-write |
+| `/workspace/ipc` | `data/ipc/{folder}_chat/` | read-write |
 
 ## IPC
 
@@ -85,17 +133,41 @@ Containers communicate with the host via JSON files:
 | `/workspace/ipc/tasks/` | Container → Host | Schedule tasks, create threads, register groups |
 | `/workspace/ipc/input/` | Host → Container | Pipe follow-up messages to running containers |
 
-The host resolves `$NANOCLAW_CHAT_JID` in task files to the actual channel JID automatically.
+The host resolves `$NANOCLAW_CHAT_JID` in task files to the actual channel JID automatically. For thread-chat sub-groups, `$NANOCLAW_CHAT_JID` resolves to the parent thread JID (via `replyToJid`).
+
+## Research Requirements
+
+When a user sends a follow-up in a research thread while the research agent is working:
+
+1. **Thread-chat agent responds immediately** — a lightweight chat container spawns, answers the user's question or acknowledges the directive within seconds, then exits.
+
+2. **Requirements are recorded** — if the message is a research directive ("include FBI members", "focus on IOCs"), the chat agent appends it as a checklist item to `requirements.md` in the shared research group folder.
+
+3. **Research agent validates before delivery** — the research agent checks `requirements.md` before delivering the final report. Every `- [ ]` item must be addressed and marked `- [x]` before the report is posted. If requirements are unmet, the agent goes back and researches them.
+
+This creates a **contract** between the user and the research agent — requirements are mandatory, not advisory. The user can add requirements at any time during research, and the agent will not deliver until all are satisfied.
+
+## Thread Re-activation
+
+Expired thread groups are **soft-deleted** (status set to `expired` in the database). The group folder and session data are preserved on disk.
+
+When a user sends a message to an expired thread:
+1. The channel handler calls `tryReactivate(jid)`
+2. The host looks up the expired thread in the database
+3. If found, re-registers the group with a fresh `added_at` timestamp
+4. The message is delivered normally, spawning a new container
+5. The agent resumes with its existing session and group context
 
 ## Thread Groups
 
-Research threads are registered as temporary groups with `idleExpiryMs`. After 10 minutes of inactivity, the group is unregistered and the container stops. The Discord thread remains archived.
+Research threads are registered as temporary groups with `idleExpiryMs`. After 10 minutes of inactivity, the group is soft-expired. The Discord thread remains archived and can be re-activated.
 
 Each thread group gets:
 - Its own group folder with research CLAUDE.md
 - Its own IPC namespace
 - Its own container and session
 - No trigger required (all messages in the thread are processed)
+- An optional thread-chat sub-group for fast user interaction
 
 ## Detection Validation
 
