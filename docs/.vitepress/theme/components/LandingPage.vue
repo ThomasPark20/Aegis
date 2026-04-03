@@ -417,7 +417,7 @@ claude
 .hero-name {
   font-size: clamp(4rem, 12vw, 8rem);
   font-weight: 800;
-  letter-spacing: -0.05em;
+  letter-spacing: 0.12em;
   line-height: 1;
   margin: 0;
   color: var(--vp-c-text-1);
