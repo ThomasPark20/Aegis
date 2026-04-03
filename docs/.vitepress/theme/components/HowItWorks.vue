@@ -1,69 +1,76 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 
 const messages = [
   { sender: 'user', name: 'You', text: 'Research Scattered Spider\'s latest campaign' },
-  { sender: 'bot', name: 'AEGIS', text: 'On it — spinning up a research thread.', delay: 800 },
-  { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 600 },
-  { sender: 'bot', name: 'AEGIS', text: 'Searching primary sources...', thread: true, delay: 1000, steps: true },
-  { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 700 },
-  { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 600 },
-  { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 700 },
-  { sender: 'step', text: 'Mapping TTPs to MITRE ATT&CK', delay: 500 },
-  { sender: 'step', text: 'Generating Sigma rules — validating with sigma-cli', delay: 800 },
-  { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 600 },
-  { sender: 'bot', name: 'AEGIS', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
-  { sender: 'user', name: 'You', text: 'Are any of them on FBI most wanted?', thread: true, delay: 1500 },
-  { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted. Added to research requirements so the report covers this.', thread: true, delay: 600, fast: true },
+  { sender: 'bot', name: 'AEGIS', text: 'On it — spinning up a research thread.', delay: 1400 },
+  { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 1000 },
+  { sender: 'bot', name: 'AEGIS', text: 'Searching primary sources...', thread: true, delay: 1600 },
+  { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 1200 },
+  { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 1000 },
+  { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 1200 },
+  { sender: 'step', text: 'Mapping TTPs to MITRE ATT&CK', delay: 900 },
+  { sender: 'step', text: 'Generating Sigma rules — validating with sigma-cli', delay: 1300 },
+  { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 1000 },
+  { sender: 'bot', name: 'AEGIS', text: 'Report ready.', thread: true, delay: 800, file: 'scattered-spider-2026-04-03.md' },
+  { sender: 'user', name: 'You', text: 'Are any of them on FBI most wanted?', thread: true, delay: 2500 },
+  { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted. Added to research requirements so the report covers this.', thread: true, delay: 1000 },
 ]
 
 const visibleMessages = ref([])
 const isTyping = ref(false)
 const typingName = ref('')
 const currentThread = ref(false)
+const messagesEl = ref(null)
 let timeoutId = null
 let currentIndex = 0
-let loopTimeout = null
+
+function scrollToBottom() {
+  nextTick(() => {
+    if (messagesEl.value) {
+      messagesEl.value.scrollTo({
+        top: messagesEl.value.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  })
+}
 
 function showNext() {
   if (currentIndex >= messages.length) {
-    // Pause then restart
-    loopTimeout = setTimeout(() => {
-      visibleMessages.value = []
-      currentIndex = 0
-      currentThread.value = false
-      showNext()
-    }, 4000)
+    // Stop — don't loop
     return
   }
 
   const msg = messages[currentIndex]
-  const delay = msg.delay || 500
+  const delay = msg.delay || 800
 
   if (msg.sender === 'bot' || (msg.sender === 'user' && currentIndex > 0)) {
     isTyping.value = true
-    typingName.value = msg.sender === 'bot' ? msg.name : msg.name
+    typingName.value = msg.name
+    scrollToBottom()
     timeoutId = setTimeout(() => {
       isTyping.value = false
       if (msg.thread) currentThread.value = true
       visibleMessages.value.push({ ...msg, id: currentIndex })
       currentIndex++
-      timeoutId = setTimeout(showNext, 200)
-    }, msg.fast ? 400 : delay)
+      scrollToBottom()
+      timeoutId = setTimeout(showNext, 400)
+    }, delay)
   } else {
     visibleMessages.value.push({ ...msg, id: currentIndex })
     currentIndex++
+    scrollToBottom()
     timeoutId = setTimeout(showNext, delay)
   }
 }
 
 onMounted(() => {
-  timeoutId = setTimeout(showNext, 800)
+  timeoutId = setTimeout(showNext, 1000)
 })
 
 onUnmounted(() => {
   if (timeoutId) clearTimeout(timeoutId)
-  if (loopTimeout) clearTimeout(loopTimeout)
 })
 </script>
 
@@ -78,8 +85,11 @@ onUnmounted(() => {
           <span v-if="!currentThread" class="channel-name"># threat-intel</span>
           <span v-else class="channel-name">🧵 Research: Scattered Spider</span>
         </div>
+        <div class="demo-dots" style="visibility: hidden;">
+          <span></span><span></span><span></span>
+        </div>
       </div>
-      <div class="demo-messages">
+      <div ref="messagesEl" class="demo-messages">
         <TransitionGroup name="msg">
           <div
             v-for="msg in visibleMessages"
@@ -99,7 +109,6 @@ onUnmounted(() => {
                 <span :class="['msg-name', msg.sender === 'bot' ? 'msg-name-bot' : 'msg-name-user']">
                   {{ msg.name }}
                 </span>
-                <span v-if="msg.fast" class="msg-badge">instant</span>
               </div>
               <div class="msg-text">{{ msg.text }}</div>
               <div v-if="msg.file" class="msg-file">
@@ -134,7 +143,7 @@ onUnmounted(() => {
 .demo-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   padding: 12px 16px;
   border-bottom: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
@@ -143,6 +152,7 @@ onUnmounted(() => {
 .demo-dots {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .demo-dots span {
@@ -153,7 +163,6 @@ onUnmounted(() => {
 }
 
 .demo-title {
-  flex: 1;
   text-align: center;
 }
 
@@ -165,12 +174,13 @@ onUnmounted(() => {
 
 .demo-messages {
   padding: 20px;
-  min-height: 420px;
-  max-height: 420px;
+  min-height: 480px;
+  max-height: 480px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  scroll-behavior: smooth;
 }
 
 .demo-msg {
@@ -195,17 +205,6 @@ onUnmounted(() => {
 
 .msg-name-user {
   color: var(--vp-c-text-2);
-}
-
-.msg-badge {
-  font-size: 10px;
-  font-weight: 600;
-  background: #e44;
-  color: #fff;
-  padding: 1px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .msg-text {
