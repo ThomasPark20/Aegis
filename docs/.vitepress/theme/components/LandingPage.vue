@@ -99,6 +99,7 @@ const sections = [
 const visibleSections = ref(new Set())
 const heroVisible = ref(true)
 const demoVisible = ref(false)
+const getRunningVisible = ref(false)
 
 function onScroll() {
   // Check each section
@@ -114,11 +115,18 @@ function onScroll() {
   const demoEl = document.querySelector('.demo-section')
   if (demoEl) {
     const rect = demoEl.getBoundingClientRect()
-    demoVisible.value = rect.top < window.innerHeight * 0.8
+    demoVisible.value = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2
     if (demoVisible.value && !chatStarted) {
       chatStarted = true
       timeoutId = setTimeout(showNext, 600)
     }
+  }
+
+  // Get Running section visibility
+  const grEl = document.querySelector('.getrunning-section')
+  if (grEl) {
+    const rect = grEl.getBoundingClientRect()
+    getRunningVisible.value = rect.top < window.innerHeight * 0.7
   }
 
   // Hero parallax
@@ -218,7 +226,7 @@ onUnmounted(() => {
     </section>
 
     <!-- GET RUNNING -->
-    <section class="getrunning-section">
+    <section class="getrunning-section" :class="{ 'getrunning-visible': getRunningVisible }">
       <h2>Get Running</h2>
       <div class="code-block">
         <pre><code>git clone https://github.com/ThomasPark20/Aegis.git
@@ -547,8 +555,21 @@ claude
 .getrunning-section {
   max-width: 580px;
   margin: 0 auto;
-  padding: 6rem 2rem 8rem;
+  padding: 2rem;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.getrunning-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .getrunning-section h2 {
