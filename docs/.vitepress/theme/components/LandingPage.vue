@@ -102,27 +102,14 @@ const demoVisible = ref(false)
 const getRunningVisible = ref(false)
 const isMobile = ref(false)
 
-// ── Mobile swipe cards ──
+// ── Mobile scroll-driven cards ──
 const activeCard = ref(0)
-const cardScrollEl = ref(null)
-
-function onCardScroll() {
-  if (!cardScrollEl.value) return
-  const el = cardScrollEl.value
-  const idx = Math.round(el.scrollLeft / el.offsetWidth)
-  activeCard.value = Math.min(idx, sections.length - 1)
-}
-
-function goToCard(idx) {
-  if (!cardScrollEl.value) return
-  activeCard.value = idx
-  cardScrollEl.value.scrollTo({ left: idx * cardScrollEl.value.offsetWidth, behavior: 'smooth' })
-}
+const demoSectionEl = ref(null)
 
 function onScroll() {
   isMobile.value = window.innerWidth <= 768
 
-  // Check each section (desktop only — mobile uses swipe cards)
+  // Desktop: check each section for visibility
   if (!isMobile.value) {
     document.querySelectorAll('.scroll-section').forEach((el) => {
       const rect = el.getBoundingClientRect()
@@ -133,8 +120,20 @@ function onScroll() {
     })
   }
 
+  // Mobile: map vertical scroll progress through demo-section to active card index
+  if (isMobile.value && demoSectionEl.value) {
+    const rect = demoSectionEl.value.getBoundingClientRect()
+    const sectionHeight = rect.height
+    const scrolled = -rect.top // how far we've scrolled into the section
+    const progress = Math.max(0, Math.min(1, scrolled / (sectionHeight - window.innerHeight)))
+    activeCard.value = Math.min(
+      Math.floor(progress * sections.length),
+      sections.length - 1
+    )
+  }
+
   // Start chat when demo section is visible
-  const demoEl = document.querySelector('.demo-section')
+  const demoEl = demoSectionEl.value || document.querySelector('.demo-section')
   if (demoEl) {
     const rect = demoEl.getBoundingClientRect()
     demoVisible.value = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2
@@ -190,7 +189,7 @@ onUnmounted(() => {
     </section>
 
     <!-- DEMO: sticky chat + scrolling explanations -->
-    <section class="demo-section">
+    <section ref="demoSectionEl" class="demo-section">
       <div class="demo-layout">
         <!-- Sticky chat window -->
         <div class="demo-sticky" :class="{ 'demo-sticky-visible': demoVisible }">
@@ -246,22 +245,26 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Mobile: sticky swipe cards below demo -->
+        <!-- Mobile: sticky stacked cards driven by vertical scroll -->
         <div v-if="isMobile" class="mobile-cards-wrapper">
-          <div ref="cardScrollEl" class="mobile-cards" @scroll.passive="onCardScroll">
-            <div v-for="section in sections" :key="section.id" class="mobile-card">
+          <div class="mobile-cards-stack">
+            <div
+              v-for="(section, i) in sections"
+              :key="section.id"
+              class="mobile-card"
+              :class="{ 'card-active': activeCard === i }"
+            >
               <h3>{{ section.title }}</h3>
               <p>{{ section.text }}</p>
             </div>
           </div>
           <div class="mobile-dots">
-            <button
+            <span
               v-for="(section, i) in sections"
               :key="section.id"
               class="mobile-dot"
               :class="{ 'dot-active': activeCard === i }"
-              @click="goToCard(i)"
-            ></button>
+            ></span>
           </div>
         </div>
       </div>
@@ -597,7 +600,7 @@ claude
 .getrunning-section {
   max-width: 640px;
   margin: 0 auto;
-  padding: 20vh 2rem;
+  padding: 20vh 2rem 4rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -671,6 +674,11 @@ claude
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
+  .hero-section {
+    min-height: 85vh;
+    padding-bottom: 4rem;
+  }
+
   .demo-layout {
     display: block;
     gap: 0;
@@ -686,7 +694,7 @@ claude
   }
 
   .demo-section {
-    min-height: 200vh;
+    min-height: 350vh; /* scroll runway: ~70vh per card */
     padding: 2rem 1rem;
   }
 
@@ -695,31 +703,32 @@ claude
     max-height: 40vh;
   }
 
-  /* Swipe cards below demo */
+  /* Stacked cards below demo, driven by vertical scroll */
   .mobile-cards-wrapper {
     position: sticky;
-    top: calc(8svh + 40vh + 60px); /* below demo: nav offset + chat height + header */
+    top: calc(8svh + 40vh + 60px);
     z-index: 9;
-    padding: 1rem 0 0;
+    padding: 1rem 1.5rem 0;
   }
 
-  .mobile-cards {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .mobile-cards::-webkit-scrollbar {
-    display: none;
+  .mobile-cards-stack {
+    position: relative;
+    min-height: 6rem;
   }
 
   .mobile-card {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-    padding: 1.25rem 1.5rem;
-    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .mobile-card.card-active {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .mobile-card h3 {
@@ -748,10 +757,8 @@ claude
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    border: none;
-    padding: 0;
+    display: inline-block;
     background: var(--vp-c-divider);
-    cursor: pointer;
     transition: background 0.2s, transform 0.2s;
   }
 
