@@ -386,7 +386,7 @@ claude
   display: flex;
   flex-direction: column;
   gap: 14rem;
-  padding: 40vh 0 10rem;
+  padding: 40vh 0 50vh;
   min-width: 0;
 }
 
