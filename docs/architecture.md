@@ -2,72 +2,11 @@
 
 ## Overview
 
-```mermaid
-graph TD
-    channels["Discord / Telegram"] --> host
-
-    subgraph host["AEGIS Host Process"]
-        router["Message Router"] --> queue["Group Queue"]
-        scheduler["Task Scheduler"] --> queue
-        ipc["IPC Watcher"]
-        ipc -->|send_message / send_file| channels
-        ipc -->|schedule_task| scheduler
-        ipc -->|start_research_thread| threads["Discord Threads"]
-    end
-
-    queue --> main
-    queue --> chat
-    queue --> research
-
-    subgraph main["Main Agent Container"]
-        m1["Claude Code + sigma-cli + yarac + snort"]
-        m2["IPC: send_message, send_file,<br/>schedule_task, start_research_thread"]
-    end
-
-    subgraph chat["Thread-Chat Container"]
-        c1["Claude Code (lightweight)"]
-        c2["Answers Q&A instantly"]
-        c3["Writes to requirements.md"]
-        c4["Reads research workspace"]
-    end
-
-    subgraph research["Research Container"]
-        r1["Claude Code + sigma-cli + yarac + snort"]
-        r2["IPC: send_message, send_file, schedule_task"]
-        r3["Checks requirements.md before delivery"]
-    end
-
-    chat -.->|"writes requirements"| research
-```
+<ArchitectureFlow />
 
 ## Research Thread Flow
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant Main as Main Channel
-    participant Host as AEGIS Host
-    participant Thread as Discord Thread
-    participant Research as Research Agent
-    participant Chat as Chat Agent
-
-    User->>Main: "Research Salt Typhoon"
-    Main->>Host: IPC: start_research_thread
-    Main-->>User: "On it — spinning up a thread"
-    Host->>Thread: Create Discord thread
-    Host->>Research: Spawn container + seed requirements.md
-    Research->>Thread: Researching...
-
-    User->>Thread: "Include FBI most wanted members"
-    Host->>Chat: Spawn lightweight container
-    Chat-->>Thread: "Got it — added to requirements"
-    Chat->>Research: Append to requirements.md
-
-    Research->>Research: Check requirements.md
-    Research->>Thread: Report delivered (.md file)
-
-    Note over Thread: 10 min idle → soft-expire<br/>Message to reactivate
-```
+<ResearchThreadFlow />
 
 ## Dual-Agent Thread Model
 
