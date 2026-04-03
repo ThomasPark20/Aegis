@@ -6,6 +6,7 @@ export default withMermaid(defineConfig({
   description: 'Autonomous CTI Research & Detection Platform',
   base: '/Aegis/',
   ignoreDeadLinks: true,
+  appearance: 'dark',
   head: [],
   themeConfig: {
     siteTitle: 'AEGIS',
