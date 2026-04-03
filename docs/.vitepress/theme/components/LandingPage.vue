@@ -152,7 +152,7 @@ onUnmounted(() => {
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
         <h1 class="hero-name">AEGIS</h1>
         <p class="hero-text">Autonomous Threat Intelligence</p>
-        <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord.</p>
+        <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">
           <a href="/Aegis/guide/getting-started" class="btn btn-primary">Get Started</a>
           <a href="/Aegis/architecture" class="btn btn-secondary">Architecture</a>
