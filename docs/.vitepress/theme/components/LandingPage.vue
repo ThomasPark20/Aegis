@@ -555,9 +555,8 @@ claude
 .getrunning-section {
   max-width: 580px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 8rem 2rem;
   text-align: center;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
