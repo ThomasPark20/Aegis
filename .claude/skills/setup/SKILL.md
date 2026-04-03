@@ -271,23 +271,32 @@ Run `npx tsx setup/index.ts --step verify` and parse the status block.
 
 Tell user to test: send a message in their registered chat. Show: `tail -f logs/nanoclaw.log`
 
-## 9a. Daily Report & Feed Scanning
+## 9a. Automated Threat Monitoring
 
-After verifying the service works, configure the reporting pipeline:
+After verifying the service works, configure the automated reporting pipeline.
 
-AskUserQuestion: What time would you like your daily threat intelligence briefing? (e.g. "9am", "07:30", "8:00 AM")
+### RSS Feed Scanning (2-hour checks)
 
-Once the user provides a time:
+AskUserQuestion: Would you like AEGIS to automatically scan CTI feeds every 2 hours for critical threats?
+1. **Yes** — "Scans RSS feeds every 2 hours. Critical items (APTs, CVEs, zero-days, ransomware) get researched immediately and delivered as Discord threads."
+2. **No** — "Skip — you can enable this later by telling AEGIS 'enable feed scanning' in chat."
 
-1. Convert to a cron expression using the detected timezone (e.g. "9am" in America/New_York → `0 9 * * *`)
-2. Tell the user you're setting up:
-   - **Daily briefing** at their chosen time — compiles all research from the day into an executive report, delivered as a Discord thread
-   - **RSS feed scanning** every 2 hours — monitors CTI feeds, critical items get immediate research threads
-3. Send a message in the registered channel asking AEGIS to set this up: "set daily report at [time]"
-   - Or seed the tasks directly via the service (the `/add-discord` skill already seeds these in Phase 4)
-4. Confirm to the user: "Daily report scheduled for [time] ([timezone]). RSS feeds will be scanned every 2 hours — critical items get immediate research threads."
+If **Yes**: Seed the RSS scan task during channel setup (Phase 4 of `/add-discord`). Confirm: "RSS feed scanning enabled — critical threats will be reported in new threads automatically."
 
-If the user declines or wants to skip: "No problem — you can set this up anytime by telling AEGIS 'set daily report at 9am' in your channel, or run `/schedule-report`."
+If **No**: Note this choice for the next question.
+
+### Daily Report
+
+AskUserQuestion: Would you like a daily threat intelligence summary?
+1. **Yes** — "Compiles all research from the day into an executive briefing, delivered as a Discord thread at your chosen time."
+2. **No** — "Skip — you can enable later via 'set daily report at 9am' in chat or `/schedule-report`."
+
+If **Yes**:
+- If RSS scanning was declined above, tell the user: "The daily report compiles findings from feed scanning — I'll enable the 2-hour scan as well so your daily report has content." Enable RSS scanning automatically.
+- Ask: "What time would you like the daily report? (e.g. '9am', '07:30')"
+- Convert to cron using detected timezone. Seed the daily-report task. Confirm: "Daily report scheduled for [time] ([timezone])."
+
+If **No**: Skip. User can configure later.
 
 ## Troubleshooting
 
