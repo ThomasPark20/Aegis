@@ -250,7 +250,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Mobile: sticky stacked cards driven by vertical scroll -->
+        <!-- Mobile: stacked cards driven by vertical scroll -->
         <div class="mobile-cards-wrapper">
           <div class="mobile-cards-stack">
             <div
@@ -262,14 +262,6 @@ onUnmounted(() => {
               <h3>{{ section.title }}</h3>
               <p>{{ section.text }}</p>
             </div>
-          </div>
-          <div class="mobile-dots">
-            <span
-              v-for="(section, i) in sections"
-              :key="section.id"
-              class="mobile-dot"
-              :class="{ 'dot-active': activeCard === i }"
-            ></span>
           </div>
         </div>
       </div>
@@ -693,42 +685,41 @@ claude
     display: none;
   }
 
-  .demo-layout {
-    display: block;
-    height: 350svh;
-  }
-
-  .demo-sticky {
-    position: sticky;
-    top: 8svh;
-    transform: none;
-    z-index: 10;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    border-radius: 0 0 12px 12px;
-  }
-
   .demo-section {
     min-height: 350svh;
     padding: 0 1rem;
   }
 
-  .chat-messages {
-    min-height: 40svh;
-    max-height: 40svh;
-  }
-
-  /* Stacked cards below demo, driven by vertical scroll */
-  .mobile-cards-wrapper {
+  .demo-layout {
     display: block;
     position: sticky;
-    top: calc(8svh + 40svh + 56px);
-    z-index: 9;
-    padding: 1rem 1.5rem 0;
+    top: 50svh;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .demo-sticky {
+    position: relative;
+    top: auto;
+    transform: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+  }
+
+  .chat-messages {
+    min-height: 36svh;
+    max-height: 36svh;
+  }
+
+  /* Stacked cards below demo */
+  .mobile-cards-wrapper {
+    display: block;
+    padding: 1rem 0.5rem 0;
   }
 
   .mobile-cards-stack {
     position: relative;
-    min-height: 6rem;
+    min-height: 5rem;
   }
 
   .mobile-card {
@@ -759,27 +750,6 @@ claude
     line-height: 1.6;
     color: var(--vp-c-text-2);
     margin: 0;
-  }
-
-  .mobile-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 0.75rem 0 0.5rem;
-  }
-
-  .mobile-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    background: var(--vp-c-divider);
-    transition: background 0.2s, transform 0.2s;
-  }
-
-  .dot-active {
-    background: var(--vp-c-text-1);
-    transform: scale(1.3);
   }
 
   .getrunning-section {
