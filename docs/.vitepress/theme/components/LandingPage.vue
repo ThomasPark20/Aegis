@@ -632,7 +632,7 @@ claude
 
   .demo-sticky {
     position: sticky;
-    top: 0;
+    top: var(--vp-nav-height, 64px);
     transform: none;
     z-index: 10;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
