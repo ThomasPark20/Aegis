@@ -134,7 +134,7 @@ onUnmounted(() => {
 
 <style scoped>
 .demo-container {
-  max-width: 580px;
+  max-width: 620px;
   margin: 2rem auto;
 }
 
@@ -180,8 +180,8 @@ onUnmounted(() => {
 
 .demo-messages {
   padding: 20px;
-  min-height: 560px;
-  max-height: 560px;
+  min-height: 70vh;
+  max-height: 70vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
