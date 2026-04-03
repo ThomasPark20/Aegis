@@ -686,7 +686,7 @@ claude
   }
 
   .demo-section {
-    min-height: 350svh;
+    min-height: 200svh;
     padding: 0 1rem;
   }
 
@@ -753,7 +753,7 @@ claude
   }
 
   .getrunning-section {
-    padding: 10vh 1rem 4rem;
+    padding: 4rem 1rem;
   }
 
   .code-block {
