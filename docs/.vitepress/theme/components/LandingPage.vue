@@ -29,9 +29,91 @@ const isTyping = ref(false)
 const typingName = ref('')
 const currentThread = ref(false)
 const chatEl = ref(null)
+const heroCanvas = ref(null)
 let timeoutId = null
 let currentIndex = 0
 let chatStarted = false
+let animFrameId = null
+
+// ── Particle grid ──
+function initParticles() {
+  const canvas = heroCanvas.value
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  let w, h, particles
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth * devicePixelRatio
+    h = canvas.height = canvas.offsetHeight * devicePixelRatio
+    ctx.scale(devicePixelRatio, devicePixelRatio)
+  }
+
+  function createParticles() {
+    const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 12000)
+    particles = []
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.offsetWidth,
+        y: Math.random() * canvas.offsetHeight,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5,
+      })
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
+    const connDist = 120
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x
+        const dy = particles[i].y - particles[j].y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < connDist) {
+          const alpha = (1 - dist / connDist) * 0.15
+          ctx.strokeStyle = `rgba(255, 160, 50, ${alpha})`
+          ctx.lineWidth = 0.5
+          ctx.beginPath()
+          ctx.moveTo(particles[i].x, particles[i].y)
+          ctx.lineTo(particles[j].x, particles[j].y)
+          ctx.stroke()
+        }
+      }
+    }
+
+    // Draw particles
+    for (const p of particles) {
+      ctx.fillStyle = `rgba(255, 140, 30, ${0.4 + p.r * 0.15})`
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+      ctx.fill()
+
+      // Move
+      p.x += p.vx
+      p.y += p.vy
+
+      // Wrap
+      if (p.x < -10) p.x = canvas.offsetWidth + 10
+      if (p.x > canvas.offsetWidth + 10) p.x = -10
+      if (p.y < -10) p.y = canvas.offsetHeight + 10
+      if (p.y > canvas.offsetHeight + 10) p.y = -10
+    }
+
+    animFrameId = requestAnimationFrame(draw)
+  }
+
+  resize()
+  createParticles()
+  draw()
+
+  window.addEventListener('resize', () => {
+    resize()
+    createParticles()
+  })
+}
 
 function scrollChat() {
   nextTick(() => {
@@ -164,11 +246,13 @@ onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', () => { isMobile.value = window.innerWidth <= 768 })
   onScroll()
+  initParticles()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
   if (timeoutId) clearTimeout(timeoutId)
+  if (animFrameId) cancelAnimationFrame(animFrameId)
 })
 </script>
 
@@ -176,6 +260,7 @@ onUnmounted(() => {
   <div class="landing">
     <!-- HERO: full viewport -->
     <section class="hero-section">
+      <canvas ref="heroCanvas" class="hero-particles"></canvas>
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
         <h1 class="hero-name">AEGIS</h1>
         <p class="hero-text">Autonomous Threat Intelligence</p>
@@ -304,7 +389,18 @@ claude
   position: relative;
 }
 
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .hero-content {
+  position: relative;
+  z-index: 1;
   transition: opacity 0.5s, transform 0.5s;
 }
 
@@ -376,6 +472,7 @@ claude
 
 .scroll-hint {
   position: absolute;
+  z-index: 1;
   bottom: 2rem;
   display: flex;
   flex-direction: column;
