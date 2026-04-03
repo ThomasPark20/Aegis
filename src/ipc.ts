@@ -56,10 +56,12 @@ export function startIpcWatcher(deps: IpcDeps): void {
 
     const registeredGroups = deps.registeredGroups();
 
-    // Build folder→isMain lookup from registered groups
+    // Build folder→isMain and folder→jid lookups from registered groups
     const folderIsMain = new Map<string, boolean>();
-    for (const group of Object.values(registeredGroups)) {
+    const folderToJid = new Map<string, string>();
+    for (const [jid, group] of Object.entries(registeredGroups)) {
       if (group.isMain) folderIsMain.set(group.folder, true);
+      folderToJid.set(group.folder, jid);
     }
 
     for (const sourceGroup of groupFolders) {
@@ -77,6 +79,11 @@ export function startIpcWatcher(deps: IpcDeps): void {
             const filePath = path.join(messagesDir, file);
             try {
               const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+              // Resolve $NANOCLAW_CHAT_JID in message data
+              const msgGroupJid = folderToJid.get(sourceGroup);
+              if (msgGroupJid && data.chatJid === '$NANOCLAW_CHAT_JID') {
+                data.chatJid = msgGroupJid;
+              }
               const targetJid = data.chatJid;
 
               if (targetJid) {
@@ -164,6 +171,18 @@ export function startIpcWatcher(deps: IpcDeps): void {
             const filePath = path.join(tasksDir, file);
             try {
               const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+              // Resolve $NANOCLAW_CHAT_JID — the container agent writes
+              // this literal string because Claude doesn't shell-expand
+              // env vars inside JSON. Replace with the actual JID for
+              // this source group.
+              const groupJid = folderToJid.get(sourceGroup);
+              if (groupJid) {
+                for (const key of Object.keys(data)) {
+                  if (data[key] === '$NANOCLAW_CHAT_JID') {
+                    data[key] = groupJid;
+                  }
+                }
+              }
               // Pass source group identity to processTaskIpc for authorization
               await processTaskIpc(data, sourceGroup, isMain, deps);
               fs.unlinkSync(filePath);
