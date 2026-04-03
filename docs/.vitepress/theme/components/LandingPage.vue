@@ -97,42 +97,41 @@ const sections = [
 ]
 
 const visibleSections = ref(new Set())
-const sectionOpacity = ref({})
 const heroVisible = ref(true)
 const demoVisible = ref(false)
 const getRunningVisible = ref(false)
 const isMobile = ref(false)
 
+// ── Mobile swipe cards ──
+const activeCard = ref(0)
+const cardScrollEl = ref(null)
+
+function onCardScroll() {
+  if (!cardScrollEl.value) return
+  const el = cardScrollEl.value
+  const idx = Math.round(el.scrollLeft / el.offsetWidth)
+  activeCard.value = Math.min(idx, sections.length - 1)
+}
+
+function goToCard(idx) {
+  if (!cardScrollEl.value) return
+  activeCard.value = idx
+  cardScrollEl.value.scrollTo({ left: idx * cardScrollEl.value.offsetWidth, behavior: 'smooth' })
+}
+
 function onScroll() {
   isMobile.value = window.innerWidth <= 768
 
-  // Get the bottom edge of the sticky demo on mobile
-  const stickyEl = document.querySelector('.demo-sticky')
-  const stickyBottom = stickyEl ? stickyEl.getBoundingClientRect().bottom : 0
-
-  // Check each section
-  document.querySelectorAll('.scroll-section').forEach((el) => {
-    const rect = el.getBoundingClientRect()
-    const id = el.dataset.id
-    if (rect.top < window.innerHeight * 0.75 && rect.bottom > 0) {
-      visibleSections.value.add(id)
-    }
-
-    // On mobile: fade out cards as they scroll behind the sticky demo
-    if (isMobile.value && stickyBottom > 0) {
-      const fadeZone = 80 // px over which the fade happens
-      const dist = rect.top - stickyBottom
-      if (dist < 0) {
-        sectionOpacity.value[id] = 0
-      } else if (dist < fadeZone) {
-        sectionOpacity.value[id] = dist / fadeZone
-      } else {
-        sectionOpacity.value[id] = 1
+  // Check each section (desktop only — mobile uses swipe cards)
+  if (!isMobile.value) {
+    document.querySelectorAll('.scroll-section').forEach((el) => {
+      const rect = el.getBoundingClientRect()
+      const id = el.dataset.id
+      if (rect.top < window.innerHeight * 0.75 && rect.bottom > 0) {
+        visibleSections.value.add(id)
       }
-    } else {
-      sectionOpacity.value[id] = 1
-    }
-  })
+    })
+  }
 
   // Start chat when demo section is visible
   const demoEl = document.querySelector('.demo-section')
@@ -159,6 +158,7 @@ function onScroll() {
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', () => { isMobile.value = window.innerWidth <= 768 })
   onScroll()
 })
 
@@ -232,18 +232,36 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Scrolling explanation cards -->
-        <div class="demo-scroll">
+        <!-- Desktop: scrolling explanation cards -->
+        <div v-if="!isMobile" class="demo-scroll">
           <div
             v-for="section in sections"
             :key="section.id"
             :data-id="section.id"
             class="scroll-section"
             :class="{ 'section-visible': visibleSections.has(section.id) }"
-            :style="isMobile && sectionOpacity[section.id] != null ? { opacity: sectionOpacity[section.id] } : {}"
           >
             <h3>{{ section.title }}</h3>
             <p>{{ section.text }}</p>
+          </div>
+        </div>
+
+        <!-- Mobile: sticky swipe cards below demo -->
+        <div v-if="isMobile" class="mobile-cards-wrapper">
+          <div ref="cardScrollEl" class="mobile-cards" @scroll.passive="onCardScroll">
+            <div v-for="section in sections" :key="section.id" class="mobile-card">
+              <h3>{{ section.title }}</h3>
+              <p>{{ section.text }}</p>
+            </div>
+          </div>
+          <div class="mobile-dots">
+            <button
+              v-for="(section, i) in sections"
+              :key="section.id"
+              class="mobile-dot"
+              :class="{ 'dot-active': activeCard === i }"
+              @click="goToCard(i)"
+            ></button>
           </div>
         </div>
       </div>
@@ -579,7 +597,7 @@ claude
 .getrunning-section {
   max-width: 640px;
   margin: 0 auto;
-  padding: 8rem 2rem;
+  padding: 20vh 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -596,10 +614,10 @@ claude
 }
 
 .getrunning-section h2 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  margin: 0 0 2.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 2rem;
 }
 
 .code-block {
@@ -667,18 +685,79 @@ claude
     border-radius: 0 0 12px 12px;
   }
 
-  .demo-scroll {
-    gap: 6rem;
-    padding: 2rem 0 8rem;
-  }
-
   .demo-section {
-    min-height: auto;
+    min-height: 200vh;
+    padding: 2rem 1rem;
   }
 
   .chat-messages {
     min-height: 40vh;
     max-height: 40vh;
+  }
+
+  /* Swipe cards below demo */
+  .mobile-cards-wrapper {
+    position: sticky;
+    top: calc(8svh + 40vh + 60px); /* below demo: nav offset + chat height + header */
+    z-index: 9;
+    padding: 1rem 0 0;
+  }
+
+  .mobile-cards {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .mobile-cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    padding: 1.25rem 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .mobile-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--vp-c-text-1);
+  }
+
+  .mobile-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--vp-c-text-2);
+    margin: 0;
+  }
+
+  .mobile-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.75rem 0 0.5rem;
+  }
+
+  .mobile-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: var(--vp-c-divider);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .dot-active {
+    background: var(--vp-c-text-1);
+    transform: scale(1.3);
   }
 
   .getrunning-section {
