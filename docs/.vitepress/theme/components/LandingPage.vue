@@ -143,11 +143,16 @@ function onScroll() {
     }
   }
 
-  // Get Running section visibility
+  // Get Running section visibility — also fade out demo as Get Running enters
   const grEl = document.querySelector('.getrunning-section')
   if (grEl) {
     const rect = grEl.getBoundingClientRect()
     getRunningVisible.value = rect.top < window.innerHeight * 0.7
+
+    // Fade out demo when Get Running is approaching
+    if (rect.top < window.innerHeight * 1.2) {
+      demoVisible.value = false
+    }
   }
 
   // Hero parallax
@@ -605,7 +610,7 @@ claude
 .getrunning-section {
   max-width: 640px;
   margin: 0 auto;
-  padding: 20vh 2rem 4rem;
+  padding: 30vh 2rem 6rem;
   text-align: center;
   display: flex;
   flex-direction: column;
