@@ -1,3 +1,7 @@
+---
+layout: page
+---
+
 <style>
 .VPDoc .container { max-width: 100% !important; }
 .VPDoc .content { max-width: 100% !important; }
