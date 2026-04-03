@@ -162,7 +162,7 @@ onUnmounted(() => {
     <section class="demo-section">
       <div class="demo-layout">
         <!-- Sticky chat window -->
-        <div class="demo-sticky">
+        <div class="demo-sticky" :class="{ 'demo-sticky-visible': demoVisible }">
           <div class="chat-window">
             <div class="chat-header">
               <div class="chat-dots"><span></span><span></span><span></span></div>
@@ -369,6 +369,12 @@ claude
   top: 50vh;
   transform: translateY(-50%);
   min-width: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.demo-sticky.demo-sticky-visible {
+  opacity: 1;
 }
 
 .demo-scroll {
