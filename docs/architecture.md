@@ -6,39 +6,39 @@
 Discord / Telegram
         │
         ▼
-┌──────────────────────────────────────────────────┐
-│              AEGIS Host Process                   │
-│                                                   │
-│  Message Router ──► Group Queue ──► Container     │
-│                                                   │
-│  Task Scheduler ──► Cron/Interval ──► Container   │
-│                                                   │
-│  IPC Watcher ◄──── File-based JSON messaging      │
-│       │                                           │
-│       ├── send_message / send_file → Channel      │
-│       ├── schedule_task → Task Scheduler          │
-│       ├── start_research_thread → Discord Thread  │
-│       └── register_group → Group Registry         │
-└──────────────────────────────────────────────────┘
-        │                │                │
-        ▼                ▼                ▼
-┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐
-│  Container   │ │  Container   │ │  Container           │
-│  (chat)      │ │ (thread-chat)│ │  (research)          │
-│              │ │              │ │                      │
-│ Claude Code  │ │ Claude Code  │ │ Claude Code          │
-│ + sigma-cli  │ │ (lightweight)│ │ + sigma-cli          │
-│ + yarac      │ │              │ │ + yarac              │
-│ + snort      │ │ Answers Q&A  │ │ + snort              │
-│              │ │ Writes to    │ │                      │
-│ IPC Tools:   │ │ requirements │ │ IPC Tools:           │
-│ send_message │ │ .md          │ │ send_message         │
-│ send_file    │ │              │ │ send_file            │
-│ schedule_task│ │ Reads        │ │ schedule_task        │
-│ start_       │ │ /workspace/  │ │                      │
-│ research_    │ │ research/ RW │ │ Checks requirements  │
-│ thread       │ │              │ │ .md before delivery  │
-└──────────────┘ └──────────────┘ └──────────────────────┘
+┌─────────────────────────────────────────────────┐
+│             AEGIS Host Process                  │
+│                                                 │
+│  Message Router ──► Group Queue ──► Container   │
+│                                                 │
+│  Task Scheduler ──► Cron/Interval ──► Container │
+│                                                 │
+│  IPC Watcher ◄──── File-based JSON messaging    │
+│       │                                         │
+│       ├── send_message / send_file → Channel    │
+│       ├── schedule_task → Task Scheduler        │
+│       ├── start_research_thread → Discord Thread│
+│       └── register_group → Group Registry       │
+└─────────────────────────────────────────────────┘
+        │                 │                 │
+        ▼                 ▼                 ▼
+┌────────────────┐ ┌────────────────┐ ┌────────────────────┐
+│ Container      │ │ Container      │ │ Container          │
+│ (main chat)    │ │ (thread-chat)  │ │ (research)         │
+│                │ │                │ │                    │
+│ Claude Code    │ │ Claude Code    │ │ Claude Code        │
+│ + sigma-cli    │ │ (lightweight)  │ │ + sigma-cli        │
+│ + yarac        │ │                │ │ + yarac            │
+│ + snort        │ │ Answers Q&A    │ │ + snort            │
+│                │ │ Writes to      │ │                    │
+│ IPC Tools:     │ │ requirements.md│ │ IPC Tools:         │
+│ send_message   │ │                │ │ send_message       │
+│ send_file      │ │ Reads research │ │ send_file          │
+│ schedule_task  │ │ workspace (RW) │ │ schedule_task      │
+│ start_research │ │                │ │                    │
+│ _thread        │ │                │ │ Checks requirements│
+│                │ │                │ │ .md before delivery│
+└────────────────┘ └────────────────┘ └────────────────────┘
 ```
 
 ## Research Thread Flow
@@ -60,10 +60,9 @@ clean, agent exits              ▼
                                 │
 User follow-up in thread ───────┤
   │                             │
-  ├──► Piped to research agent (turn-boundary injection)
-  │
   └──► Thread-chat agent spawns (fast response)
-       Answers questions or steers research
+       Answers questions or adds to requirements.md
+       Research agent checks requirements before delivery
                                 │
                           10 min idle → soft-expire
                           Re-activatable on next message

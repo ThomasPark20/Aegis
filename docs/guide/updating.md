@@ -14,22 +14,12 @@ Restart the service if running:
 launchctl kickstart -k gui/$(id -u)/com.aegis
 ```
 
-## Syncing NanoClaw Upstream
+## Rebuilding the Container
 
-AEGIS is built on NanoClaw. To pull useful upstream changes:
+If the agent-runner or container skills changed, rebuild the container image:
 
 ```bash
-git fetch upstream
-git log upstream/main --oneline -20   # see what's new
-git cherry-pick <commit>              # pick specific commits
+./container/build.sh
 ```
 
-Or merge everything (may require conflict resolution):
-```bash
-git merge upstream/main
-```
-
-The `upstream` remote is configured during setup. If it's missing:
-```bash
-git remote add upstream https://github.com/qwibitai/nanoclaw.git
-```
+Then restart the service to pick up the new image.
