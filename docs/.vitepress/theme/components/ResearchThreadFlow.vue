@@ -15,6 +15,7 @@ const nodes = ref([
     style: {
       background: '#f0f0f0', border: '2px solid #333', borderRadius: '24px',
       padding: '14px 28px', fontWeight: '600', fontSize: '13px', width: '300px',
+      textAlign: 'center',
     },
   },
   {
@@ -23,7 +24,7 @@ const nodes = ref([
     data: { label: '2. Main Agent acknowledges and dispatches' },
     style: {
       background: '#fff', border: '1px solid #ccc', borderRadius: '10px',
-      padding: '14px 20px', fontSize: '13px', width: '300px',
+      padding: '14px 20px', fontSize: '13px', width: '300px', textAlign: 'center',
     },
   },
   {
@@ -33,7 +34,7 @@ const nodes = ref([
     style: {
       background: '#000', color: '#fff', border: 'none', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {
@@ -43,7 +44,7 @@ const nodes = ref([
     style: {
       background: '#fff', border: '2px solid #333', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {
@@ -53,7 +54,7 @@ const nodes = ref([
     style: {
       background: '#f0f0f0', border: '2px solid #333', borderRadius: '24px',
       padding: '14px 28px', fontWeight: '600', fontSize: '13px', width: '310px',
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {
@@ -63,7 +64,7 @@ const nodes = ref([
     style: {
       background: '#fff', border: '2px solid #e44', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '310px', fontWeight: '500',
-      color: '#c33', whiteSpace: 'pre-wrap',
+      color: '#c33', whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {
@@ -73,7 +74,7 @@ const nodes = ref([
     style: {
       background: '#fff8f8', border: '2px dashed #e44', borderRadius: '10px',
       padding: '16px 20px', fontSize: '13px', width: '340px', whiteSpace: 'pre-wrap',
-      fontFamily: 'var(--vp-font-family-mono), monospace',
+      fontFamily: 'var(--vp-font-family-mono), monospace', textAlign: 'center',
     },
   },
   {
@@ -83,7 +84,7 @@ const nodes = ref([
     style: {
       background: '#fff', border: '2px solid #333', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {
@@ -93,7 +94,7 @@ const nodes = ref([
     style: {
       background: '#f0fff0', border: '2px solid #393', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '600',
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-wrap', textAlign: 'center',
     },
   },
   {

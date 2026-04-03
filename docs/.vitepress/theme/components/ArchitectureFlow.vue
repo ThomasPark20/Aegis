@@ -17,7 +17,7 @@ const nodes = ref([
     data: { label: 'Discord / Telegram' },
     style: {
       background: '#f5f5f5', border: '2px solid #333', borderRadius: '8px',
-      padding: '14px 32px', fontWeight: '600', fontSize: '15px',
+      padding: '14px 32px', fontWeight: '600', fontSize: '15px', textAlign: 'center',
     },
   },
   {
@@ -38,7 +38,7 @@ const nodes = ref([
     data: { label: 'Message Router' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '10px 20px', fontSize: '13px',
+      padding: '10px 20px', fontSize: '13px', textAlign: 'center',
     },
   },
   {
@@ -48,7 +48,7 @@ const nodes = ref([
     data: { label: 'Group Queue' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '10px 20px', fontSize: '13px',
+      padding: '10px 20px', fontSize: '13px', textAlign: 'center',
     },
   },
   {
@@ -58,7 +58,7 @@ const nodes = ref([
     data: { label: 'Task Scheduler' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '10px 20px', fontSize: '13px',
+      padding: '10px 20px', fontSize: '13px', textAlign: 'center',
     },
   },
   {
@@ -68,7 +68,7 @@ const nodes = ref([
     data: { label: 'IPC Watcher' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '10px 20px', fontSize: '13px',
+      padding: '10px 20px', fontSize: '13px', textAlign: 'center',
     },
   },
 
@@ -92,7 +92,7 @@ const nodes = ref([
     style: {
       background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.5',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 
@@ -116,7 +116,7 @@ const nodes = ref([
     style: {
       background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.5',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 
@@ -140,7 +140,7 @@ const nodes = ref([
     style: {
       background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '240px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.5',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 ])
