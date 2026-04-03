@@ -309,7 +309,7 @@ Generated Sigma rules must pass these checks:
 sigma check rule.yml
 
 # Backend conversion test (confirms rule compiles to a valid query)
-sigma convert -t splunk rule.yml
+sigma convert --without-pipeline -t splunk rule.yml
 ```
 
 If validation fails, review the error message, fix the rule, and retry (max 3 attempts total).

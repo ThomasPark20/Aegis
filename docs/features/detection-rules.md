@@ -6,7 +6,7 @@ Every detection rule AEGIS generates is validated with real CLI tools before inc
 
 | Type | When Generated | Validation |
 |------|---------------|------------|
-| **Sigma** | Almost always — behavioral/technical indicators | `sigma check` + `sigma convert -t splunk` |
+| **Sigma** | Almost always — behavioral/technical indicators | `sigma check` + `sigma convert --without-pipeline -t splunk` |
 | **YARA** | File-level indicators (malware, byte patterns) | `yarac rule.yar /dev/null` |
 | **Snort** | Network indicators (IPs, domains, HTTP patterns) | `snort -T` |
 

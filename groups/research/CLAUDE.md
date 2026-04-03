@@ -196,7 +196,7 @@ Rules **must** be validated using CLI tools before appending:
 
 | Rule Type | Validation Command | Success |
 |-----------|--------------------|---------|
-| Sigma | `sigma check rule.yml && sigma convert -t splunk rule.yml` | Exit code 0 |
+| Sigma | `sigma check rule.yml && sigma convert --without-pipeline -t splunk rule.yml` | Exit code 0 |
 | YARA | `yarac rule.yar /dev/null` | Exit code 0 |
 | Snort | `snort -T -c snort.lua --rule-path rule.rules` | Exit code 0 (fallback: snort may not be installed) |
 

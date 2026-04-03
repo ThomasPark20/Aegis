@@ -100,7 +100,7 @@ Each thread group gets:
 ## Detection Validation
 
 The container image includes:
-- **sigma-cli** — `sigma check` + `sigma convert -t splunk`
+- **sigma-cli** — `sigma check` + `sigma convert --without-pipeline -t splunk`
 - **yarac** — compiles YARA rules
 - **snort** — validates Snort rules
 

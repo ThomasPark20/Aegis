@@ -166,6 +166,15 @@ function createSchema(database: Database.Database): void {
   } catch {
     /* column already exists */
   }
+
+  // Add status column for soft-delete (thread re-activation)
+  try {
+    database.exec(
+      `ALTER TABLE registered_groups ADD COLUMN status TEXT DEFAULT 'active'`,
+    );
+  } catch {
+    /* column already exists */
+  }
 }
 
 export function initDatabase(): void {
@@ -665,18 +674,41 @@ export function setRegisteredGroup(jid: string, group: RegisteredGroup): void {
   );
 }
 
+type RegisteredGroupRow = {
+  jid: string;
+  name: string;
+  folder: string;
+  trigger_pattern: string;
+  added_at: string;
+  container_config: string | null;
+  requires_trigger: number | null;
+  is_main: number | null;
+  idle_expiry_ms: number | null;
+  status: string | null;
+};
+
+function rowToGroup(row: RegisteredGroupRow): RegisteredGroup {
+  return {
+    name: row.name,
+    folder: row.folder,
+    trigger: row.trigger_pattern,
+    added_at: row.added_at,
+    containerConfig: row.container_config
+      ? JSON.parse(row.container_config)
+      : undefined,
+    requiresTrigger:
+      row.requires_trigger === null ? undefined : row.requires_trigger === 1,
+    isMain: row.is_main === 1 ? true : undefined,
+    idleExpiryMs: row.idle_expiry_ms ?? undefined,
+  };
+}
+
 export function getAllRegisteredGroups(): Record<string, RegisteredGroup> {
-  const rows = db.prepare('SELECT * FROM registered_groups').all() as Array<{
-    jid: string;
-    name: string;
-    folder: string;
-    trigger_pattern: string;
-    added_at: string;
-    container_config: string | null;
-    requires_trigger: number | null;
-    is_main: number | null;
-    idle_expiry_ms: number | null;
-  }>;
+  const rows = db
+    .prepare(
+      "SELECT * FROM registered_groups WHERE status = 'active' OR status IS NULL",
+    )
+    .all() as RegisteredGroupRow[];
   const result: Record<string, RegisteredGroup> = {};
   for (const row of rows) {
     if (!isValidGroupFolder(row.folder)) {
@@ -686,19 +718,7 @@ export function getAllRegisteredGroups(): Record<string, RegisteredGroup> {
       );
       continue;
     }
-    result[row.jid] = {
-      name: row.name,
-      folder: row.folder,
-      trigger: row.trigger_pattern,
-      added_at: row.added_at,
-      containerConfig: row.container_config
-        ? JSON.parse(row.container_config)
-        : undefined,
-      requiresTrigger:
-        row.requires_trigger === null ? undefined : row.requires_trigger === 1,
-      isMain: row.is_main === 1 ? true : undefined,
-      idleExpiryMs: row.idle_expiry_ms ?? undefined,
-    };
+    result[row.jid] = rowToGroup(row);
   }
   return result;
 }
@@ -714,6 +734,31 @@ export function getChatByJid(jid: string): ChatInfo | null {
 
 export function deleteRegisteredGroup(jid: string): void {
   db.prepare('DELETE FROM registered_groups WHERE jid = ?').run(jid);
+}
+
+/** Soft-delete: mark a thread group as expired (preserves data for re-activation). */
+export function expireGroup(jid: string): void {
+  db.prepare(
+    "UPDATE registered_groups SET status = 'expired' WHERE jid = ?",
+  ).run(jid);
+}
+
+/** Look up an expired thread group by JID. Returns the group data if found, null otherwise. */
+export function getExpiredThread(jid: string): RegisteredGroup | null {
+  const row = db
+    .prepare(
+      "SELECT * FROM registered_groups WHERE jid = ? AND status = 'expired'",
+    )
+    .get(jid) as RegisteredGroupRow | undefined;
+  if (!row || !isValidGroupFolder(row.folder)) return null;
+  return rowToGroup(row);
+}
+
+/** Re-activate an expired thread group, resetting its added_at timestamp. */
+export function reactivateGroup(jid: string): void {
+  db.prepare(
+    "UPDATE registered_groups SET status = 'active', added_at = ? WHERE jid = ?",
+  ).run(new Date().toISOString(), jid);
 }
 
 // --- JSON migration ---

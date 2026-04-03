@@ -85,7 +85,7 @@ EOF
 sigma check /tmp/rule.yml
 
 # Test compilation to Splunk backend
-sigma convert -t splunk /tmp/rule.yml
+sigma convert --without-pipeline -t splunk /tmp/rule.yml
 ```
 Both commands must exit 0 for the rule to be considered valid.
 
