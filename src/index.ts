@@ -289,8 +289,13 @@ async function spawnThreadChatAgent(
     let gotResult = false;
     await runAgent(chatGroup, prompt, chatVirtualJid, async (result) => {
       if (result.result) {
-        const text = (typeof result.result === 'string' ? result.result : JSON.stringify(result.result))
-          .replace(/<internal>[\s\S]*?<\/internal>/g, '').trim();
+        const text = (
+          typeof result.result === 'string'
+            ? result.result
+            : JSON.stringify(result.result)
+        )
+          .replace(/<internal>[\s\S]*?<\/internal>/g, '')
+          .trim();
         if (text) {
           await chatChannel.sendMessage(outputJid, text);
         }
@@ -318,7 +323,10 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
 
   const channel = findChannel(channels, outputJid);
   if (!channel) {
-    logger.warn({ chatJid, outputJid }, 'No channel owns JID, skipping messages');
+    logger.warn(
+      { chatJid, outputJid },
+      'No channel owns JID, skipping messages',
+    );
     return true;
   }
 
@@ -612,8 +620,10 @@ async function startMessageLoop(): Promise<void> {
 
           // Research threads with active containers: route to chat agent, not research container.
           // The chat agent handles user interaction and steers research via STEERING.md.
-          const isActiveResearchThread = group.idleExpiryMs && !group.parentResearchFolder
-            && queue.isActive(chatJid);
+          const isActiveResearchThread =
+            group.idleExpiryMs &&
+            !group.parentResearchFolder &&
+            queue.isActive(chatJid);
           if (isActiveResearchThread) {
             lastAgentTimestamp[chatJid] =
               allPending[allPending.length - 1].timestamp;
@@ -790,7 +800,10 @@ async function main(): Promise<void> {
       const expired = getExpiredThread(jid);
       if (!expired) return false;
       // Re-activate: put back in memory and DB
-      registeredGroups[jid] = { ...expired, added_at: new Date().toISOString() };
+      registeredGroups[jid] = {
+        ...expired,
+        added_at: new Date().toISOString(),
+      };
       reactivateGroup(jid);
       logger.info(
         { jid, folder: expired.folder },

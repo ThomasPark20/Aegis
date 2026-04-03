@@ -635,6 +635,8 @@ claude
     top: 0;
     transform: none;
     z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 12px 12px;
   }
 
   .demo-scroll {

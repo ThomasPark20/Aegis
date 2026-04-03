@@ -178,9 +178,7 @@ function createSchema(database: Database.Database): void {
 
   // Add reply_to_jid for thread-chat sub-groups (outbound messages go to parent thread)
   try {
-    database.exec(
-      `ALTER TABLE registered_groups ADD COLUMN reply_to_jid TEXT`,
-    );
+    database.exec(`ALTER TABLE registered_groups ADD COLUMN reply_to_jid TEXT`);
   } catch {
     /* column already exists */
   }
