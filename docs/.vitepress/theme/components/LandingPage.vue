@@ -366,7 +366,8 @@ claude
 .demo-sticky {
   flex: 1;
   position: sticky;
-  top: 5rem;
+  top: 50vh;
+  transform: translateY(-50%);
   min-width: 0;
 }
 
@@ -374,8 +375,8 @@ claude
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12rem;
-  padding: 8rem 0 20rem;
+  gap: 14rem;
+  padding: 40vh 0 40vh;
   min-width: 0;
 }
 
