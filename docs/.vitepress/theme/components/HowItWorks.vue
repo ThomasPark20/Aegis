@@ -3,18 +3,24 @@ import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 
 const messages = [
   { sender: 'user', name: 'You', text: 'Research Scattered Spider\'s latest campaign' },
-  { sender: 'bot', name: 'AEGIS', text: 'On it — spinning up a research thread.', delay: 1400 },
-  { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 1000 },
-  { sender: 'bot', name: 'AEGIS', text: 'Searching primary sources...', thread: true, delay: 1600 },
-  { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 1200 },
-  { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 1000 },
-  { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 1200 },
-  { sender: 'step', text: 'Mapping TTPs to MITRE ATT&CK', delay: 900 },
-  { sender: 'step', text: 'Generating Sigma rules — validating with sigma-cli', delay: 1300 },
-  { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 1000 },
-  { sender: 'bot', name: 'AEGIS', text: 'Report ready.', thread: true, delay: 800, file: 'scattered-spider-2026-04-03.md' },
-  { sender: 'user', name: 'You', text: 'Are any of them on FBI most wanted?', thread: true, delay: 2500 },
-  { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted. Added to research requirements so the report covers this.', thread: true, delay: 1000 },
+  { sender: 'bot', name: 'AEGIS', text: 'On it — spinning up a research thread.', delay: 800 },
+  { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 600 },
+  { sender: 'bot', name: 'AEGIS', text: 'Searching primary sources...', thread: true, delay: 1000 },
+  { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 700 },
+  { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 600 },
+  { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 700 },
+  { sender: 'step', text: 'Mapping TTPs to MITRE ATT&CK', delay: 500 },
+  { sender: 'step', text: 'Generating Sigma rules — validating with sigma-cli', delay: 800 },
+  { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 600 },
+  { sender: 'step', text: 'Generating Snort rules — validating with snort', delay: 600 },
+  { sender: 'step', text: 'Compiling topic summary with sources', delay: 500 },
+  { sender: 'bot', name: 'AEGIS', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
+  { sender: 'user', name: 'You', text: 'Are any of them on FBI most wanted?', thread: true, delay: 1500 },
+  { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted by the DOJ. Added to research requirements so the report covers this.', thread: true, delay: 600 },
+  { sender: 'user', name: 'You', text: 'Also focus on their SIM swapping TTPs', thread: true, delay: 1200 },
+  { sender: 'bot', name: 'Chat Agent', text: 'Added to requirements: focus analysis on SIM swapping techniques and related TTPs. The research agent will address this before delivering the final report.', thread: true, delay: 600 },
+  { sender: 'system', text: 'requirements.md updated — 2 items pending', delay: 500 },
+  { sender: 'bot', name: 'AEGIS', text: 'Updated report with FBI indictments and SIM swapping analysis. All requirements satisfied.', thread: true, delay: 1200, file: 'scattered-spider-2026-04-03-v2.md' },
 ]
 
 const visibleMessages = ref([])
@@ -174,8 +180,8 @@ onUnmounted(() => {
 
 .demo-messages {
   padding: 20px;
-  min-height: 480px;
-  max-height: 480px;
+  min-height: 560px;
+  max-height: 560px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
