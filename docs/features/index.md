@@ -1,27 +1,22 @@
-# Core Features
+# Features
 
-AEGIS has 8 core features, all working out of the box.
+## [Research on Demand](./research)
+Ask AEGIS to research any threat. It creates a Discord thread, runs the full pipeline, and delivers a report — all without blocking your main channel.
 
-## 1. [Research on Demand](./research)
-Ask AEGIS to research any threat. It uses exact terms, follows primary sources, and delivers complete reports.
+## [Research Threads](./threads)
+Every research request gets its own Discord thread. Follow up with questions, add context mid-research, or request detection rules — all in the thread.
 
-## 2. [Validated Detection Rules](./detection-rules)
-Sigma, YARA, and Snort rules — every one validated with real CLI tools before delivery.
+## [Validated Detection Rules](./detection-rules)
+Sigma, YARA, and Snort rules validated with real CLI tools before delivery.
 
-## 3. [File Attachments](./attachments)
-Reports delivered as .md files, not message walls. Short answers stay inline.
+## [Daily Briefing](./daily-briefing)
+Compiles all research from the day into an executive report, delivered as a thread at your configured time.
 
-## 4. Non-Blocking Chat
-Research runs in parallel containers. Chat never hangs. You can start new research while previous tasks complete.
+## [Critical Alerts](./critical-alerts)
+RSS feeds scanned every 2 hours. Critical items get immediate research in dedicated threads.
 
-## 5. [Daily Briefing](./daily-briefing)
-8am ET every morning — RSS + Reddit feeds, filtered, deduplicated, researched, with detection rules attached.
+## [File Attachments](./attachments)
+Reports delivered as `.md` files. Short answers stay inline.
 
-## 6. [Critical Alerts](./critical-alerts)
-Headline scan every 2 hours. If something critical hits, you get an immediate alert with full analysis.
-
-## 7. [Thread Follow-ups](./threads)
-Ask follow-up questions naturally. AEGIS reads the full thread context.
-
-## 8. [Status Command](./status)
-`/status` shows what's running, what's been generated, and quick stats.
+## [/status Command](./status)
+See what's running, recent reports, and quick stats.

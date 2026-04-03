@@ -3,32 +3,38 @@
 Ask AEGIS to research any topic:
 
 ```
-You: "Research Scattered Spider latest activity"
-You: "Research CVE-2026-1234"
-You: "Research teampcp"
+"Research Scattered Spider latest activity"
+"Research CVE-2026-1234"
+"Research teampcp"
 ```
 
-## How It Works
+## What Happens
 
-1. AEGIS acknowledges immediately — "On it, researching now"
-2. A background container runs the full research pipeline
-3. Chat stays responsive — you can ask other questions while research runs
-4. When done, AEGIS posts the report as a .md file attachment
+1. AEGIS creates a **Discord thread** named "Research: [Topic]"
+2. A research agent starts working in that thread
+3. Main channel stays clean — no research clutter
+4. When done, the report is attached as a `.md` file in the thread
+5. You can follow up with questions directly in the thread
 
-## What the Research Agent Does
+## Research Pipeline
 
-- Web searches for primary sources (not just news articles)
-- Follows links to technical writeups, IOC repos, PDFs
-- Extracts IOCs (IPs, domains, hashes, URLs) and defangs them
-- Maps TTPs to MITRE ATT&CK techniques
-- Generates detection rules (Sigma, YARA, Snort)
-- Validates every rule with CLI tools
-- Compiles everything into a structured topic summary
+The research agent runs this pipeline inside an isolated container:
+
+1. Web search for primary sources (vendor reports, advisories, OSINT)
+2. Follow links to technical writeups, IOC repos, PDFs
+3. Extract IOCs (IPs, domains, hashes, URLs) and defang them
+4. Map TTPs to MITRE ATT&CK techniques
+5. Generate detection rules (Sigma, YARA, Snort)
+6. Validate every rule with CLI tools
+7. Compile structured topic summary
+8. Deliver via `send_file` in the thread
 
 ## Exact Terms
 
-AEGIS researches the **exact term** you give it. If you say "teampcp", it researches "teampcp" — it won't substitute "TeamTNT" or any other term it thinks you might mean. If it can't find anything for the exact term, it asks for clarification.
+AEGIS researches the **exact term** you give it. "teampcp" stays "teampcp" — it won't substitute what it thinks you meant. If the exact term yields nothing, it asks for clarification.
 
-## Sources
+## Follow-ups
 
-Every source in a report is a clickable markdown link: `[Source Name](URL) — description`. No source is ever cited without a URL.
+Messages you send in the research thread get piped to the running agent. Ask questions, add context ("also check this URL"), or request detection rules — the agent incorporates it into the ongoing research.
+
+Thread agents expire after 10 minutes of inactivity. The thread stays in Discord for reference.

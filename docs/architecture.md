@@ -6,42 +6,66 @@
 Discord / Telegram
         │
         ▼
-┌──────────────────────────────────────────────┐
-│            AEGIS Host Process                │
-│                                              │
-│  Message Router ──► Group Queue ──► Spawn    │
-│                                    Container │
-│  Task Scheduler ──► Cron/Interval ──► Spawn  │
-│                                    Container │
-│  IPC Watcher ◄──── File-based messaging      │
-└──────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│              AEGIS Host Process                   │
+│                                                   │
+│  Message Router ──► Group Queue ──► Container     │
+│                                                   │
+│  Task Scheduler ──► Cron/Interval ──► Container   │
+│                                                   │
+│  IPC Watcher ◄──── File-based JSON messaging      │
+│       │                                           │
+│       ├── send_message / send_file → Channel      │
+│       ├── schedule_task → Task Scheduler          │
+│       ├── start_research_thread → Discord Thread  │
+│       └── register_group → Group Registry         │
+└──────────────────────────────────────────────────┘
         │                          │
         ▼                          ▼
-┌──────────────┐          ┌──────────────┐
-│  Container A │          │  Container B │
-│  (chat msg)  │          │  (research)  │
-│              │          │              │
-│ Claude Code  │          │ Claude Code  │
-│ + sigma-cli  │          │ + sigma-cli  │
-│ + yarac      │          │ + yarac      │
-│ + snort      │          │ + snort      │
-│              │          │              │
-│ MCP Tools:   │          │ MCP Tools:   │
-│ send_message │          │ send_message │
-│ send_file    │          │ send_file    │
-│ schedule_task│          │ schedule_task│
-└──────────────┘          └──────────────┘
+┌──────────────┐          ┌──────────────────────┐
+│  Container   │          │  Container           │
+│  (chat)      │          │  (research thread)   │
+│              │          │                      │
+│ Claude Code  │          │ Claude Code          │
+│ + sigma-cli  │          │ + sigma-cli          │
+│ + yarac      │          │ + yarac              │
+│ + snort      │          │ + snort              │
+│              │          │                      │
+│ IPC Tools:   │          │ IPC Tools:           │
+│ send_message │          │ send_message         │
+│ send_file    │          │ send_file            │
+│ schedule_task│          │ schedule_task        │
+│ start_research_thread   │                      │
+└──────────────┘          └──────────────────────┘
+```
+
+## Research Thread Flow
+
+```
+User: "Research Salt Typhoon"
+  │
+  ▼
+Main Agent (container) ──► IPC: start_research_thread
+  │                              │
+  │ "On it — spinning up        ▼
+  │  a research thread"    Host creates Discord thread
+  │                        Registers thread as group
+  ▼                        Injects research prompt
+Main channel stays              │
+clean, agent exits              ▼
+                          Research Agent (new container)
+                          Works inside the thread
+                          User can follow up
+                                │
+                          10 min idle → thread group expires
+                          Discord thread stays archived
 ```
 
 ## Why Chat Never Blocks
 
-Each incoming message spawns a **new container**. If a research task takes 5 minutes, it runs in Container B while Container A has already responded and exited. The next message gets Container C. They're completely independent.
-
-The chat agent uses `schedule_task` to dispatch research as a background one-shot task. It acknowledges immediately ("On it"), then wraps up. The research container runs asynchronously and posts results via `send_file` when done.
+Each message spawns a **new container**. Research runs in its own container tied to a Discord thread. The main channel agent acknowledges immediately and exits. Multiple research threads can run concurrently.
 
 ## Container Mounts
-
-Each container sees:
 
 | Container Path | Host Path | Access |
 |----------------|-----------|--------|
@@ -51,26 +75,37 @@ Each container sees:
 | `/home/node/.claude` | `data/sessions/{group}/.claude/` | read-write |
 | `/workspace/ipc` | `data/ipc/{group}/` | read-write |
 
-## IPC (Inter-Process Communication)
+## IPC
 
 Containers communicate with the host via JSON files:
 
-- **`/workspace/ipc/messages/`** — container writes `{type: "message", chatJid, text}` to send messages
-- **`/workspace/ipc/messages/`** — container writes `{type: "file", chatJid, filePath, caption}` to send file attachments
-- **`/workspace/ipc/tasks/`** — container writes task JSON to schedule background work
-- **`/workspace/ipc/input/`** — host pipes new messages to active containers
+| Directory | Direction | Purpose |
+|-----------|-----------|---------|
+| `/workspace/ipc/messages/` | Container → Host | Send messages and files to channels |
+| `/workspace/ipc/tasks/` | Container → Host | Schedule tasks, create threads, register groups |
+| `/workspace/ipc/input/` | Host → Container | Pipe follow-up messages to running containers |
 
-The host process watches these directories and routes messages to the correct channel (Discord/Telegram).
+The host resolves `$NANOCLAW_CHAT_JID` in task files to the actual channel JID automatically.
+
+## Thread Groups
+
+Research threads are registered as temporary groups with `idleExpiryMs`. After 10 minutes of inactivity, the group is unregistered and the container stops. The Discord thread remains archived.
+
+Each thread group gets:
+- Its own group folder with research CLAUDE.md
+- Its own IPC namespace
+- Its own container and session
+- No trigger required (all messages in the thread are processed)
 
 ## Detection Validation
 
 The container image includes:
-- **sigma-cli** — validates Sigma rules (`sigma check`) and converts to Splunk queries (`sigma convert -t splunk`)
+- **sigma-cli** — `sigma check` + `sigma convert -t splunk`
 - **yarac** — compiles YARA rules
-- **snort** — validates Snort rules (when available)
+- **snort** — validates Snort rules
 
-Rules are validated before inclusion in summaries. Failed rules are retried up to 3 times. If still failing, they're marked `<!-- UNVALIDATED -->` — never silently dropped.
+Rules validate before inclusion. Failed rules retry 3 times. If still failing, marked `<!-- UNVALIDATED -->`.
 
 ## Model
 
-All containers use **Claude Opus 4.6** (`claude-opus-4-6`), configured automatically in `data/sessions/{group}/.claude/settings.json`.
+All containers use **Claude Opus 4.6** (`claude-opus-4-6`).

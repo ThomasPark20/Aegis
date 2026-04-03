@@ -5,11 +5,8 @@ export default defineConfig({
   description: 'Autonomous CTI Research & Detection Platform',
   base: '/Aegis/',
   ignoreDeadLinks: true,
-  head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/shield.svg' }],
-  ],
+  head: [],
   themeConfig: {
-    logo: '/shield.svg',
     siteTitle: 'AEGIS',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
@@ -54,7 +51,7 @@ export default defineConfig({
             { text: 'File Attachments', link: '/features/attachments' },
             { text: 'Daily Briefing', link: '/features/daily-briefing' },
             { text: 'Critical Alerts', link: '/features/critical-alerts' },
-            { text: 'Thread Follow-ups', link: '/features/threads' },
+            { text: 'Research Threads', link: '/features/threads' },
             { text: 'Status Command', link: '/features/status' },
           ],
         },
@@ -64,7 +61,6 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/ThomasPark20/Aegis' },
     ],
     footer: {
-      message: 'Built on NanoClaw',
       copyright: 'MIT License',
     },
     search: {

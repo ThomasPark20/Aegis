@@ -1,38 +1,54 @@
 # Daily Briefing
 
-Every morning at 8:00 AM ET, AEGIS delivers a threat intelligence briefing.
+AEGIS compiles all research from the day into an executive report, delivered as a Discord thread at your configured time.
+
+## Setup
+
+During `/setup`, AEGIS asks what time you want your daily report. You can also configure it anytime:
+
+```
+"Set daily report at 9am"
+"Schedule my briefing for 07:30"
+"Cancel daily report"
+```
+
+Or run `/schedule-report` for a guided setup.
 
 ## What Happens
 
-1. Fetches all RSS + Reddit feeds from `feeds.yaml`
-2. Filters noise (listicles, vendor marketing, career advice, memes)
-3. Deduplicates against existing summaries
-4. Groups new articles by topic
-5. Researches each new topic in depth
-6. Extracts IOCs and maps TTPs
-7. Generates and validates detection rules
-8. Delivers a batched briefing with all .md reports attached
+At your scheduled time:
 
-## Example Output
+1. Reads all topic summaries from the current day
+2. Compiles an executive brief (top 3-5 items by severity)
+3. Includes full topic summaries, IOC table, detection rules count
+4. Creates a **"Daily Brief — YYYY-MM-DD"** Discord thread
+5. Posts the executive summary as the opening message
+6. Attaches the full compiled report as a `.md` file
+
+## Example
 
 ```
-Good morning. Here's your daily CTI briefing — 3 new reports:
+Thread: Daily Brief — 2026-04-02
+────────────────────────────────
+AEGIS: Daily CTI Briefing — April 2, 2026
 
-1. CVE-2026-XXXX — Critical RCE in Apache Struts
-2. Scattered Spider — New social engineering campaign
-3. BlackCat ransomware — Updated encryptor variant
+  - CVE-2026-1234: Critical RCE in Apache Struts (CVSS 9.8, active exploitation)
+  - Scattered Spider: New social engineering campaign targeting telecom
+  - BlackCat ransomware: Updated encryptor variant with Linux support
 
-[Attached: 3 .md files]
+  3 reports, 7 detection rules generated.
+
+  [attached: 2026-04-02-daily-report.md]
 ```
 
 ## Quiet Days
 
-If no new actionable intelligence is found:
+If nothing new was researched:
 
 ```
-No new actionable threat intelligence today.
+No significant threat activity in the last 24 hours.
 ```
 
-## Token Efficiency
+## Depends on Feed Scanning
 
-The briefing deduplicates aggressively. Topics already covered in existing summaries are skipped. Only genuinely new intelligence triggers research.
+The daily report compiles findings from the 2-hour RSS feed scan. If you enable the daily report, feed scanning is automatically enabled too.

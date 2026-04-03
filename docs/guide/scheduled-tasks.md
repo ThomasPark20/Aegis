@@ -1,40 +1,53 @@
 # Scheduled Tasks
 
-AEGIS seeds two scheduled tasks when you connect a channel.
+AEGIS can run two automated tasks, both configured during `/setup`.
 
-## Daily Briefing
+## RSS Feed Scan
 
-- **Schedule:** 8:00 AM ET, every day
-- **What it does:** Fetches all RSS + Reddit feeds, filters noise, deduplicates, researches new topics, generates detection rules, validates them, delivers a batched briefing as .md file attachments
-- **If nothing new:** "No new actionable threat intelligence today."
+- **Schedule:** Every 2 hours (`0 */2 * * *`)
+- **How it works:** A script fetches all RSS feeds, deduplicates against existing summaries, and classifies articles as critical or non-critical
+- **If nothing critical:** Zero tokens consumed
+- **If critical items found:** Creates a "Critical: [Topic]" Discord thread with immediate research
+- **Non-critical items:** Saved for daily report compilation
 
-## Critical Issue Polling
+## Daily Report
 
-- **Schedule:** Every 2 hours
-- **How it works:** A lightweight script fetches recent CVEs and checks for critical indicators:
-  - CVSS score >= 9.0
-  - Active exploitation
-  - Zero-day disclosure
-  - CISA KEV addition
-- **If nothing critical:** Does nothing. Zero agent tokens consumed.
-- **If critical item found:** Full research pipeline runs, immediate alert posted with report attached.
+- **Schedule:** Your configured time (default 8:00 AM local)
+- **How it works:** Compiles all research from the day into an executive brief
+- **Delivery:** Creates a "Daily Brief — YYYY-MM-DD" Discord thread with executive summary and full report attached
+- **If nothing new:** "No significant threat activity in the last 24 hours."
+- **Depends on:** RSS feed scanning (auto-enabled if you enable daily reports)
 
-## Managing Tasks
+## Configuring
 
-Inside a Claude session with AEGIS:
+Set or change your daily report time anytime in chat:
 
 ```
-# List all tasks
-list_tasks
+"Set daily report at 9am"
+"Change daily report to 7:30am"
+"Cancel daily report"
+```
 
-# Cancel a task
-cancel_task(task_id: "...")
+Or run `/schedule-report` for a guided setup.
 
-# Create a custom task
+## Custom Tasks
+
+Create custom scheduled tasks inside a Claude session:
+
+```
 schedule_task(
   prompt: "Your instructions",
   schedule_type: "cron",
   schedule_value: "0 9 * * 1",  # every Monday 9am
   context_mode: "isolated"
 )
+```
+
+## Managing Tasks
+
+```
+list_tasks          # see all scheduled tasks
+pause_task(id)      # pause a task
+resume_task(id)     # resume a paused task
+cancel_task(id)     # delete a task
 ```

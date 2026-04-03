@@ -1,28 +1,47 @@
 # Critical Alerts
 
-AEGIS scans for critical threats every 2 hours. Most scans cost zero tokens.
+AEGIS scans all RSS feeds every 2 hours. Critical items get immediate research in dedicated threads.
 
 ## How It Works
 
-A lightweight **script gate** runs first:
-1. Fetches recent CVE data
-2. Checks for critical indicators:
-   - CVSS score >= 9.0
-   - Active exploitation
-   - Zero-day disclosure
-   - CISA KEV (Known Exploited Vulnerabilities) addition
+A lightweight script runs first (zero tokens):
 
-**If nothing critical:** The script returns `{wakeAgent: false}`. No agent invocation. Zero tokens consumed.
+1. Fetches all RSS feeds from `feeds.yaml` (11 CTI sources)
+2. Parses entries, deduplicates against existing summaries
+3. Classifies articles as critical or non-critical
 
-**If critical item found:** The script returns `{wakeAgent: true}`. The full research agent wakes up, runs the complete research pipeline on that specific topic, and posts an immediate alert:
+**Critical keywords:** APT, CVE, active exploitation, zero-day, ransomware, data breach, CISA advisory, emergency directive, RCE
+
+**If nothing critical:** `{wakeAgent: false}`. No agent invocation. Zero cost.
+
+**If critical items found:** Agent wakes up and creates a thread for each critical topic:
 
 ```
-CRITICAL: CVE-2026-XXXX — Remote code execution in Apache Struts,
-actively exploited in the wild. CVSS 9.8.
+Thread: Critical: CVE-2026-1234 Active Exploitation
+──────────────────────────────────────────────────
+AEGIS: A critical zero-day vulnerability (CVE-2026-1234) in Apache
+       Struts is under active exploitation. CISA has issued an
+       emergency directive.
 
-[Attached: cve-2026-xxxx-struts-rce.md]
+       [attached: 2026-04-02-critical-cve-2026-1234.md]
+
+You: "Generate detection rules"
+AEGIS: "Here are 2 Sigma rules targeting the exploitation TTPs..."
 ```
 
 ## Cost
 
-Most 2-hour scans cost nothing — just a bash script checking a JSON API. You only pay for agent tokens when something genuinely critical appears.
+Most scans cost nothing — just a Node.js script fetching RSS feeds. You only pay for agent tokens when something genuinely critical appears.
+
+## Non-Critical Items
+
+New non-critical articles are saved for the daily report compilation. They don't trigger immediate research or threads.
+
+## Deduplication
+
+Before creating a thread, AEGIS checks:
+- Existing summaries for the same topic/CVE
+- Active research threads with similar names
+- Duplicate articles from multiple feeds about the same event
+
+One topic = one thread. No spam.

@@ -9,35 +9,30 @@ claude
 /setup
 ```
 
-Then connect a channel:
+`/setup` handles everything in one flow:
 
-```
-/add-discord    # for Discord
-/add-telegram   # for Telegram
-```
+1. **Dependencies** — Node.js 22+, npm install
+2. **Container runtime** — Docker build + test
+3. **API credentials** — Anthropic API key or Claude subscription
+4. **Channel** — Discord bot creation, permissions, registration
+5. **Feed scanning** — 2-hour RSS scan for critical threats (optional)
+6. **Daily report** — configurable delivery time (optional)
+7. **Service** — background process started
 
-That's it. AEGIS handles dependencies, container builds, and model configuration automatically.
-
-## What Happens During Setup
-
-`/setup` runs through these steps:
-
-1. **Prerequisites** — checks for Node.js 22+, Docker, git
-2. **Dependencies** — `npm install`
-3. **API Authentication** — configures your Anthropic API key or OAuth token
-4. **Container Build** — builds the agent container with detection tools (sigma-cli, yarac, snort)
-5. **Model Configuration** — sets Claude Opus 4.6 as the default
-6. **Service Start** — launches the background service
-
-After setup, `/add-discord` or `/add-telegram` walks you through connecting a chat channel. No config files to edit manually.
-
-## What You Get
+## After Setup
 
 Once connected, AEGIS:
 
-- Responds to research requests in real-time
-- Delivers reports as `.md` file attachments
-- Runs a daily briefing at 8am ET
-- Scans for critical threats every 2 hours
-- Validates every detection rule before delivery
-- Never blocks chat while researching
+- Responds to research requests by creating Discord threads
+- Delivers all reports as `.md` file attachments
+- Scans RSS feeds every 2 hours for critical threats (if enabled)
+- Compiles a daily briefing at your configured time (if enabled)
+- Validates every detection rule with CLI tools before delivery
+- Never blocks chat — research runs in isolated containers
+
+## Prerequisites
+
+- **Git** and **Node.js 22+**
+- **Docker** (running)
+- **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** CLI
+- **Anthropic API access** (API key or Claude Pro/Max subscription)
