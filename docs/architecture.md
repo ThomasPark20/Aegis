@@ -1,3 +1,9 @@
+<style>
+.VPDoc .container { max-width: 100% !important; }
+.VPDoc .content { max-width: 100% !important; }
+.VPDoc .content-container { max-width: 860px !important; margin: 0 auto !important; }
+</style>
+
 # Architecture
 
 ## Overview
