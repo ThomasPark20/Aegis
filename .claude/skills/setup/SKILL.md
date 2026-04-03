@@ -281,9 +281,7 @@ AskUserQuestion: Would you like AEGIS to automatically scan CTI feeds every 2 ho
 1. **Yes** — "Scans RSS feeds every 2 hours. Critical items (APTs, CVEs, zero-days, ransomware) get researched immediately and delivered as Discord threads."
 2. **No** — "Skip — you can enable this later by telling AEGIS 'enable feed scanning' in chat."
 
-If **Yes**: Seed the RSS scan task during channel setup (Phase 4 of `/add-discord`). Confirm: "RSS feed scanning enabled — critical threats will be reported in new threads automatically."
-
-If **No**: Note this choice for the next question.
+Note the user's choice for the next question.
 
 ### Daily Report
 
@@ -292,11 +290,30 @@ AskUserQuestion: Would you like a daily threat intelligence summary?
 2. **No** — "Skip — you can enable later via 'set daily report at 9am' in chat or `/schedule-report`."
 
 If **Yes**:
-- If RSS scanning was declined above, tell the user: "The daily report compiles findings from feed scanning — I'll enable the 2-hour scan as well so your daily report has content." Enable RSS scanning automatically.
+- If RSS scanning was declined above, tell the user: "The daily report compiles findings from feed scanning — I'll enable the 2-hour scan as well so your daily report has content."
 - Ask: "What time would you like the daily report? (e.g. '9am', '07:30')"
-- Convert to cron using detected timezone. Seed the daily-report task. Confirm: "Daily report scheduled for [time] ([timezone])."
+- Convert to a cron expression (e.g. "9am" → `0 9 * * *`, "07:30" → `30 7 * * *`)
 
-If **No**: Skip. User can configure later.
+### Seed the tasks
+
+Look up the registered channel JID:
+```bash
+sqlite3 store/messages.db "SELECT jid FROM registered_groups WHERE is_main = 1 LIMIT 1"
+```
+
+Then seed tasks based on the user's choices using `npx tsx setup/index.ts --step seed-tasks`. The `--jid` is the JID from above:
+
+- **Both RSS + daily**: `npx tsx setup/index.ts --step seed-tasks -- --jid "<jid>" --daily-cron "<cron>"`
+- **RSS only (no daily)**: `npx tsx setup/index.ts --step seed-tasks -- --jid "<jid>" --no-daily`
+- **Neither**: Skip this step entirely.
+
+After seeding, restart the service so it picks up the new tasks:
+```bash
+launchctl kickstart -k gui/$(id -u)/com.nanoclaw   # macOS (if loaded)
+# or: systemctl --user restart nanoclaw              # Linux
+```
+
+Confirm to user what was enabled and when things will run.
 
 ## Troubleshooting
 
