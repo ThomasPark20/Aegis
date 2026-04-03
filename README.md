@@ -17,17 +17,83 @@ claude
 
 ## What It Does
 
-- **Researches threats on demand** — follows primary sources, delivers .md reports as file attachments
-- **Generates validated detection rules** — Sigma, YARA, Snort — validated with real CLI tools
-- **Daily briefing at 8am ET** — RSS + Reddit feeds, filtered, deduplicated, researched
-- **Critical alerts every 2 hours** — zero-day, CVSS 9+, active exploitation
-- **Dual-agent research threads** — each research request spins up a Discord thread with two agents: a fast **chat agent** for instant Q&A and a deep **research agent** running in the background. Steer research mid-flight, ask questions, add requirements — the chat agent responds in seconds while research continues uninterrupted
-- **Research requirements** — follow-up messages in threads become mandatory requirements (`requirements.md`). The research agent checks every requirement before delivering the final report
-- **Thread re-activation** — expired threads come back to life when you message them, with full context preserved
+### Research on Demand
+
+Ask AEGIS to research any threat — it creates a Discord thread, runs a full investigation pipeline, and delivers a structured report with validated detection rules.
+
+```
+You: "Research Lazarus Group"
+AEGIS: "On it — spinning up a research thread."
+
+→ Thread: Research: Lazarus Group
+  AEGIS researches primary sources, extracts IOCs, maps TTPs,
+  generates Sigma/YARA/Snort rules, delivers .md report
+```
+
+### Dual-Agent Research Threads
+
+Each research thread runs two agents concurrently:
+
+| Agent | What it does | Speed |
+|-------|-------------|-------|
+| **Chat agent** | Answers questions, records requirements | Seconds |
+| **Research agent** | Deep investigation, IOC extraction, rule generation | Minutes |
+
+Send follow-ups in the thread — the chat agent responds instantly while research continues in the background:
+
+```
+You: "Are any Lazarus members on the FBI most wanted list?"
+AEGIS (chat): "Yes — Park Jin Hyok was indicted in 2018..."
+
+You: "Include their info in the report"
+AEGIS (chat): "Got it — added to research requirements."
+
+→ Research agent checks requirements.md before delivering
+→ Report won't ship until all requirements are addressed
+```
+
+### Research Requirements
+
+Follow-up messages become mandatory checklist items in `requirements.md`. The research agent validates every requirement before delivering the final report — it's a contract, not a suggestion.
+
+### Automated Monitoring
+
+- **RSS feed scanning** — every 2 hours, CTI feeds are scanned. Critical items (APTs, CVEs, zero-days, ransomware) get their own research thread automatically
+- **Daily briefing** — compiles all research from the day into an executive report, delivered as a Discord thread at your configured time
+
+### Detection Rules
+
+Sigma, YARA, and Snort rules — validated with real CLI tools before delivery. Failed rules retry 3 times. If still failing, marked as unvalidated so nothing is silently dropped.
+
+### Thread Re-activation
+
+Research threads expire after 10 minutes of inactivity but are **soft-deleted** — send a message to bring them back with full context, session, and research files preserved.
+
+## Architecture
+
+```
+Discord / Telegram
+        │
+        ▼
+   AEGIS Host Process
+   ├── Message Router → Group Queue → Containers
+   ├── Task Scheduler → Cron/Interval → Containers
+   └── IPC Watcher ← File-based JSON messaging
+        │
+        ├── Main agent container (chat, dispatches research)
+        ├── Research agent container (deep investigation)
+        └── Thread-chat agent container (fast Q&A + requirements)
+```
+
+Each agent runs in an isolated Docker container with its own filesystem, IPC namespace, and Claude session. Credentials are injected at runtime via OneCLI — containers never see real secrets.
 
 ## Prerequisites
 
-Git, Node.js 22+, Docker, [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Anthropic API access.
+- Git
+- Node.js 22+
+- Docker
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+- Anthropic API key or Claude Pro/Max subscription
 
 ## License
 
