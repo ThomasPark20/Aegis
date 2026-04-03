@@ -271,6 +271,24 @@ Run `npx tsx setup/index.ts --step verify` and parse the status block.
 
 Tell user to test: send a message in their registered chat. Show: `tail -f logs/nanoclaw.log`
 
+## 9a. Daily Report & Feed Scanning
+
+After verifying the service works, configure the reporting pipeline:
+
+AskUserQuestion: What time would you like your daily threat intelligence briefing? (e.g. "9am", "07:30", "8:00 AM")
+
+Once the user provides a time:
+
+1. Convert to a cron expression using the detected timezone (e.g. "9am" in America/New_York → `0 9 * * *`)
+2. Tell the user you're setting up:
+   - **Daily briefing** at their chosen time — compiles all research from the day into an executive report, delivered as a Discord thread
+   - **RSS feed scanning** every 2 hours — monitors CTI feeds, critical items get immediate research threads
+3. Send a message in the registered channel asking AEGIS to set this up: "set daily report at [time]"
+   - Or seed the tasks directly via the service (the `/add-discord` skill already seeds these in Phase 4)
+4. Confirm to the user: "Daily report scheduled for [time] ([timezone]). RSS feeds will be scanned every 2 hours — critical items get immediate research threads."
+
+If the user declines or wants to skip: "No problem — you can set this up anytime by telling AEGIS 'set daily report at 9am' in your channel, or run `/schedule-report`."
+
 ## Troubleshooting
 
 **Service not starting:** Check `logs/aegis.error.log`. Common: wrong Node path (re-run step 7), credential system not running (Docker: check `curl http://127.0.0.1:10254/api/health`; Apple Container: check `.env` credentials), missing channel credentials (re-invoke channel skill).
