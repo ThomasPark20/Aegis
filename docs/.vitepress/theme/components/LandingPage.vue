@@ -232,7 +232,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Desktop: scrolling explanation cards -->
-        <div v-if="!isMobile" class="demo-scroll">
+        <div class="demo-scroll">
           <div
             v-for="section in sections"
             :key="section.id"
@@ -246,7 +246,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Mobile: sticky stacked cards driven by vertical scroll -->
-        <div v-if="isMobile" class="mobile-cards-wrapper">
+        <div class="mobile-cards-wrapper">
           <div class="mobile-cards-stack">
             <div
               v-for="(section, i) in sections"
@@ -433,6 +433,11 @@ claude
   gap: 14rem;
   padding: 40vh 0 40vh;
   min-width: 0;
+}
+
+/* Hide mobile-only elements on desktop */
+.mobile-cards-wrapper {
+  display: none;
 }
 
 /* ── Chat window ── */
@@ -679,9 +684,13 @@ claude
     padding-bottom: 4rem;
   }
 
+  .demo-scroll {
+    display: none;
+  }
+
   .demo-layout {
     display: block;
-    gap: 0;
+    height: 350svh;
   }
 
   .demo-sticky {
@@ -694,19 +703,20 @@ claude
   }
 
   .demo-section {
-    min-height: 350vh; /* scroll runway: ~70vh per card */
-    padding: 2rem 1rem;
+    min-height: 350svh;
+    padding: 0 1rem;
   }
 
   .chat-messages {
-    min-height: 40vh;
-    max-height: 40vh;
+    min-height: 40svh;
+    max-height: 40svh;
   }
 
   /* Stacked cards below demo, driven by vertical scroll */
   .mobile-cards-wrapper {
+    display: block;
     position: sticky;
-    top: calc(8svh + 40vh + 60px);
+    top: calc(8svh + 40svh + 56px);
     z-index: 9;
     padding: 1rem 1.5rem 0;
   }
@@ -768,7 +778,7 @@ claude
   }
 
   .getrunning-section {
-    padding: 2rem 1rem;
+    padding: 10vh 1rem 4rem;
   }
 
   .code-block {
