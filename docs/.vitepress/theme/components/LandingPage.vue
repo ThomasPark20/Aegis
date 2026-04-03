@@ -597,6 +597,8 @@ claude
   font-size: 14px;
   line-height: 1.6;
   color: var(--vp-c-text-1);
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .getrunning-sub {
@@ -624,13 +626,15 @@ claude
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .demo-layout {
-    flex-direction: column;
-    gap: 2rem;
+    display: block;
+    gap: 0;
   }
 
   .demo-sticky {
-    position: relative;
+    position: sticky;
     top: 0;
+    transform: none;
+    z-index: 10;
   }
 
   .demo-scroll {
@@ -645,6 +649,23 @@ claude
   .chat-messages {
     min-height: 40vh;
     max-height: 40vh;
+  }
+
+  .getrunning-section {
+    padding: 2rem 1rem;
+  }
+
+  .code-block {
+    padding: 1rem;
+  }
+
+  .code-block code {
+    font-size: 12px;
+  }
+
+  .getrunning-links {
+    flex-direction: column;
+    align-items: center;
   }
 }
 </style>
