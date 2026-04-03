@@ -17,28 +17,7 @@ hero:
 
 ## How It Works
 
-```
-You: "Research Scattered Spider's latest campaign"
-
-                    ┌─────────────────────────────┐
-AEGIS creates ────► │  Research: Scattered Spider  │  ◄── Discord thread
-a thread            │                              │
-                    │  AEGIS: Researching now...    │
-                    │                              │
-                    │  → Web search primary sources │
-                    │  → Extract IOCs & TTPs        │
-                    │  → Generate Sigma + YARA      │
-                    │  → Validate with CLI tools    │
-                    │                              │
-                    │  AEGIS: Report ready.         │
-                    │  📎 scattered-spider-2026.md  │
-                    │                              │
-                    │  You: "What TTPs?"            │
-                    │  AEGIS: "T1566, T1078..."     │
-                    └─────────────────────────────┘
-
-Main channel stays clean. Follow up in the thread.
-```
+<HowItWorks />
 
 </div>
 
