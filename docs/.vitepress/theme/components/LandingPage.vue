@@ -149,8 +149,8 @@ function onScroll() {
     const rect = grEl.getBoundingClientRect()
     getRunningVisible.value = rect.top < window.innerHeight * 0.7
 
-    // Fade out demo when Get Running is approaching
-    if (rect.top < window.innerHeight * 1.2) {
+    // Fade out demo only when Get Running actually enters the viewport
+    if (rect.top < window.innerHeight * 0.5) {
       demoVisible.value = false
     }
   }
