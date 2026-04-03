@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: 'AEGIS',
   description: 'Autonomous CTI Research & Detection Platform',
   base: '/Aegis/',
@@ -67,4 +68,5 @@ export default defineConfig({
       provider: 'local',
     },
   },
-})
+  mermaid: {},
+}))

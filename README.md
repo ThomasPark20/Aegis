@@ -71,18 +71,13 @@ Research threads expire after 10 minutes of inactivity but are **soft-deleted** 
 
 ## Architecture
 
-```
-Discord / Telegram
-        │
-        ▼
-   AEGIS Host Process
-   ├── Message Router → Group Queue → Containers
-   ├── Task Scheduler → Cron/Interval → Containers
-   └── IPC Watcher ← File-based JSON messaging
-        │
-        ├── Main agent container (chat, dispatches research)
-        ├── Research agent container (deep investigation)
-        └── Thread-chat agent container (fast Q&A + requirements)
+```mermaid
+graph LR
+    channels["Discord / Telegram"] --> host["AEGIS Host Process"]
+    host --> main["Main Agent"]
+    host --> chat["Thread-Chat Agent"]
+    host --> research["Research Agent"]
+    chat -.->|"requirements.md"| research
 ```
 
 Each agent runs in an isolated Docker container with its own filesystem, IPC namespace, and Claude session. Credentials are injected at runtime via OneCLI — containers never see real secrets.
