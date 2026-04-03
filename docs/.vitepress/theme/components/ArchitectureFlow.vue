@@ -13,144 +13,150 @@ const nodes = ref([
   {
     id: 'channels',
     type: 'default',
-    position: { x: 300, y: 0 },
+    position: { x: 340, y: 0 },
     data: { label: 'Discord / Telegram' },
     style: {
       background: '#f5f5f5', border: '2px solid #333', borderRadius: '8px',
-      padding: '12px 24px', fontWeight: '600', fontSize: '14px',
+      padding: '14px 32px', fontWeight: '600', fontSize: '15px',
     },
   },
   {
     id: 'host',
     type: 'default',
-    position: { x: 175, y: 100 },
+    position: { x: 180, y: 120 },
     data: { label: 'AEGIS Host Process' },
     style: {
-      background: '#000', color: '#fff', border: 'none', borderRadius: '8px',
-      padding: '12px 24px', fontWeight: '700', fontSize: '14px', width: '380px',
+      background: '#000', color: '#fff', border: 'none', borderRadius: '10px',
+      padding: '14px 32px', fontWeight: '700', fontSize: '15px', width: '440px',
       textAlign: 'center',
     },
   },
   {
     id: 'router',
     type: 'default',
-    position: { x: 100, y: 180 },
+    position: { x: 120, y: 220 },
     data: { label: 'Message Router' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '8px 16px', fontSize: '12px',
+      padding: '10px 20px', fontSize: '13px',
     },
   },
   {
     id: 'queue',
     type: 'default',
-    position: { x: 290, y: 180 },
+    position: { x: 340, y: 220 },
     data: { label: 'Group Queue' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '8px 16px', fontSize: '12px',
+      padding: '10px 20px', fontSize: '13px',
     },
   },
   {
     id: 'scheduler',
     type: 'default',
-    position: { x: 100, y: 240 },
+    position: { x: 120, y: 300 },
     data: { label: 'Task Scheduler' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '8px 16px', fontSize: '12px',
+      padding: '10px 20px', fontSize: '13px',
     },
   },
   {
     id: 'ipc',
     type: 'default',
-    position: { x: 290, y: 240 },
+    position: { x: 340, y: 300 },
     data: { label: 'IPC Watcher' },
     style: {
       background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
-      padding: '8px 16px', fontSize: '12px',
+      padding: '10px 20px', fontSize: '13px',
     },
   },
+
+  // Main Agent
   {
     id: 'main',
     type: 'default',
-    position: { x: 0, y: 360 },
+    position: { x: 0, y: 460 },
     data: { label: 'Main Agent' },
     style: {
-      background: '#fff', border: '2px solid #333', borderRadius: '8px',
-      padding: '12px 20px', fontWeight: '600', fontSize: '13px', width: '180px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '220px',
       textAlign: 'center',
     },
   },
   {
     id: 'main-detail',
     type: 'default',
-    position: { x: 0, y: 410 },
-    data: { label: 'Claude Code + sigma-cli + yarac + snort\nIPC: send_message, send_file, schedule_task, start_research_thread' },
+    position: { x: 0, y: 530 },
+    data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task,\nstart_research_thread' },
     style: {
-      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '6px',
-      padding: '8px 12px', fontSize: '10px', width: '180px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.4',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
+      padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
+      color: '#666', lineHeight: '1.5',
     },
   },
+
+  // Chat Agent
   {
     id: 'chat',
     type: 'default',
-    position: { x: 220, y: 360 },
+    position: { x: 290, y: 460 },
     data: { label: 'Thread-Chat Agent' },
     style: {
-      background: '#fff', border: '2px solid #333', borderRadius: '8px',
-      padding: '12px 20px', fontWeight: '600', fontSize: '13px', width: '180px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '220px',
       textAlign: 'center',
     },
   },
   {
     id: 'chat-detail',
     type: 'default',
-    position: { x: 220, y: 410 },
-    data: { label: 'Lightweight — answers Q&A\nWrites to requirements.md\nReads research workspace\nExits after one response' },
+    position: { x: 290, y: 530 },
+    data: { label: 'Lightweight — answers Q&A\n\nWrites to requirements.md\nReads research workspace\nExits after one response' },
     style: {
-      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '6px',
-      padding: '8px 12px', fontSize: '10px', width: '180px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.4',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
+      padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
+      color: '#666', lineHeight: '1.5',
     },
   },
+
+  // Research Agent
   {
     id: 'research',
     type: 'default',
-    position: { x: 440, y: 360 },
+    position: { x: 580, y: 460 },
     data: { label: 'Research Agent' },
     style: {
-      background: '#fff', border: '2px solid #333', borderRadius: '8px',
-      padding: '12px 20px', fontWeight: '600', fontSize: '13px', width: '200px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '240px',
       textAlign: 'center',
     },
   },
   {
     id: 'research-detail',
     type: 'default',
-    position: { x: 440, y: 410 },
-    data: { label: 'Claude Code + sigma-cli + yarac + snort\nIPC: send_message, send_file, schedule_task\nChecks requirements.md before delivery' },
+    position: { x: 580, y: 530 },
+    data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task\n\nChecks requirements.md\nbefore delivery' },
     style: {
-      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '6px',
-      padding: '8px 12px', fontSize: '10px', width: '200px', whiteSpace: 'pre-wrap',
-      color: '#666', lineHeight: '1.4',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
+      padding: '12px 16px', fontSize: '11px', width: '240px', whiteSpace: 'pre-wrap',
+      color: '#666', lineHeight: '1.5',
     },
   },
 ])
 
 const edges = ref([
-  { id: 'e-channels-host', source: 'channels', target: 'host', animated: true, style: { stroke: '#333' } },
-  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#999' }, label: '' },
+  { id: 'e-channels-host', source: 'channels', target: 'host', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#999' } },
   { id: 'e-scheduler-queue', source: 'scheduler', target: 'queue', style: { stroke: '#999' } },
   { id: 'e-ipc-channels', source: 'ipc', target: 'channels', style: { stroke: '#999', strokeDasharray: '5,5' }, label: 'outbound' },
-  { id: 'e-queue-main', source: 'queue', target: 'main', animated: true, style: { stroke: '#333' } },
-  { id: 'e-queue-chat', source: 'queue', target: 'chat', animated: true, style: { stroke: '#333' } },
-  { id: 'e-queue-research', source: 'queue', target: 'research', animated: true, style: { stroke: '#333' } },
+  { id: 'e-queue-main', source: 'queue', target: 'main', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-queue-chat', source: 'queue', target: 'chat', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-queue-research', source: 'queue', target: 'research', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
   {
     id: 'e-chat-research', source: 'chat', target: 'research',
-    style: { stroke: '#e44', strokeDasharray: '5,5', strokeWidth: 2 },
-    label: 'requirements.md', labelStyle: { fontSize: '11px', fontWeight: '600', fill: '#e44' },
+    style: { stroke: '#e44', strokeDasharray: '6,4', strokeWidth: 2 },
+    label: 'requirements.md', labelStyle: { fontSize: '12px', fontWeight: '600', fill: '#e44' },
   },
 ])
 
@@ -197,11 +203,11 @@ function onNodeClick(event) {
 </script>
 
 <template>
-  <div style="width: 100%; height: 560px; border: 1px solid var(--vp-c-divider); border-radius: 8px; overflow: hidden; position: relative;">
+  <div style="width: 100%; height: 720px; border: 1px solid var(--vp-c-divider); border-radius: 8px; overflow: hidden; position: relative;">
     <VueFlow
       :nodes="nodes"
       :edges="edges"
-      :default-viewport="{ x: 20, y: 10, zoom: 0.9 }"
+      :default-viewport="{ x: 10, y: 10, zoom: 0.78 }"
       :nodes-draggable="true"
       :zoom-on-scroll="true"
       :pan-on-drag="true"
@@ -214,14 +220,14 @@ function onNodeClick(event) {
     <transition name="fade">
       <div
         v-if="selectedNode"
-        style="position: absolute; top: 12px; right: 12px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-divider); border-radius: 8px; padding: 16px; max-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;"
+        style="position: absolute; top: 16px; right: 16px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-divider); border-radius: 10px; padding: 20px; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;"
       >
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <strong style="font-size: 13px;">{{ selectedNode.title }}</strong>
-          <button @click="selectedNode = null" style="background: none; border: none; cursor: pointer; font-size: 16px; color: var(--vp-c-text-3);">&times;</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong style="font-size: 14px;">{{ selectedNode.title }}</strong>
+          <button @click="selectedNode = null" style="background: none; border: none; cursor: pointer; font-size: 18px; color: var(--vp-c-text-3); padding: 0 4px;">&times;</button>
         </div>
-        <ul style="margin: 0; padding-left: 16px; font-size: 12px; color: var(--vp-c-text-2); line-height: 1.6;">
-          <li v-for="item in selectedNode.items" :key="item">{{ item }}</li>
+        <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--vp-c-text-2); line-height: 1.7;">
+          <li v-for="item in selectedNode.items" :key="item" style="margin-bottom: 4px;">{{ item }}</li>
         </ul>
       </div>
     </transition>
