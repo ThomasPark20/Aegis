@@ -97,17 +97,40 @@ const sections = [
 ]
 
 const visibleSections = ref(new Set())
+const sectionOpacity = ref({})
 const heroVisible = ref(true)
 const demoVisible = ref(false)
 const getRunningVisible = ref(false)
+const isMobile = ref(false)
 
 function onScroll() {
+  isMobile.value = window.innerWidth <= 768
+
+  // Get the bottom edge of the sticky demo on mobile
+  const stickyEl = document.querySelector('.demo-sticky')
+  const stickyBottom = stickyEl ? stickyEl.getBoundingClientRect().bottom : 0
+
   // Check each section
   document.querySelectorAll('.scroll-section').forEach((el) => {
     const rect = el.getBoundingClientRect()
     const id = el.dataset.id
     if (rect.top < window.innerHeight * 0.75 && rect.bottom > 0) {
       visibleSections.value.add(id)
+    }
+
+    // On mobile: fade out cards as they scroll behind the sticky demo
+    if (isMobile.value && stickyBottom > 0) {
+      const fadeZone = 80 // px over which the fade happens
+      const dist = rect.top - stickyBottom
+      if (dist < 0) {
+        sectionOpacity.value[id] = 0
+      } else if (dist < fadeZone) {
+        sectionOpacity.value[id] = dist / fadeZone
+      } else {
+        sectionOpacity.value[id] = 1
+      }
+    } else {
+      sectionOpacity.value[id] = 1
     }
   })
 
@@ -217,6 +240,7 @@ onUnmounted(() => {
             :data-id="section.id"
             class="scroll-section"
             :class="{ 'section-visible': visibleSections.has(section.id) }"
+            :style="isMobile && sectionOpacity[section.id] != null ? { opacity: sectionOpacity[section.id] } : {}"
           >
             <h3>{{ section.title }}</h3>
             <p>{{ section.text }}</p>
