@@ -553,7 +553,7 @@ claude
 
 /* ── Get Running ── */
 .getrunning-section {
-  max-width: 580px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 8rem 2rem;
   text-align: center;
@@ -572,10 +572,10 @@ claude
 }
 
 .getrunning-section h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin: 0 0 2rem;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 2.5rem;
 }
 
 .code-block {
@@ -593,15 +593,15 @@ claude
 
 .code-block code {
   font-family: var(--vp-font-family-mono);
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--vp-c-text-1);
   word-break: break-all;
   white-space: pre-wrap;
 }
 
 .getrunning-sub {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: var(--vp-c-text-2);
   line-height: 1.6;
   margin-bottom: 2rem;
@@ -609,8 +609,13 @@ claude
 
 .getrunning-links {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   justify-content: center;
+}
+
+.getrunning-links .btn {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
 }
 
 /* ── Animations ── */
@@ -631,7 +636,7 @@ claude
 
   .demo-sticky {
     position: sticky;
-    top: var(--vp-nav-height, 64px);
+    top: 8svh;
     transform: none;
     z-index: 10;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
