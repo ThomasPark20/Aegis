@@ -119,3 +119,7 @@ Rules validate before inclusion. Failed rules retry 3 times. If still failing, m
 ## Model
 
 All containers use **Claude Opus 4.6** (`claude-opus-4-6`).
+
+## Built on NanoClaw
+
+AEGIS is built on [NanoClaw](https://github.com/qwibitai/nanoclaw) — an open-source personal Claude assistant framework. NanoClaw provides the core runtime: channel system, container isolation, IPC messaging, group queue, and task scheduler. AEGIS extends it with CTI-specific research pipelines, dual-agent threads, detection rule generation, and the requirements contract system.

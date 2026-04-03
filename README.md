@@ -90,6 +90,10 @@ Each agent runs in an isolated Docker container with its own filesystem, IPC nam
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 - Anthropic API key or Claude Pro/Max subscription
 
+## Built on NanoClaw
+
+AEGIS is built on [NanoClaw](https://github.com/qwibitai/nanoclaw), an open-source personal Claude assistant framework.
+
 ## License
 
 MIT

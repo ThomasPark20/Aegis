@@ -26,13 +26,13 @@ Enable **Message Content Intent**:
 
 1. **Check container** — `docker ps` should show a running container
 2. **Check summaries** — `ls groups/global/summaries/`
-3. **Check container tools** — `docker run --rm --entrypoint bash nanoclaw-agent:latest -c 'sigma --version'`
+3. **Check container tools** — `docker run --rm --entrypoint bash aegis-agent:latest -c 'sigma --version'`
 
 ## Detection Rules Failing Validation
 
 Validation runs inside the container. Check:
 ```bash
-docker run --rm --entrypoint bash nanoclaw-agent:latest -c 'sigma --version && yarac --help | head -1'
+docker run --rm --entrypoint bash aegis-agent:latest -c 'sigma --version && yarac --help | head -1'
 ```
 
 If tools are missing, rebuild: `cd container && bash build.sh`

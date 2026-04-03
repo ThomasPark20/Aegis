@@ -355,7 +355,7 @@ claude
 
 /* ── Demo section ── */
 .demo-section {
-  min-height: 200vh;
+  min-height: auto;
   padding: 4rem 2rem;
 }
 
@@ -386,7 +386,7 @@ claude
   display: flex;
   flex-direction: column;
   gap: 14rem;
-  padding: 40vh 0 40vh;
+  padding: 40vh 0 10rem;
   min-width: 0;
 }
 
