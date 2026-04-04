@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-import { VueFlow } from '@vue-flow/core'
+import { VueFlow, Handle } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
+import { withBase } from 'vitepress'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css'
 import '@vue-flow/controls/dist/style.css'
@@ -23,9 +24,9 @@ const nodes = ref([
   },
   {
     id: 'host',
-    type: 'default',
     position: { x: 180, y: 120 },
-    data: { label: 'Actionable. Host Process' },
+    type: 'host',
+    data: { label: 'Host Process' },
     style: {
       background: '#D4760A', color: '#FFFFFF', border: 'none', borderRadius: '10px',
       padding: '14px 32px', fontWeight: '700', fontSize: '15px', width: '440px',
@@ -220,6 +221,14 @@ function onNodeClick(event) {
       :min-zoom="0.3"
       @node-click="onNodeClick"
     >
+      <template #node-host="{ data }">
+        <Handle type="target" :position="'top'" />
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <img :src="withBase('/apple-touch-icon.png')" alt="" style="height: 22px; width: 22px; border-radius: 4px;" />
+          <span>{{ data.label }}</span>
+        </div>
+        <Handle type="source" :position="'bottom'" />
+      </template>
       <Background />
       <Controls position="bottom-right" />
     </VueFlow>
