@@ -324,7 +324,7 @@ onUnmounted(() => {
                   <template v-else>
                     <div class="msg-sender">
                       <template v-if="msg.isBot">
-                        <img :src="withBase('/apple-touch-icon.png')" alt="Actionable." class="chat-logo" />
+                        <img :src="withBase('/favicon/dark/favicon-128x128.png')" alt="Actionable." class="chat-logo" />
                       </template>
                       <span v-else :class="msg.sender === 'bot' ? 'name-bot' : 'name-user'">{{ msg.name }}</span>
                     </div>
@@ -352,7 +352,7 @@ onUnmounted(() => {
           >
             <h3>{{ section.title }}</h3>
             <p v-if="section.text">{{ section.text }}</p>
-            <p v-else>{{ section.textParts[0] }}<img :src="withBase('/apple-touch-icon.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
+            <p v-else>{{ section.textParts[0] }}<img :src="withBase('/favicon/dark/favicon-128x128.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
           </div>
         </div>
 
@@ -367,7 +367,7 @@ onUnmounted(() => {
             >
               <h3>{{ section.title }}</h3>
               <p v-if="section.text">{{ section.text }}</p>
-              <p v-else>{{ section.textParts[0] }}<img :src="withBase('/apple-touch-icon.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
+              <p v-else>{{ section.textParts[0] }}<img :src="withBase('/favicon/dark/favicon-128x128.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
             </div>
           </div>
         </div>

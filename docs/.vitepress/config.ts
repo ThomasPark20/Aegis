@@ -8,9 +8,9 @@ export default withMermaid(defineConfig({
   ignoreDeadLinks: true,
   appearance: 'dark',
   head: [
-    ['link', { rel: 'icon', type: 'image/x-icon', href: '/Aegis/favicon.ico' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/Aegis/favicon-32x32.png' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/Aegis/apple-touch-icon.png' }],
+    ['link', { rel: 'icon', type: 'image/x-icon', href: '/Aegis/favicon/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/favicon/dark/favicon.svg' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/Aegis/favicon/dark/apple-touch-icon.png' }],
     ['meta', { name: 'theme-color', content: '#0A0A0A' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
@@ -20,7 +20,10 @@ export default withMermaid(defineConfig({
     }],
   ],
   themeConfig: {
-    logo: '/favicon-32x32.png',
+    logo: {
+      light: '/favicon/light/favicon-128x128.png',
+      dark: '/favicon/dark/favicon-128x128.png',
+    },
     siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
