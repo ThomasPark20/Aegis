@@ -7,9 +7,9 @@ const { isDark } = useData()
 // ── Chat simulation ──
 const messages = [
   { sender: 'user', name: 'Thomas Park', text: 'Research Scattered Spider\'s latest campaign' },
-  { sender: 'bot', name: 'actionable', isBot: true, text: 'On it — spinning up a research thread.', delay: 800 },
+  { sender: 'bot', name: 'Research Agent', text: 'On it — spinning up a research thread.', delay: 800 },
   { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 600 },
-  { sender: 'bot', name: 'actionable', isBot: true, text: 'Searching primary sources...', thread: true, delay: 1000 },
+  { sender: 'bot', name: 'Research Agent', text: 'Searching primary sources...', thread: true, delay: 1000 },
   { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 700 },
   { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 600 },
   { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 700 },
@@ -18,13 +18,13 @@ const messages = [
   { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 600 },
   { sender: 'step', text: 'Generating Snort rules — validating with snort', delay: 600 },
   { sender: 'step', text: 'Compiling topic summary with sources', delay: 500 },
-  { sender: 'bot', name: 'actionable', isBot: true, text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
+  { sender: 'bot', name: 'Research Agent', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
   { sender: 'user', name: 'Thomas Park', text: 'Are any of them on FBI most wanted?', thread: true, delay: 1500 },
   { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted by the DOJ. Added to research requirements so the report covers this.', thread: true, delay: 600 },
   { sender: 'user', name: 'Thomas Park', text: 'Also focus on their SIM swapping TTPs', thread: true, delay: 1200 },
   { sender: 'bot', name: 'Chat Agent', text: 'Added to requirements: focus analysis on SIM swapping techniques and related TTPs.', thread: true, delay: 600 },
   { sender: 'system', text: 'requirements.md updated — 2 items pending', delay: 500 },
-  { sender: 'bot', name: 'actionable', isBot: true, text: 'Updated report with FBI indictments and SIM swapping analysis. All requirements satisfied.', thread: true, delay: 1200, file: 'scattered-spider-2026-04-03-v2.md' },
+  { sender: 'bot', name: 'Research Agent', text: 'Updated report with FBI indictments and SIM swapping analysis. All requirements satisfied.', thread: true, delay: 1200, file: 'scattered-spider-2026-04-03-v2.md' },
 ]
 
 const visibleMessages = ref([])
@@ -157,7 +157,7 @@ const sections = [
   {
     id: 'research',
     title: 'Research on Demand',
-    textParts: ['Ask ', ' to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.'],
+    text: 'Ask Actionable to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
   },
   {
     id: 'dual-agent',
@@ -323,10 +323,7 @@ onUnmounted(() => {
                   </template>
                   <template v-else>
                     <div class="msg-sender">
-                      <template v-if="msg.isBot">
-                        <img :src="withBase('/favicon/favicon-dark.png')" alt="Actionable." class="chat-logo" />
-                      </template>
-                      <span v-else :class="msg.sender === 'bot' ? 'name-bot' : 'name-user'">{{ msg.name }}</span>
+                      <span :class="msg.sender === 'bot' ? 'name-bot' : 'name-user'">{{ msg.name }}</span>
                     </div>
                     <div class="msg-body">{{ msg.text }}</div>
                     <div v-if="msg.file" class="msg-file">📎 {{ msg.file }}</div>
@@ -351,8 +348,7 @@ onUnmounted(() => {
             :class="{ 'section-visible': visibleSections.has(section.id) }"
           >
             <h3>{{ section.title }}</h3>
-            <p v-if="section.text">{{ section.text }}</p>
-            <p v-else>{{ section.textParts[0] }}<img :src="withBase('/favicon/favicon-dark.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
+            <p>{{ section.text }}</p>
           </div>
         </div>
 
@@ -366,8 +362,7 @@ onUnmounted(() => {
               :class="{ 'card-active': activeCard === i }"
             >
               <h3>{{ section.title }}</h3>
-              <p v-if="section.text">{{ section.text }}</p>
-              <p v-else>{{ section.textParts[0] }}<img :src="withBase('/favicon/favicon-dark.png')" alt="Actionable." class="section-logo" />{{ section.textParts[1] }}</p>
+              <p>{{ section.text }}</p>
             </div>
           </div>
         </div>
@@ -623,21 +618,6 @@ claude
 }
 
 .msg-sender { margin-bottom: 2px; }
-
-.chat-logo {
-  height: 24px;
-  width: 24px;
-  border-radius: 4px;
-  vertical-align: -4px;
-}
-
-.section-logo {
-  display: inline;
-  height: 1.6em;
-  width: auto;
-  vertical-align: -0.2em;
-  margin: 0 0.1em;
-}
 
 .name-bot {
   font-size: 13px;

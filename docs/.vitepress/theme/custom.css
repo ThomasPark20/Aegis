@@ -147,6 +147,33 @@
   font-size: 0.875rem;
 }
 
+/* ── On This Page (right outline) ── */
+
+.VPDocAsideOutline .outline-link {
+  padding: 4px 0 4px 16px;
+  line-height: 1.5;
+}
+
+.VPDocAsideOutline .outline-marker {
+  left: 0;
+  width: 3px;
+  border-radius: 2px;
+}
+
+.VPDocAsideOutline .outline-title {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding-left: 0;
+}
+
+.VPDocAside {
+  padding-left: 16px;
+}
+
+.VPDocAside .content {
+  padding-right: 8px;
+}
+
 /* ── Code ── */
 
 .vp-doc [class*='language-'] {
