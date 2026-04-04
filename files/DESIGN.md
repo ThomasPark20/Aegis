@@ -25,18 +25,18 @@ The wordmark "Actionable." in TeX Gyre Adventor Bold (Avant Garde Gothic Bold) w
 
 ### Font System
 
-| Role | Font | Weight | Google Fonts | Fallback Stack |
-|------|------|--------|-------------|----------------|
-| Display / Logo | Advent Pro | 700 (Bold) | `Advent+Pro:wght@700` | Century Gothic, URW Gothic, ITC Avant Garde Gothic, sans-serif |
-| Headings (H1–H3) | Advent Pro | 600 (SemiBold) | `Advent+Pro:wght@600` | Century Gothic, sans-serif |
-| Body / Docs | Inter | 400 / 500 | `Inter:wght@400;500` | -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif |
-| Code / CLI | JetBrains Mono | 400 | `JetBrains+Mono:wght@400` | Consolas, Monaco, Courier New, monospace |
+| Role | Font | Weight | Source | Fallback Stack |
+|------|------|--------|-------|----------------|
+| Logo wordmark | TeX Gyre Adventor | Bold | Rendered as PNG/SVG — not loaded as a web font | — |
+| Headings (H1–H3) | Inter | 600 (SemiBold) | Google Fonts: `Inter:wght@600` | -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif |
+| Body / Docs | Inter | 400 / 500 | Google Fonts: `Inter:wght@400;500` | -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif |
+| Code / CLI | JetBrains Mono | 400 | Google Fonts: `JetBrains+Mono:wght@400` | Consolas, Monaco, Courier New, monospace |
 
-### Why This Pairing
+### Why This System
 
-Advent Pro is the Google Fonts equivalent of ITC Avant Garde Gothic — the same geometric DNA as TeX Gyre Adventor with its wide circular "a" and "e" shapes and tight spacing. It serves as the display and heading font, carrying the brand's distinctive character.
+The logo uses TeX Gyre Adventor Bold (the free clone of ITC Avant Garde Gothic Bold) with its wide circular "a" and "e" shapes. This font is **not available on Google Fonts** and no adequate substitute exists — Advent Pro is a condensed geometric that looks nothing like it at display sizes. The logo is therefore always rendered as a pre-built asset (PNG or SVG with embedded text), never as a live web font.
 
-Inter is the companion body font. Where Advent Pro is geometric and stylized, Inter is designed specifically for screen readability at small sizes. The contrast creates hierarchy: Advent Pro demands attention for headings, Inter recedes for long-form reading in docs and feature descriptions. Inter's x-height and letter-spacing are tuned for UI text, making it the right choice for the VitePress documentation site.
+Inter serves as the sole web font for all UI text — headings, body, navigation, and captions. Using one font family with weight variation (400/500/600) keeps the page clean and avoids font-loading jank. Inter's x-height and letter-spacing are tuned for screen readability, making it the right choice for the VitePress documentation site.
 
 JetBrains Mono handles all code blocks, CLI examples, and inline code. It has clear disambiguation between similar characters (0/O, 1/l/I) which matters for security tooling where IOCs and rule syntax need to be read precisely.
 
@@ -44,10 +44,10 @@ JetBrains Mono handles all code blocks, CLI examples, and inline code. It has cl
 
 | Element | Font | Size | Weight | Line Height | Letter Spacing |
 |---------|------|------|--------|-------------|----------------|
-| Hero title | Advent Pro | 72px / 4.5rem | 700 | 1.0 | -0.02em |
-| Page heading (H1) | Advent Pro | 36px / 2.25rem | 600 | 1.2 | -0.01em |
-| Section heading (H2) | Advent Pro | 24px / 1.5rem | 600 | 1.3 | 0 |
-| Subsection (H3) | Advent Pro | 20px / 1.25rem | 600 | 1.4 | 0 |
+| Hero title | Logo asset (PNG) | ~520px wide, responsive | — | — | — |
+| Page heading (H1) | Inter | 36px / 2.25rem | 700 | 1.2 | -0.02em |
+| Section heading (H2) | Inter | 24px / 1.5rem | 600 | 1.3 | -0.01em |
+| Subsection (H3) | Inter | 20px / 1.25rem | 600 | 1.4 | 0 |
 | Body large | Inter | 18px / 1.125rem | 400 | 1.6 | 0 |
 | Body default | Inter | 16px / 1rem | 400 | 1.6 | 0 |
 | Body small / captions | Inter | 14px / 0.875rem | 400 | 1.5 | 0.01em |
@@ -104,8 +104,10 @@ This creates a subtle, ambient background that never competes with content.
 ### Google Fonts Import
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Advent+Pro:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
 ```
+
+Note: TeX Gyre Adventor is **not on Google Fonts**. The logo is always a pre-built asset (PNG/SVG), never rendered as live text.
 
 ### CSS Custom Properties
 
@@ -161,35 +163,24 @@ This creates a subtle, ambient background that never competes with content.
   --vp-c-brand-soft: rgba(212, 118, 10, 0.08);
 }
 
-/* Heading font override */
+/* Headings — Inter with weight variation */
 .vp-doc h1,
 .vp-doc h2,
 .vp-doc h3 {
-  font-family: 'Advent Pro', 'Century Gothic', sans-serif;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .vp-doc h1 {
   font-size: 2.25rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-/* Hero section on landing page */
-.VPHero .name {
-  font-family: 'Advent Pro', 'Century Gothic', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
-}
-
-.VPHero .tagline {
-  font-family: 'Advent Pro', 'Century Gothic', sans-serif;
-  font-weight: 600;
-}
+/* Hero — uses logo PNG asset, not a font */
 
 /* Sidebar nav */
 .VPSidebar .text {
-  font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
 }
@@ -207,11 +198,12 @@ This creates a subtle, ambient background that never competes with content.
 // .vitepress/config.ts
 export default defineConfig({
   head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/Aegis/actionable-logo-128.png' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { 
       rel: 'stylesheet', 
-      href: 'https://fonts.googleapis.com/css2?family=Advent+Pro:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap' 
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap' 
     }],
   ],
 })
