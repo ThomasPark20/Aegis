@@ -625,15 +625,15 @@ claude
 .msg-sender { margin-bottom: 2px; }
 
 .chat-logo {
-  height: 18px;
-  width: 18px;
+  height: 24px;
+  width: 24px;
   border-radius: 4px;
-  vertical-align: -2px;
+  vertical-align: -4px;
 }
 
 .section-logo {
   display: inline;
-  height: 1.2em;
+  height: 1.6em;
   width: auto;
   vertical-align: -0.2em;
   margin: 0 0.1em;
