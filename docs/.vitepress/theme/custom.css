@@ -95,11 +95,9 @@
 
 /* ── Navbar ── */
 
-.VPNavBarTitle .title {
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+.VPNavBarTitle .logo {
+  height: 20px;
+  width: auto;
 }
 
 .VPNavBar {

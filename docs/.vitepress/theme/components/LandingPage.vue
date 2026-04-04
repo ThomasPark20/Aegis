@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
-import { withBase } from 'vitepress'
+import { withBase, useData } from 'vitepress'
+
+const { isDark } = useData()
 
 // ── Chat simulation ──
 const messages = [
@@ -265,8 +267,16 @@ onUnmounted(() => {
     <section class="hero-section">
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
         <img
+          v-if="isDark"
           :src="withBase('/actionable-wordmark-white-2x.png')"
           :srcset="`${withBase('/actionable-wordmark-white-1x.png')} 1x, ${withBase('/actionable-wordmark-white-2x.png')} 2x`"
+          alt="Actionable."
+          class="hero-logo"
+        />
+        <img
+          v-else
+          :src="withBase('/actionable-wordmark-dark-2x.png')"
+          :srcset="`${withBase('/actionable-wordmark-dark-1x.png')} 1x, ${withBase('/actionable-wordmark-dark-2x.png')} 2x`"
           alt="Actionable."
           class="hero-logo"
         />

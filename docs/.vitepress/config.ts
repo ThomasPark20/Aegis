@@ -17,7 +17,11 @@ export default withMermaid(defineConfig({
     }],
   ],
   themeConfig: {
-    siteTitle: 'ACTIONABLE.',
+    logo: {
+      light: '/actionable-wordmark-dark-1x.png',
+      dark: '/actionable-wordmark-white-1x.png',
+    },
+    siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },
