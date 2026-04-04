@@ -17,9 +17,8 @@ const nodes = ref([
     position: { x: 340, y: 0 },
     data: { label: 'Discord / Telegram' },
     style: {
-      background: '#1E1E1E', border: '2px solid #888', borderRadius: '8px',
+      background: '#f5f5f5', border: '2px solid #333', borderRadius: '8px',
       padding: '14px 32px', fontWeight: '600', fontSize: '15px', textAlign: 'center',
-      color: '#E8E8E8',
     },
   },
   {
@@ -39,9 +38,8 @@ const nodes = ref([
     position: { x: 120, y: 220 },
     data: { label: 'Message Router' },
     style: {
-      background: '#141414', border: '1px solid #555', borderRadius: '6px',
+      background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
-      color: '#E8E8E8',
     },
   },
   {
@@ -50,9 +48,8 @@ const nodes = ref([
     position: { x: 340, y: 220 },
     data: { label: 'Group Queue' },
     style: {
-      background: '#141414', border: '1px solid #555', borderRadius: '6px',
+      background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
-      color: '#E8E8E8',
     },
   },
   {
@@ -61,9 +58,8 @@ const nodes = ref([
     position: { x: 120, y: 300 },
     data: { label: 'Task Scheduler' },
     style: {
-      background: '#141414', border: '1px solid #555', borderRadius: '6px',
+      background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
-      color: '#E8E8E8',
     },
   },
   {
@@ -72,9 +68,8 @@ const nodes = ref([
     position: { x: 340, y: 300 },
     data: { label: 'IPC Watcher' },
     style: {
-      background: '#141414', border: '1px solid #555', borderRadius: '6px',
+      background: '#fafafa', border: '1px solid #ddd', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
-      color: '#E8E8E8',
     },
   },
 
@@ -85,8 +80,8 @@ const nodes = ref([
     position: { x: 0, y: 460 },
     data: { label: 'Main Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
-      padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '220px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '220px',
       textAlign: 'center',
     },
   },
@@ -96,9 +91,9 @@ const nodes = ref([
     position: { x: 0, y: 530 },
     data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task,\nstart_research_thread' },
     style: {
-      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
-      color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 
@@ -109,8 +104,8 @@ const nodes = ref([
     position: { x: 290, y: 460 },
     data: { label: 'Thread-Chat Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
-      padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '220px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '220px',
       textAlign: 'center',
     },
   },
@@ -120,9 +115,9 @@ const nodes = ref([
     position: { x: 290, y: 530 },
     data: { label: 'Lightweight — answers Q&A\n\nWrites to requirements.md\nReads research workspace\nExits after one response' },
     style: {
-      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
-      color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 
@@ -133,8 +128,8 @@ const nodes = ref([
     position: { x: 580, y: 460 },
     data: { label: 'Research Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
-      padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '240px',
+      background: '#fff', border: '2px solid #333', borderRadius: '10px',
+      padding: '14px 24px', fontWeight: '600', fontSize: '14px', width: '240px',
       textAlign: 'center',
     },
   },
@@ -144,26 +139,30 @@ const nodes = ref([
     position: { x: 580, y: 530 },
     data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task\n\nChecks requirements.md\nbefore delivery' },
     style: {
-      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
+      background: '#fafafa', border: '1px dashed #ccc', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '240px', whiteSpace: 'pre-wrap',
-      color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
+      color: '#666', lineHeight: '1.5', textAlign: 'center',
     },
   },
 ])
 
 const edges = ref([
-  { id: 'e-channels-host', source: 'channels', target: 'host', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
-  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#888' } },
-  { id: 'e-scheduler-queue', source: 'scheduler', target: 'queue', style: { stroke: '#888' } },
-  { id: 'e-ipc-channels', source: 'ipc', target: 'channels', style: { stroke: '#888', strokeDasharray: '5,5' }, label: 'outbound' },
-  { id: 'e-queue-main', source: 'queue', target: 'main', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
-  { id: 'e-queue-chat', source: 'queue', target: 'chat', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
-  { id: 'e-queue-research', source: 'queue', target: 'research', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
+  { id: 'e-channels-host', source: 'channels', target: 'host', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#999' } },
+  { id: 'e-scheduler-queue', source: 'scheduler', target: 'queue', style: { stroke: '#999' } },
+  { id: 'e-ipc-channels', source: 'ipc', target: 'channels', style: { stroke: '#999', strokeDasharray: '5,5' }, label: 'outbound' },
+  { id: 'e-queue-main', source: 'queue', target: 'main', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-queue-chat', source: 'queue', target: 'chat', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
+  { id: 'e-queue-research', source: 'queue', target: 'research', animated: true, style: { stroke: '#333', strokeWidth: 2 } },
   {
     id: 'e-chat-research', source: 'chat', target: 'research',
     style: { stroke: '#e44', strokeDasharray: '6,4', strokeWidth: 2 },
     label: 'requirements.md', labelStyle: { fontSize: '12px', fontWeight: '600', fill: '#e44' },
   },
+  // Agent → detail edges
+  { id: 'e-main-detail', source: 'main', target: 'main-detail', style: { stroke: '#ccc', strokeWidth: 1 } },
+  { id: 'e-chat-detail', source: 'chat', target: 'chat-detail', style: { stroke: '#ccc', strokeWidth: 1 } },
+  { id: 'e-research-detail', source: 'research', target: 'research-detail', style: { stroke: '#ccc', strokeWidth: 1 } },
 ])
 
 const nodeDetails = {
