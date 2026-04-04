@@ -17,7 +17,7 @@ const nodes = ref([
     position: { x: 340, y: 0 },
     data: { label: 'Discord / Telegram' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '8px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '8px',
       padding: '14px 32px', fontWeight: '600', fontSize: '15px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -28,7 +28,7 @@ const nodes = ref([
     type: 'host',
     data: { label: 'Host Process' },
     style: {
-      background: '#D4760A', color: '#FFFFFF', border: 'none', borderRadius: '10px',
+      background: '#2A2A2A', color: '#FFFFFF', border: '2px solid #555', borderRadius: '10px',
       padding: '14px 32px', fontWeight: '700', fontSize: '15px', width: '440px',
       textAlign: 'center',
     },
@@ -39,7 +39,7 @@ const nodes = ref([
     position: { x: 120, y: 220 },
     data: { label: 'Message Router' },
     style: {
-      background: '#141414', border: '1px solid #2A2A2A', borderRadius: '6px',
+      background: '#141414', border: '1px solid #555', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -50,7 +50,7 @@ const nodes = ref([
     position: { x: 340, y: 220 },
     data: { label: 'Group Queue' },
     style: {
-      background: '#141414', border: '1px solid #2A2A2A', borderRadius: '6px',
+      background: '#141414', border: '1px solid #555', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -61,7 +61,7 @@ const nodes = ref([
     position: { x: 120, y: 300 },
     data: { label: 'Task Scheduler' },
     style: {
-      background: '#141414', border: '1px solid #2A2A2A', borderRadius: '6px',
+      background: '#141414', border: '1px solid #555', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -72,7 +72,7 @@ const nodes = ref([
     position: { x: 340, y: 300 },
     data: { label: 'IPC Watcher' },
     style: {
-      background: '#141414', border: '1px solid #2A2A2A', borderRadius: '6px',
+      background: '#141414', border: '1px solid #555', borderRadius: '6px',
       padding: '10px 20px', fontSize: '13px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -85,7 +85,7 @@ const nodes = ref([
     position: { x: 0, y: 460 },
     data: { label: 'Main Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '10px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
       padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '220px',
       textAlign: 'center',
     },
@@ -96,7 +96,7 @@ const nodes = ref([
     position: { x: 0, y: 530 },
     data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task,\nstart_research_thread' },
     style: {
-      background: '#141414', border: '1px dashed #2A2A2A', borderRadius: '8px',
+      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
       color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
     },
@@ -109,7 +109,7 @@ const nodes = ref([
     position: { x: 290, y: 460 },
     data: { label: 'Thread-Chat Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '10px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
       padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '220px',
       textAlign: 'center',
     },
@@ -120,7 +120,7 @@ const nodes = ref([
     position: { x: 290, y: 530 },
     data: { label: 'Lightweight — answers Q&A\n\nWrites to requirements.md\nReads research workspace\nExits after one response' },
     style: {
-      background: '#141414', border: '1px dashed #2A2A2A', borderRadius: '8px',
+      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '220px', whiteSpace: 'pre-wrap',
       color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
     },
@@ -133,7 +133,7 @@ const nodes = ref([
     position: { x: 580, y: 460 },
     data: { label: 'Research Agent' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '10px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
       padding: '14px 24px', fontWeight: '600', fontSize: '14px', color: '#E8E8E8', width: '240px',
       textAlign: 'center',
     },
@@ -144,7 +144,7 @@ const nodes = ref([
     position: { x: 580, y: 530 },
     data: { label: 'Claude Code + sigma-cli\n+ yarac + snort\n\nIPC: send_message, send_file,\nschedule_task\n\nChecks requirements.md\nbefore delivery' },
     style: {
-      background: '#141414', border: '1px dashed #2A2A2A', borderRadius: '8px',
+      background: '#141414', border: '1px dashed #555', borderRadius: '8px',
       padding: '12px 16px', fontSize: '11px', width: '240px', whiteSpace: 'pre-wrap',
       color: '#A0A0A0', lineHeight: '1.5', textAlign: 'center',
     },
@@ -153,9 +153,9 @@ const nodes = ref([
 
 const edges = ref([
   { id: 'e-channels-host', source: 'channels', target: 'host', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
-  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#6B6B6B' } },
-  { id: 'e-scheduler-queue', source: 'scheduler', target: 'queue', style: { stroke: '#6B6B6B' } },
-  { id: 'e-ipc-channels', source: 'ipc', target: 'channels', style: { stroke: '#6B6B6B', strokeDasharray: '5,5' }, label: 'outbound' },
+  { id: 'e-router-queue', source: 'router', target: 'queue', style: { stroke: '#888' } },
+  { id: 'e-scheduler-queue', source: 'scheduler', target: 'queue', style: { stroke: '#888' } },
+  { id: 'e-ipc-channels', source: 'ipc', target: 'channels', style: { stroke: '#888', strokeDasharray: '5,5' }, label: 'outbound' },
   { id: 'e-queue-main', source: 'queue', target: 'main', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
   { id: 'e-queue-chat', source: 'queue', target: 'chat', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },
   { id: 'e-queue-research', source: 'queue', target: 'research', animated: true, style: { stroke: '#A0A0A0', strokeWidth: 2 } },

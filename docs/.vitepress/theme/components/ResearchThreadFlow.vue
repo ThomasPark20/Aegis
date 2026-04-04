@@ -13,7 +13,7 @@ const nodes = ref([
     position: { x: 0, y: 0 },
     data: { label: '1. User: "Research Lazarus Group"' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '24px', color: '#E8E8E8',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '24px', color: '#E8E8E8',
       padding: '14px 28px', fontWeight: '600', fontSize: '13px', width: '300px',
       textAlign: 'center',
     },
@@ -23,7 +23,7 @@ const nodes = ref([
     position: { x: 0, y: 110 },
     data: { label: '2. Main Agent acknowledges and dispatches' },
     style: {
-      background: '#1E1E1E', border: '1px solid #2A2A2A', borderRadius: '10px',
+      background: '#1E1E1E', border: '1px solid #555', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', textAlign: 'center',
       color: '#E8E8E8',
     },
@@ -33,7 +33,7 @@ const nodes = ref([
     position: { x: 0, y: 220 },
     data: { label: '3. Host creates Discord thread\n    + seeds requirements.md' },
     style: {
-      background: '#D4760A', color: '#FFFFFF', border: 'none', borderRadius: '10px',
+      background: '#2A2A2A', color: '#FFFFFF', border: '2px solid #555', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
       whiteSpace: 'pre-wrap', textAlign: 'center',
     },
@@ -43,7 +43,7 @@ const nodes = ref([
     position: { x: 0, y: 350 },
     data: { label: '4. Research Agent spawns\n    Deep investigation begins' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '10px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
       whiteSpace: 'pre-wrap', textAlign: 'center', color: '#E8E8E8',
     },
@@ -53,7 +53,7 @@ const nodes = ref([
     position: { x: 440, y: 350 },
     data: { label: '5. User follow-up:\n    "Include FBI most wanted members"' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '24px', color: '#E8E8E8',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '24px', color: '#E8E8E8',
       padding: '14px 28px', fontWeight: '600', fontSize: '13px', width: '310px',
       whiteSpace: 'pre-wrap', textAlign: 'center',
     },
@@ -84,7 +84,7 @@ const nodes = ref([
     position: { x: 0, y: 750 },
     data: { label: '8. Research Agent checks requirements\n    before delivering report' },
     style: {
-      background: '#1E1E1E', border: '2px solid #6B6B6B', borderRadius: '10px',
+      background: '#1E1E1E', border: '2px solid #888', borderRadius: '10px',
       padding: '14px 20px', fontSize: '13px', width: '300px', fontWeight: '500',
       whiteSpace: 'pre-wrap', textAlign: 'center', color: '#E8E8E8',
     },
@@ -104,7 +104,7 @@ const nodes = ref([
     position: { x: 440, y: 880 },
     data: { label: '10 min idle → soft-expire\nMessage to reactivate with full context' },
     style: {
-      background: '#141414', border: '1px dashed #6B6B6B', borderRadius: '10px',
+      background: '#141414', border: '1px dashed #888', borderRadius: '10px',
       padding: '14px 20px', fontSize: '12px', width: '280px', whiteSpace: 'pre-wrap',
       color: '#A0A0A0', textAlign: 'center',
     },
@@ -132,7 +132,7 @@ const edges = ref([
     label: 'continues research...', labelStyle: { fontSize: '11px', fill: '#A0A0A0' },
   },
   { id: 'e8', source: 'validate', target: 'deliver', animated: true, style: { stroke: '#393', strokeWidth: 2 } },
-  { id: 'e9', source: 'deliver', target: 'expire', style: { stroke: '#6B6B6B', strokeDasharray: '6,4' } },
+  { id: 'e9', source: 'deliver', target: 'expire', style: { stroke: '#888', strokeDasharray: '6,4' } },
 ])
 </script>
 
