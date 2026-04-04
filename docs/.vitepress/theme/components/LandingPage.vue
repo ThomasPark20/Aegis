@@ -415,16 +415,16 @@ claude
 }
 
 .hero-square {
-  font-size: 0.4em;
-  vertical-align: 0.25em;
-  margin-left: 0.05em;
+  font-size: 0.3em;
+  vertical-align: 0.3em;
+  margin-left: 0.08em;
   color: var(--vp-c-text-1);
 }
 
 .hero-name {
   font-size: clamp(4rem, 12vw, 8rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: -0.04em;
   line-height: 1;
   margin: 0;
   color: var(--vp-c-text-1);
