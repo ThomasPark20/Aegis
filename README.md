@@ -1,6 +1,6 @@
 <div align="center">
 
-# A C T I O N A B L E .
+# Actionable.
 
 **Autonomous Threat Intelligence**
 
