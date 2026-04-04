@@ -268,15 +268,15 @@ onUnmounted(() => {
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
         <img
           v-if="isDark"
-          :src="withBase('/actioner-wordmark-white-2x.png')"
-          :srcset="`${withBase('/actioner-wordmark-white-1x.png')} 1x, ${withBase('/actioner-wordmark-white-2x.png')} 2x`"
+          :src="withBase('/actioner-wordmark-white-4x.png')"
+          :srcset="`${withBase('/actioner-wordmark-white-2x.png')} 1x, ${withBase('/actioner-wordmark-white-4x.png')} 2x`"
           alt="Actioner"
           class="hero-logo"
         />
         <img
           v-else
-          :src="withBase('/actioner-wordmark-dark-2x.png')"
-          :srcset="`${withBase('/actioner-wordmark-dark-1x.png')} 1x, ${withBase('/actioner-wordmark-dark-2x.png')} 2x`"
+          :src="withBase('/actioner-wordmark-dark-4x.png')"
+          :srcset="`${withBase('/actioner-wordmark-dark-2x.png')} 1x, ${withBase('/actioner-wordmark-dark-4x.png')} 2x`"
           alt="Actioner"
           class="hero-logo"
         />
