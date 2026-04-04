@@ -20,7 +20,7 @@ Default for non-main channels. To change:
 Enable **Message Content Intent**:
 1. [Discord Developer Portal](https://discord.com/developers/applications) > your app > **Bot** tab
 2. Under **Privileged Gateway Intents**, enable **Message Content Intent**
-3. Restart Actionable■
+3. Restart <A />
 
 ## Research Not Returning Results
 

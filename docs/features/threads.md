@@ -26,25 +26,25 @@ Send messages in any thread to interact. A fast **thread-chat agent** responds i
 ```
 Thread: Research: Scattered Spider
 ────────────────────────────────
-Actionable■: Researching now...
+<A />: Researching now...
 
 You: "Are they the same as ShinyHunters?"
-Actionable■ (chat): "No — Scattered Spider (UNC3944) and ShinyHunters are
+<A /> (chat): "No — Scattered Spider (UNC3944) and ShinyHunters are
               different groups. ShinyHunters focuses on data breaches..."
 
 You: "Focus on the IOCs, skip attribution"
-Actionable■ (chat): "Got it — added to the research requirements: focus
+<A /> (chat): "Got it — added to the research requirements: focus
               analysis on IOCs rather than attribution."
 
 You: "Also check Volt Typhoon overlap"
-Actionable■ (chat): "Added to requirements: investigate potential Volt
+<A /> (chat): "Added to requirements: investigate potential Volt
               Typhoon overlap. The research agent will cover this
               before delivering the report."
 
-Actionable■ (research): Report ready. [attached .md]
+<A /> (research): Report ready. [attached .md]
 
 You: "Generate Sigma rules for the RDP lateral movement"
-Actionable■: "Here's a Sigma rule targeting T1021.001..."
+<A />: "Here's a Sigma rule targeting T1021.001..."
 ```
 
 ## Dual-Agent Model
@@ -72,7 +72,7 @@ The thread-chat agent has access to the research agent's workspace, so it can re
 
 ## Thread Re-activation
 
-Expired threads are **soft-deleted**, not destroyed. The group folder, session data, and research files are preserved. When you send a message to an expired thread, Actionable■ automatically re-activates it — the new agent has access to all prior research context.
+Expired threads are **soft-deleted**, not destroyed. The group folder, session data, and research files are preserved. When you send a message to an expired thread, <A /> automatically re-activates it — the new agent has access to all prior research context.
 
 ## Telegram
 

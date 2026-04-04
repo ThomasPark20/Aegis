@@ -264,7 +264,12 @@ onUnmounted(() => {
     <!-- HERO: full viewport -->
     <section class="hero-section">
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
-        <img :src="withBase('/actionable-logo-1000.png')" alt="Actionable." class="hero-logo" />
+        <img
+          :src="withBase('/actionable-wordmark-white-2x.png')"
+          :srcset="`${withBase('/actionable-wordmark-white-1x.png')} 1x, ${withBase('/actionable-wordmark-white-2x.png')} 2x`"
+          alt="Actionable."
+          class="hero-logo"
+        />
         <p class="hero-text">Threat intelligence that works for you.</p>
         <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">

@@ -1,6 +1,6 @@
 # Scheduled Tasks
 
-Actionable■ can run two automated tasks, both configured during `/setup`.
+<A /> can run two automated tasks, both configured during `/setup`.
 
 ## RSS Feed Scan
 

@@ -1,10 +1,10 @@
 # Daily Briefing
 
-Actionable■ compiles all research from the day into an executive report, delivered as a Discord thread at your configured time.
+<A /> compiles all research from the day into an executive report, delivered as a Discord thread at your configured time.
 
 ## Setup
 
-During `/setup`, Actionable■ asks what time you want your daily report. You can also configure it anytime:
+During `/setup`, <A /> asks what time you want your daily report. You can also configure it anytime:
 
 ```
 "Set daily report at 9am"
@@ -30,7 +30,7 @@ At your scheduled time:
 ```
 Thread: Daily Brief — 2026-04-02
 ────────────────────────────────
-Actionable■: Daily CTI Briefing — April 2, 2026
+<A />: Daily CTI Briefing — April 2, 2026
 
   - CVE-2026-1234: Critical RCE in Apache Struts (CVSS 9.8, active exploitation)
   - Scattered Spider: New social engineering campaign targeting telecom

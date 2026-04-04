@@ -21,7 +21,7 @@ claude
 
 ## After Setup
 
-Once connected, Actionable■:
+Once connected, <A />:
 
 - Responds to research requests by creating Discord threads
 - Delivers all reports as `.md` file attachments

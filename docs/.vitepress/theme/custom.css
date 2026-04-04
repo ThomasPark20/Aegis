@@ -158,6 +158,16 @@
   color: var(--vp-c-text-2);
 }
 
+/* ── Inline wordmark ── */
+
+.inline-wordmark {
+  display: inline;
+  height: 0.9em;
+  width: auto;
+  vertical-align: baseline;
+  margin: 0 0.05em;
+}
+
 /* ── Footer ── */
 
 .VPFooter .message, .VPFooter .copyright {

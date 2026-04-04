@@ -5,6 +5,7 @@ import ResearchThreadFlow from './components/ResearchThreadFlow.vue'
 import HowItWorks from './components/HowItWorks.vue'
 import LandingPage from './components/LandingPage.vue'
 import FooterLayout from './components/FooterLayout.vue'
+import A from './components/A.vue'
 
 export default {
   extends: DefaultTheme,
@@ -14,5 +15,6 @@ export default {
     app.component('ResearchThreadFlow', ResearchThreadFlow)
     app.component('HowItWorks', HowItWorks)
     app.component('LandingPage', LandingPage)
+    app.component('A', A)
   },
 }

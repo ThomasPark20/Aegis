@@ -3,7 +3,7 @@
 ## Create a Discord Bot
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click **New Application** — name it "Actionable■" (or whatever you like)
+2. Click **New Application** — name it "<A />" (or whatever you like)
 3. Go to the **Bot** tab
 4. Click **Reset Token** — copy it immediately (you only see it once)
 5. Under **Privileged Gateway Intents**, enable:
@@ -21,12 +21,12 @@ Open the OAuth2 URL in your browser. Select your server. Authorize.
 ## Get Your Channel ID
 
 1. In Discord: **User Settings** > **Advanced** > Enable **Developer Mode**
-2. Right-click the text channel you want Actionable■ in
+2. Right-click the text channel you want <A /> in
 3. Click **Copy Channel ID**
 
 ## Run /add-discord
 
-In your Actionable■ Claude session:
+In your <A /> Claude session:
 
 ```
 /add-discord
@@ -38,11 +38,11 @@ You'll be asked for:
 - **Channel name** — the channel name (e.g., "threat-intel")
 - **Channel ID** — the number you copied
 
-Actionable■ registers the channel, seeds scheduled tasks (daily briefing + critical alerts), and verifies the connection.
+<A /> registers the channel, seeds scheduled tasks (daily briefing + critical alerts), and verifies the connection.
 
 ## Verify
 
-Send any message in your registered channel. Actionable■ should respond within a few seconds.
+Send any message in your registered channel. <A /> should respond within a few seconds.
 
 ## Adding More Channels
 
