@@ -8,7 +8,10 @@ export default withMermaid(defineConfig({
   ignoreDeadLinks: true,
   appearance: 'dark',
   head: [
-    ['link', { rel: 'icon', type: 'image/png', href: '/Aegis/actionable-logo-128.png' }],
+    ['link', { rel: 'icon', type: 'image/x-icon', href: '/Aegis/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/Aegis/favicon-32x32.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/Aegis/apple-touch-icon.png' }],
+    ['meta', { name: 'theme-color', content: '#0A0A0A' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', {
@@ -17,11 +20,8 @@ export default withMermaid(defineConfig({
     }],
   ],
   themeConfig: {
-    logo: {
-      light: '/actionable-wordmark-dark-1x.png',
-      dark: '/actionable-wordmark-white-1x.png',
-    },
-    siteTitle: false,
+    logo: '/favicon-32x32.png',
+    siteTitle: 'ACTIONABLE.',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },
