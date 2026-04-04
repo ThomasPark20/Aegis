@@ -96,8 +96,8 @@
 /* ── Navbar ── */
 
 .VPNavBarTitle .logo {
-  height: 20px;
-  width: auto;
+  height: 28px;
+  width: 28px;
 }
 
 .VPNavBar {
@@ -160,10 +160,11 @@
 
 .inline-wordmark {
   display: inline;
-  height: 0.9em;
+  height: 1.2em;
   width: auto;
-  vertical-align: baseline;
-  margin: 0 0.05em;
+  vertical-align: -0.2em;
+  margin: 0 0.15em;
+  border-radius: 3px;
 }
 
 /* ── Footer ── */

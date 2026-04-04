@@ -25,7 +25,7 @@ const nodes = ref([
     id: 'host',
     type: 'default',
     position: { x: 180, y: 120 },
-    data: { label: 'Actionable■ Host Process' },
+    data: { label: 'Actionable. Host Process' },
     style: {
       background: '#D4760A', color: '#FFFFFF', border: 'none', borderRadius: '10px',
       padding: '14px 32px', fontWeight: '700', fontSize: '15px', width: '440px',
@@ -212,11 +212,12 @@ function onNodeClick(event) {
     <VueFlow
       :nodes="nodes"
       :edges="edges"
-      :default-viewport="{ x: 10, y: 10, zoom: 0.78 }"
       :nodes-draggable="true"
       :zoom-on-scroll="true"
       :pan-on-drag="true"
-      fit-view-on-init
+      :fit-view-on-init="true"
+      :max-zoom="1.5"
+      :min-zoom="0.3"
       @node-click="onNodeClick"
     >
       <Background />

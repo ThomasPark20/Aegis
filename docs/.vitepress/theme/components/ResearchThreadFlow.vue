@@ -141,11 +141,12 @@ const edges = ref([
     <VueFlow
       :nodes="nodes"
       :edges="edges"
-      :default-viewport="{ x: 10, y: 10, zoom: 0.72 }"
       :nodes-draggable="true"
       :zoom-on-scroll="true"
       :pan-on-drag="true"
-      fit-view-on-init
+      :fit-view-on-init="true"
+      :max-zoom="1.5"
+      :min-zoom="0.3"
     >
       <Background />
       <Controls position="bottom-right" />
