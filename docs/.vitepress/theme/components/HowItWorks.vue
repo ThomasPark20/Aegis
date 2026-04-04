@@ -3,7 +3,7 @@ import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 
 const messages = [
   { sender: 'user', name: 'You', text: 'Research Scattered Spider\'s latest campaign' },
-  { sender: 'bot', name: 'Research Agent', text: 'On it — spinning up a research thread.', delay: 800 },
+  { sender: 'bot', name: 'Chat Agent', text: 'On it — spinning up a research thread.', delay: 800 },
   { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 600 },
   { sender: 'bot', name: 'Research Agent', text: 'Searching primary sources...', thread: true, delay: 1000 },
   { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 700 },
