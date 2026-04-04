@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Actionable■
+title: Actionable Intelligence
 ---
 
 <LandingPage />

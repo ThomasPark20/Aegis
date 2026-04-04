@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
-  title: 'Actionable■',
+  title: 'Actionable Intelligence',
   description: 'Threat intelligence that works for you.',
   base: '/Aegis/',
   ignoreDeadLinks: true,
