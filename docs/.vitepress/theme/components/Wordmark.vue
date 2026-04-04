@@ -6,7 +6,7 @@ const { isDark } = useData()
 
 <template>
   <img
-    :src="isDark ? withBase('/favicon/dark/favicon-128x128.png') : withBase('/favicon/light/favicon-128x128.png')"
+    :src="isDark ? withBase('/favicon/favicon-dark.png') : withBase('/favicon/favicon-light.png')"
     alt="Actionable."
     class="inline-wordmark"
   />
