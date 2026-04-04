@@ -104,6 +104,14 @@
   border-bottom: 1px solid var(--vp-c-divider) !important;
 }
 
+.VPNavBar .content {
+  gap: 0 !important;
+}
+
+.VPNavBarSearch {
+  padding-left: 8px !important;
+}
+
 /* ── Sidebar ── */
 
 .VPSidebar .text {

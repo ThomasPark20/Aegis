@@ -28,7 +28,6 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },
-      { text: 'Features', link: '/features/' },
       { text: 'GitHub', link: 'https://github.com/ThomasPark20/Aegis' },
     ],
     sidebar: {
@@ -57,10 +56,23 @@ export default withMermaid(defineConfig({
             { text: 'Troubleshooting', link: '/guide/troubleshooting' },
           ],
         },
+        {
+          text: 'Features',
+          items: [
+            { text: 'Overview', link: '/features/' },
+            { text: 'Research on Demand', link: '/features/research' },
+            { text: 'Detection Rules', link: '/features/detection-rules' },
+            { text: 'File Attachments', link: '/features/attachments' },
+            { text: 'Daily Briefing', link: '/features/daily-briefing' },
+            { text: 'Critical Alerts', link: '/features/critical-alerts' },
+            { text: 'Research Threads', link: '/features/threads' },
+            { text: 'Status Command', link: '/features/status' },
+          ],
+        },
       ],
       '/features/': [
         {
-          text: 'Core Features',
+          text: 'Features',
           items: [
             { text: 'Overview', link: '/features/' },
             { text: 'Research on Demand', link: '/features/research' },
