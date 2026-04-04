@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
-  title: 'Actionable.',
-  description: 'Autonomous CTI Research & Detection Platform',
+  title: 'Actionable■',
+  description: 'Threat intelligence that works for you.',
   base: '/Aegis/',
   ignoreDeadLinks: true,
   appearance: 'dark',
   head: [],
   themeConfig: {
-    siteTitle: 'Actionable.',
+    siteTitle: 'Actionable■',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },

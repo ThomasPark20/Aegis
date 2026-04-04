@@ -122,4 +122,4 @@ All containers use **Claude Opus 4.6** (`claude-opus-4-6`).
 
 ## Built on NanoClaw
 
-Actionable. is built on [NanoClaw](https://github.com/qwibitai/nanoclaw) — an open-source personal Claude assistant framework. NanoClaw provides the core runtime: channel system, container isolation, IPC messaging, group queue, and task scheduler. Actionable. extends it with CTI-specific research pipelines, dual-agent threads, detection rule generation, and the requirements contract system.
+Actionable■ is built on [NanoClaw](https://github.com/qwibitai/nanoclaw) — an open-source personal Claude assistant framework. NanoClaw provides the core runtime: channel system, container isolation, IPC messaging, group queue, and task scheduler. Actionable■ extends it with CTI-specific research pipelines, dual-agent threads, detection rule generation, and the requirements contract system.

@@ -9,7 +9,7 @@
 
 ## Run /add-telegram
 
-In your Actionable. Claude session:
+In your Actionable■ Claude session:
 
 ```
 /add-telegram
@@ -18,8 +18,8 @@ In your Actionable. Claude session:
 You'll be asked for:
 - **Bot token** — from BotFather
 
-Actionable. writes the token, builds, registers the channel, and seeds scheduled tasks.
+Actionable■ writes the token, builds, registers the channel, and seeds scheduled tasks.
 
 ## Verify
 
-Send a message to your bot in Telegram. Actionable. should respond within a few seconds.
+Send a message to your bot in Telegram. Actionable■ should respond within a few seconds.

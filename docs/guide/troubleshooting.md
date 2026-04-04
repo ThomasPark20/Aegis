@@ -7,7 +7,7 @@
 3. **Check channel registered** — `sqlite3 store/messages.db "SELECT * FROM registered_groups"`
 4. **Check service running** — `launchctl list | grep actionable`
 5. **Check logs** — `tail -f logs/actionable.log`
-6. **For non-main channels** — messages must start with `@Actionable.`
+6. **For non-main channels** — messages must start with `@Actionable■`
 
 ## Bot Responds to @mentions Only
 
@@ -20,7 +20,7 @@ Default for non-main channels. To change:
 Enable **Message Content Intent**:
 1. [Discord Developer Portal](https://discord.com/developers/applications) > your app > **Bot** tab
 2. Under **Privileged Gateway Intents**, enable **Message Content Intent**
-3. Restart Actionable.
+3. Restart Actionable■
 
 ## Research Not Returning Results
 

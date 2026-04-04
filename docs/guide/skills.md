@@ -1,6 +1,6 @@
 # Custom Skills
 
-Actionable. comes with 4 built-in CTI skills. You can add your own.
+Actionable■ comes with 4 built-in CTI skills. You can add your own.
 
 ## Built-in Skills
 

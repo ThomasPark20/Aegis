@@ -1,6 +1,6 @@
 # Validated Detection Rules
 
-Every detection rule Actionable. generates is validated with real CLI tools before inclusion in a report.
+Every detection rule Actionable■ generates is validated with real CLI tools before inclusion in a report.
 
 ## Supported Rule Types
 

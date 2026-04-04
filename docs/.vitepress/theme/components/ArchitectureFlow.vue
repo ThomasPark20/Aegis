@@ -24,7 +24,7 @@ const nodes = ref([
     id: 'host',
     type: 'default',
     position: { x: 180, y: 120 },
-    data: { label: 'Actionable. Host Process' },
+    data: { label: 'Actionable■ Host Process' },
     style: {
       background: '#000', color: '#fff', border: 'none', borderRadius: '10px',
       padding: '14px 32px', fontWeight: '700', fontSize: '15px', width: '440px',

@@ -14,7 +14,7 @@ description: >
     What this rule detects and why it matters.
 references:
     - https://source-url-from-topic-summary
-author: Actionable.
+author: Actionable■
 date: YYYY-MM-DD       # Date rule was created
 modified: YYYY-MM-DD   # Date rule was last modified (optional on first creation)
 tags:
@@ -210,7 +210,7 @@ description: >
     technique used by threat actors including Volt Typhoon.
 references:
     - https://blog.talosintelligence.com/volt-typhoon-certutil
-author: Actionable.
+author: Actionable■
 date: 2026-04-01
 tags:
     - attack.command_and_control
@@ -245,7 +245,7 @@ description: >
     domain generation algorithms used by malware for C2 communication.
 references:
     - https://example.com/dga-analysis
-author: Actionable.
+author: Actionable■
 date: 2026-04-01
 tags:
     - attack.command_and_control
@@ -277,7 +277,7 @@ description: >
     with C2 beacon check-ins, including encoded parameters and unusual paths.
 references:
     - https://example.com/c2-beacon-analysis
-author: Actionable.
+author: Actionable■
 date: 2026-04-01
 tags:
     - attack.command_and_control
