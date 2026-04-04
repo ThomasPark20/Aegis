@@ -1,11 +1,11 @@
 # /status Command
 
-Send `/status` in your channel to see what <A /> is doing.
+Send `/status` in your channel to see what <Wordmark /> is doing.
 
 ## Output
 
 ```
-<A /> — ONLINE
+<Wordmark /> — ONLINE
 
 Active Research: Scattered Spider campaign (started 2 min ago)
 
@@ -19,11 +19,11 @@ Stats: 12 reports, 34 detection rules generated
 
 ## What It Shows
 
-- <A /> status (online/offline)
+- <Wordmark /> status (online/offline)
 - Currently running research tasks
 - Last 5 reports generated
 - Quick stats (total reports, total rules)
 
 ## What It Doesn't Show
 
-<A /> never exposes internal details like file paths, container IDs, database queries, or system architecture. The output is user-friendly, not a debug dump.
+<Wordmark /> never exposes internal details like file paths, container IDs, database queries, or system architecture. The output is user-friendly, not a debug dump.

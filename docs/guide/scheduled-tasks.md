@@ -1,6 +1,6 @@
 # Scheduled Tasks
 
-<A /> can run two automated tasks, both configured during `/setup`.
+<Wordmark /> can run two automated tasks, both configured during `/setup`.
 
 ## RSS Feed Scan
 

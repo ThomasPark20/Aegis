@@ -1,6 +1,6 @@
 # Critical Alerts
 
-<A /> scans all RSS feeds every 2 hours. Critical items get immediate research in dedicated threads.
+<Wordmark /> scans all RSS feeds every 2 hours. Critical items get immediate research in dedicated threads.
 
 ## How It Works
 
@@ -19,14 +19,14 @@ A lightweight script runs first (zero tokens):
 ```
 Thread: Critical: CVE-2026-1234 Active Exploitation
 ──────────────────────────────────────────────────
-<A />: A critical zero-day vulnerability (CVE-2026-1234) in Apache
+<Wordmark />: A critical zero-day vulnerability (CVE-2026-1234) in Apache
        Struts is under active exploitation. CISA has issued an
        emergency directive.
 
        [attached: 2026-04-02-critical-cve-2026-1234.md]
 
 You: "Generate detection rules"
-<A />: "Here are 2 Sigma rules targeting the exploitation TTPs..."
+<Wordmark />: "Here are 2 Sigma rules targeting the exploitation TTPs..."
 ```
 
 ## Cost
@@ -39,7 +39,7 @@ New non-critical articles are saved for the daily report compilation. They don't
 
 ## Deduplication
 
-Before creating a thread, <A /> checks:
+Before creating a thread, <Wordmark /> checks:
 - Existing summaries for the same topic/CVE
 - Active research threads with similar names
 - Duplicate articles from multiple feeds about the same event

@@ -1,10 +1,10 @@
 # RSS Feeds
 
-<A /> ingests threat intelligence from RSS feeds. Edit `feeds.yaml` to customize sources.
+<Wordmark /> ingests threat intelligence from RSS feeds. Edit `feeds.yaml` to customize sources.
 
 ## Default Feeds
 
-<A /> ships with feeds from:
+<Wordmark /> ships with feeds from:
 - BleepingComputer
 - The Record
 - Unit42 (Palo Alto)
@@ -39,7 +39,7 @@ feeds:
 
 ## Feed Processing
 
-During the daily briefing (8am ET), <A />:
+During the daily briefing (8am ET), <Wordmark />:
 1. Fetches all feeds
 2. Filters noise (listicles, vendor marketing, job posts, memes)
 3. Deduplicates against existing summaries

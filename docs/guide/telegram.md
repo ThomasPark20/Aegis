@@ -9,7 +9,7 @@
 
 ## Run /add-telegram
 
-In your <A /> Claude session:
+In your <Wordmark /> Claude session:
 
 ```
 /add-telegram
@@ -18,8 +18,8 @@ In your <A /> Claude session:
 You'll be asked for:
 - **Bot token** — from BotFather
 
-<A /> writes the token, builds, registers the channel, and seeds scheduled tasks.
+<Wordmark /> writes the token, builds, registers the channel, and seeds scheduled tasks.
 
 ## Verify
 
-Send a message to your bot in Telegram. <A /> should respond within a few seconds.
+Send a message to your bot in Telegram. <Wordmark /> should respond within a few seconds.

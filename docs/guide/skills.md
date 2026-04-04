@@ -1,6 +1,6 @@
 # Custom Skills
 
-<A /> comes with 4 built-in CTI skills. You can add your own.
+<Wordmark /> comes with 4 built-in CTI skills. You can add your own.
 
 ## Built-in Skills
 
