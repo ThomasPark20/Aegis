@@ -1,6 +1,6 @@
 <div align="center">
 
-# A E G I S
+# A C T I O N A B L E .
 
 **Autonomous Threat Intelligence**
 
@@ -25,7 +25,7 @@ Setup walks you through everything — dependencies, Docker, API credentials, Di
 
 ## What It Does
 
-- **Research on demand** — ask AEGIS to research any threat. It spins up a Discord thread, investigates primary sources, extracts IOCs, maps TTPs, and delivers a structured report.
+- **Research on demand** — ask Actionable. to research any threat. It spins up a Discord thread, investigates primary sources, extracts IOCs, maps TTPs, and delivers a structured report.
 - **Dual-agent threads** — a fast chat agent answers follow-ups in seconds while a deep research agent works in the background.
 - **Requirements contract** — follow-up messages become mandatory checklist items. The report won't ship until every requirement is addressed.
 - **Validated detection rules** — Sigma, YARA, and Snort rules generated and validated with real CLI tools before delivery.
@@ -43,7 +43,7 @@ Full documentation, architecture diagrams, and feature guides are at **[thomaspa
 
 ## Built on NanoClaw
 
-AEGIS is built on [NanoClaw](https://github.com/qwibitai/nanoclaw), an open-source personal Claude assistant framework.
+Actionable. is built on [NanoClaw](https://github.com/qwibitai/nanoclaw), an open-source personal Claude assistant framework.
 
 ## License
 

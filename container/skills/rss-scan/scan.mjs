@@ -114,7 +114,7 @@ async function fetchFeed(url, timeoutMs = 10000) {
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'AEGIS-RSS-Scanner/1.0' }
+      headers: { 'User-Agent': 'Actionable-RSS-Scanner/1.0' }
     });
     if (!res.ok) return '';
     return await res.text();

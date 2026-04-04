@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
-  title: 'AEGIS',
+  title: 'Actionable.',
   description: 'Autonomous CTI Research & Detection Platform',
   base: '/Aegis/',
   ignoreDeadLinks: true,
   appearance: 'dark',
   head: [],
   themeConfig: {
-    siteTitle: 'AEGIS',
+    siteTitle: 'Actionable.',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },

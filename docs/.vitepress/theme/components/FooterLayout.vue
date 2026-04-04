@@ -9,7 +9,7 @@ const { frontmatter } = useData()
 <template>
   <Layout>
     <template #doc-after>
-      <footer v-if="frontmatter.layout !== 'page'" class="aegis-footer">
+      <footer v-if="frontmatter.layout !== 'page'" class="actionable-footer">
         <p>MIT License</p>
       </footer>
     </template>
@@ -17,14 +17,14 @@ const { frontmatter } = useData()
 </template>
 
 <style scoped>
-.aegis-footer {
+.actionable-footer {
   border-top: 1px solid var(--vp-c-divider);
   padding: 1.5rem 0;
   margin-top: 3rem;
   text-align: center;
 }
 
-.aegis-footer p {
+.actionable-footer p {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   margin: 0;

@@ -1,10 +1,10 @@
 # RSS Feeds
 
-AEGIS ingests threat intelligence from RSS feeds. Edit `feeds.yaml` to customize sources.
+Actionable. ingests threat intelligence from RSS feeds. Edit `feeds.yaml` to customize sources.
 
 ## Default Feeds
 
-AEGIS ships with feeds from:
+Actionable. ships with feeds from:
 - BleepingComputer
 - The Record
 - Unit42 (Palo Alto)
@@ -39,7 +39,7 @@ feeds:
 
 ## Feed Processing
 
-During the daily briefing (8am ET), AEGIS:
+During the daily briefing (8am ET), Actionable.:
 1. Fetches all feeds
 2. Filters noise (listicles, vendor marketing, job posts, memes)
 3. Deduplicates against existing summaries

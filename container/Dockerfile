@@ -33,7 +33,7 @@ ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
 # Install agent-browser and claude-code globally
 RUN npm install -g agent-browser @anthropic-ai/claude-code
 
-# --- AEGIS CTI validation tools ---
+# --- Actionable. CTI validation tools ---
 RUN apt-get update && apt-get install -y \
     python3-pip \
     yara \

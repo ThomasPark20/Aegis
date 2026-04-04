@@ -1,6 +1,6 @@
 ---
 layout: page
-title: AEGIS
+title: Actionable.
 ---
 
 <LandingPage />

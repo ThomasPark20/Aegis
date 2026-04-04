@@ -4,9 +4,9 @@ import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 // ── Chat simulation ──
 const messages = [
   { sender: 'user', name: 'Thomas Park', text: 'Research Scattered Spider\'s latest campaign' },
-  { sender: 'bot', name: 'AEGIS', text: 'On it — spinning up a research thread.', delay: 800 },
+  { sender: 'bot', name: 'Actionable.', text: 'On it — spinning up a research thread.', delay: 800 },
   { sender: 'system', text: 'Thread created: Research: Scattered Spider', delay: 600 },
-  { sender: 'bot', name: 'AEGIS', text: 'Searching primary sources...', thread: true, delay: 1000 },
+  { sender: 'bot', name: 'Actionable.', text: 'Searching primary sources...', thread: true, delay: 1000 },
   { sender: 'step', text: 'Web search — CrowdStrike, CISA, Microsoft reports', delay: 700 },
   { sender: 'step', text: 'Following links to IOC repos and PDFs', delay: 600 },
   { sender: 'step', text: 'Extracting IOCs — 12 IPs, 8 domains, 3 hashes', delay: 700 },
@@ -15,13 +15,13 @@ const messages = [
   { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 600 },
   { sender: 'step', text: 'Generating Snort rules — validating with snort', delay: 600 },
   { sender: 'step', text: 'Compiling topic summary with sources', delay: 500 },
-  { sender: 'bot', name: 'AEGIS', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
+  { sender: 'bot', name: 'Actionable.', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
   { sender: 'user', name: 'Thomas Park', text: 'Are any of them on FBI most wanted?', thread: true, delay: 1500 },
   { sender: 'bot', name: 'Chat Agent', text: 'Good question — yes, several members have been indicted by the DOJ. Added to research requirements so the report covers this.', thread: true, delay: 600 },
   { sender: 'user', name: 'Thomas Park', text: 'Also focus on their SIM swapping TTPs', thread: true, delay: 1200 },
   { sender: 'bot', name: 'Chat Agent', text: 'Added to requirements: focus analysis on SIM swapping techniques and related TTPs.', thread: true, delay: 600 },
   { sender: 'system', text: 'requirements.md updated — 2 items pending', delay: 500 },
-  { sender: 'bot', name: 'AEGIS', text: 'Updated report with FBI indictments and SIM swapping analysis. All requirements satisfied.', thread: true, delay: 1200, file: 'scattered-spider-2026-04-03-v2.md' },
+  { sender: 'bot', name: 'Actionable.', text: 'Updated report with FBI indictments and SIM swapping analysis. All requirements satisfied.', thread: true, delay: 1200, file: 'scattered-spider-2026-04-03-v2.md' },
 ]
 
 const visibleMessages = ref([])
@@ -154,7 +154,7 @@ const sections = [
   {
     id: 'research',
     title: 'Research on Demand',
-    text: 'Ask AEGIS to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
+    text: 'Ask Actionable. to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
   },
   {
     id: 'dual-agent',
@@ -263,7 +263,7 @@ onUnmounted(() => {
     <!-- HERO: full viewport -->
     <section class="hero-section">
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
-        <h1 class="hero-name">AEGIS</h1>
+        <h1 class="hero-name">Actionable.</h1>
         <p class="hero-text">Autonomous Threat Intelligence</p>
         <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">

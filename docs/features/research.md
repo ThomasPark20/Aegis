@@ -1,6 +1,6 @@
 # Research on Demand
 
-Ask AEGIS to research any topic:
+Ask Actionable. to research any topic:
 
 ```
 "Research Scattered Spider latest activity"
@@ -10,7 +10,7 @@ Ask AEGIS to research any topic:
 
 ## What Happens
 
-1. AEGIS creates a **Discord thread** named "Research: [Topic]"
+1. Actionable. creates a **Discord thread** named "Research: [Topic]"
 2. A research agent starts working in that thread
 3. Main channel stays clean — no research clutter
 4. When done, the report is attached as a `.md` file in the thread
@@ -31,7 +31,7 @@ The research agent runs this pipeline inside an isolated container:
 
 ## Exact Terms
 
-AEGIS researches the **exact term** you give it. "teampcp" stays "teampcp" — it won't substitute what it thinks you meant. If the exact term yields nothing, it asks for clarification.
+Actionable. researches the **exact term** you give it. "teampcp" stays "teampcp" — it won't substitute what it thinks you meant. If the exact term yields nothing, it asks for clarification.
 
 ## Mid-Research Interaction
 

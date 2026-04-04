@@ -1,11 +1,11 @@
 ---
 name: add-telegram
-description: Configure Telegram bot channel integration for AEGIS. No code changes needed — Telegram support is bundled.
+description: Configure Telegram bot channel integration for Actionable. No code changes needed — Telegram support is bundled.
 ---
 
 # Add Telegram Channel
 
-This skill configures a Telegram bot for AEGIS. The Telegram channel code is already bundled in the repo — this skill just collects your token and registers the channel.
+This skill configures a Telegram bot for Actionable. The Telegram channel code is already bundled in the repo — this skill just collects your token and registers the channel.
 
 ## Phase 1: Pre-flight Check
 
@@ -33,8 +33,8 @@ If the user doesn't have a bot token, tell them:
 >
 > 1. Open Telegram and search for `@BotFather`
 > 2. Send `/newbot` and follow the prompts:
->    - Bot name: Something friendly (e.g., "AEGIS Assistant")
->    - Bot username: Must end with "bot" (e.g., "aegis_cti_bot")
+>    - Bot name: Something friendly (e.g., "Actionable. Assistant")
+>    - Bot username: Must end with "bot" (e.g., "actionable_cti_bot")
 > 3. Copy the bot token (looks like `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11`)
 
 Wait for the user to provide the token.
@@ -113,18 +113,18 @@ Wait for the user to provide the chat ID and a name for the chat.
 For a main chat (responds to all messages):
 
 ```bash
-npx tsx setup/index.ts --step register -- --jid "tg:<chat-id>" --name "<chat-name>" --folder "telegram_main" --trigger "@AEGIS" --channel telegram --no-trigger-required --is-main
+npx tsx setup/index.ts --step register -- --jid "tg:<chat-id>" --name "<chat-name>" --folder "telegram_main" --trigger "@Actionable." --channel telegram --no-trigger-required --is-main
 ```
 
 For additional chats (trigger-only):
 
 ```bash
-npx tsx setup/index.ts --step register -- --jid "tg:<chat-id>" --name "<chat-name>" --folder "telegram_<group-name>" --trigger "@AEGIS" --channel telegram
+npx tsx setup/index.ts --step register -- --jid "tg:<chat-id>" --name "<chat-name>" --folder "telegram_<group-name>" --trigger "@Actionable." --channel telegram
 ```
 
 ## Phase 4: Seed Scheduled Tasks
 
-After registration, seed the default AEGIS tasks. **Only seed if they don't already exist** — check with `list_tasks` first.
+After registration, seed the default Actionable. tasks. **Only seed if they don't already exist** — check with `list_tasks` first.
 
 1. **Daily briefing** — runs every morning at 8am local time:
 
@@ -159,14 +159,14 @@ Tell the user:
 
 > Send a message to your registered Telegram chat:
 > - For main chat: Any message works
-> - For non-main: `@AEGIS hello` or @mention the bot
+> - For non-main: `@Actionable. hello` or @mention the bot
 >
 > The bot should respond within a few seconds.
 
 ### Check logs if needed
 
 ```bash
-tail -f logs/aegis.log
+tail -f logs/actionable.log
 ```
 
 ## Troubleshooting
@@ -176,7 +176,7 @@ tail -f logs/aegis.log
 1. Check `TELEGRAM_BOT_TOKEN` is set in `.env` AND synced to `data/env/env`
 2. Check chat is registered: `sqlite3 store/messages.db "SELECT * FROM registered_groups WHERE jid LIKE 'tg:%'"`
 3. For non-main chats: message must include trigger pattern (@mention the bot)
-4. Service is running: `launchctl list | grep aegis` (macOS) or `systemctl --user status aegis` (Linux)
+4. Service is running: `launchctl list | grep actionable` (macOS) or `systemctl --user status actionable` (Linux)
 5. Verify token: `curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe"`
 
 ### Bot only responds to @mentions in groups
@@ -189,7 +189,7 @@ Group Privacy is enabled (default). Fix:
 
 If `/chatid` doesn't work:
 - Verify token: `curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe"`
-- Check bot is started: `tail -f logs/aegis.log`
+- Check bot is started: `tail -f logs/actionable.log`
 
 ## After Setup
 
@@ -199,7 +199,7 @@ The Telegram bot supports:
 - **Daily briefing** — at your configured time (default 8am), a compiled daily report is sent as message + .md file attachment.
 - Media handling (photos, documents, videos shown as descriptions)
 - Reply context (shows who the user is replying to)
-- @mention translation (Telegram mentions → AEGIS trigger format)
+- @mention translation (Telegram mentions → Actionable. trigger format)
 - Message splitting for long responses
 - File sending for reports and exports via `sendDocument`
 

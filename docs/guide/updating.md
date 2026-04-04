@@ -1,9 +1,9 @@
-# Updating AEGIS
+# Updating Actionable.
 
 ## Pull Latest Changes
 
 ```bash
-cd aegis
+cd Aegis
 git pull
 npm install
 npm run build
@@ -11,7 +11,7 @@ npm run build
 
 Restart the service if running:
 ```bash
-launchctl kickstart -k gui/$(id -u)/com.aegis
+launchctl kickstart -k gui/$(id -u)/com.actionable
 ```
 
 ## Rebuilding the Container

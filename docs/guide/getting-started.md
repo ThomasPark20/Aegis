@@ -21,7 +21,7 @@ claude
 
 ## After Setup
 
-Once connected, AEGIS:
+Once connected, Actionable.:
 
 - Responds to research requests by creating Discord threads
 - Delivers all reports as `.md` file attachments

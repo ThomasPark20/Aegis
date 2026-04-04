@@ -11,7 +11,7 @@ rule Rule_Name : optional_tag1 optional_tag2
 {
     meta:
         description = "What this rule detects"
-        author = "AEGIS"
+        author = "Actionable."
         date = "YYYY-MM-DD"
         reference = "https://source-url"
         hash = "SHA256 of known sample (if available)"
@@ -35,7 +35,7 @@ rule Rule_Name : optional_tag1 optional_tag2
 | Field | Required | Description |
 |---|---|---|
 | `description` | Yes | What the rule detects and why |
-| `author` | Yes | Always `"AEGIS"` for generated rules |
+| `author` | Yes | Always `"Actionable."` for generated rules |
 | `date` | Yes | Creation date `YYYY-MM-DD` |
 | `reference` | Yes | Source URL from the topic summary |
 | `hash` | No | SHA256 of a known sample, if available in the summary |
@@ -189,7 +189,7 @@ rule Malware_CobaltStrike_Beacon_Strings
 {
     meta:
         description = "Detects Cobalt Strike beacon via characteristic strings"
-        author = "AEGIS"
+        author = "Actionable."
         date = "2026-04-01"
         reference = "https://example.com/cobalt-strike-analysis"
         severity = "critical"
@@ -218,7 +218,7 @@ rule Technique_Process_Injection_PE_Imports
 {
     meta:
         description = "Detects PE files importing common process injection API chain"
-        author = "AEGIS"
+        author = "Actionable."
         date = "2026-04-01"
         reference = "https://example.com/injection-technique"
         severity = "high"
@@ -241,7 +241,7 @@ rule Malware_Shellcode_Loader_XOR_Stub
 {
     meta:
         description = "Detects common XOR decryption stub used by shellcode loaders"
-        author = "AEGIS"
+        author = "Actionable."
         date = "2026-04-01"
         reference = "https://example.com/shellcode-analysis"
         hash = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"

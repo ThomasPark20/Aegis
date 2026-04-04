@@ -1,11 +1,11 @@
 ---
 name: schedule-report
-description: Set up or manage your daily AEGIS security report schedule. Configure what time the daily brief is delivered, view the current schedule, change the time, or cancel it.
+description: Set up or manage your daily Actionable. security report schedule. Configure what time the daily brief is delivered, view the current schedule, change the time, or cancel it.
 ---
 
 # /schedule-report — Daily Report Schedule Manager
 
-Interactively guide the user through setting up, viewing, or managing their daily AEGIS security report schedule.
+Interactively guide the user through setting up, viewing, or managing their daily Actionable. security report schedule.
 
 **Main-channel check:** Only the main channel can manage scheduled tasks. Run:
 
@@ -68,10 +68,10 @@ Convert the user's requested time to a cron expression. Examples:
 
 ### If daily-report task already exists (from Step 1):
 
-Use `mcp__nanoclaw__update_task` to update:
+Use `mcp__actionable__update_task` to update:
 
 ```
-mcp__nanoclaw__update_task({
+mcp__actionable__update_task({
   taskId: "daily-report",
   schedule_value: "<cron expression>"
 })
@@ -79,10 +79,10 @@ mcp__nanoclaw__update_task({
 
 ### If daily-report task does not exist:
 
-Use `mcp__nanoclaw__schedule_task` to create:
+Use `mcp__actionable__schedule_task` to create:
 
 ```
-mcp__nanoclaw__schedule_task({
+mcp__actionable__schedule_task({
   taskId: "daily-report",
   targetJid: "$NANOCLAW_CHAT_JID",
   prompt: "It is time for the daily security report. Compile all summaries from today into a structured daily brief. Read all files in /workspace/extra/summaries/ with today's date prefix. Create an executive summary (top 3-5 items), full topic summaries, and an IOC table if any IOCs were extracted. Save the report to /workspace/extra/summaries/daily/. Then deliver it as a new thread using start_research_thread with thread name 'Daily Brief — YYYY-MM-DD'. Post the executive summary bullets as the opening message and attach the full report as an .md file via send_file. If no new summaries exist for today, send a short message: 'No significant threat activity detected in the last 24 hours.'",
@@ -94,7 +94,7 @@ mcp__nanoclaw__schedule_task({
 
 ## Step 5: Confirm to the user
 
-> Your daily AEGIS security report is now scheduled for [time] ([TIMEZONE]).
+> Your daily Actionable. security report is now scheduled for [time] ([TIMEZONE]).
 > It will be delivered as a new thread each day with an executive summary and full report attached.
 >
 > You can also say "set daily report at [time]" in chat anytime to change the schedule, or run `/schedule-report` again to manage it.
@@ -105,18 +105,18 @@ If the user chose an action from Step 1:
 
 ### Pause
 ```
-mcp__nanoclaw__pause_task({ taskId: "daily-report" })
+mcp__actionable__pause_task({ taskId: "daily-report" })
 ```
 > Daily report paused. Say "resume daily report" or run `/schedule-report` to re-enable it.
 
 ### Resume
 ```
-mcp__nanoclaw__resume_task({ taskId: "daily-report" })
+mcp__actionable__resume_task({ taskId: "daily-report" })
 ```
 > Daily report resumed. Next delivery at [next scheduled time].
 
 ### Cancel
 ```
-mcp__nanoclaw__cancel_task({ taskId: "daily-report" })
+mcp__actionable__cancel_task({ taskId: "daily-report" })
 ```
 > Daily report cancelled. Run `/schedule-report` anytime to set up a new schedule.

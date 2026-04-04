@@ -1,9 +1,9 @@
 ---
 name: setup
-description: Run initial AEGIS setup. Use when user wants to install dependencies, authenticate messaging channels, register their main channel, or start the background services. Triggers on "setup", "install", "configure aegis", or first-time setup requests.
+description: Run initial Actionable. setup. Use when user wants to install dependencies, authenticate messaging channels, register their main channel, or start the background services. Triggers on "setup", "install", "configure actionable", or first-time setup requests.
 ---
 
-# AEGIS Setup
+# Actionable. Setup
 
 Run setup steps automatically. Only pause when user action is required (channel authentication, configuration choices). Setup uses `bash setup.sh` for bootstrap, then `npx tsx setup/index.ts --step <name>` for all other steps. Steps emit structured status blocks to stdout. Verbose logs go to `logs/setup.log`.
 
@@ -219,19 +219,19 @@ AskUserQuestion: Agent access to external directories?
 
 ## 7. Configure Model
 
-AEGIS uses Claude Opus 4.6 by default. The model is configured in `src/container-runner.ts` (settings.json written per group). Verify:
+Actionable. uses Claude Opus 4.6 by default. The model is configured in `src/container-runner.ts` (settings.json written per group). Verify:
 
 ```bash
 grep 'claude-opus-4-6' src/container-runner.ts
 ```
 
-If not present, this was already set during the AEGIS build. No user action needed.
+If not present, this was already set during the Actionable. build. No user action needed.
 
 ## 8. Start Service
 
 If service already running: unload first.
 - macOS: `launchctl unload ~/Library/LaunchAgents/com.nanoclaw.plist`
-- Linux: `systemctl --user stop aegis` (or `systemctl stop aegis` if root)
+- Linux: `systemctl --user stop actionable` (or `systemctl stop actionable` if root)
 
 Run `npx tsx setup/index.ts --step service` and parse the status block.
 
@@ -253,8 +253,8 @@ Replace `USERNAME` with the actual username (from `whoami`). Run the two `sudo` 
 
 **If SERVICE_LOADED=false:**
 - Read `logs/setup.log` for the error.
-- macOS: check `launchctl list | grep aegis`. If PID=`-` and status non-zero, read `logs/aegis.error.log`.
-- Linux: check `systemctl --user status aegis`.
+- macOS: check `launchctl list | grep actionable`. If PID=`-` and status non-zero, read `logs/actionable.error.log`.
+- Linux: check `systemctl --user status actionable`.
 - Re-run the service step after fixing.
 
 ## 9. Verify
@@ -262,7 +262,7 @@ Replace `USERNAME` with the actual username (from `whoami`). Run the two `sudo` 
 Run `npx tsx setup/index.ts --step verify` and parse the status block.
 
 **If STATUS=failed, fix each:**
-- SERVICE=stopped → `npm run build`, then restart: `launchctl kickstart -k gui/$(id -u)/com.nanoclaw` (macOS) or `systemctl --user restart aegis` (Linux) or `bash start-nanoclaw.sh` (WSL nohup)
+- SERVICE=stopped → `npm run build`, then restart: `launchctl kickstart -k gui/$(id -u)/com.nanoclaw` (macOS) or `systemctl --user restart actionable` (Linux) or `bash start-nanoclaw.sh` (WSL nohup)
 - SERVICE=not_found → re-run step 7
 - CREDENTIALS=missing → re-run step 4 (Docker: check `onecli secrets list`; Apple Container: check `.env` for credentials)
 - CHANNEL_AUTH shows `not_found` for any channel → re-invoke that channel's skill (e.g. `/add-telegram`)
@@ -277,9 +277,9 @@ After verifying the service works, configure the automated reporting pipeline.
 
 ### RSS Feed Scanning (2-hour checks)
 
-AskUserQuestion: Would you like AEGIS to automatically scan CTI feeds every 2 hours for critical threats?
+AskUserQuestion: Would you like Actionable. to automatically scan CTI feeds every 2 hours for critical threats?
 1. **Yes** — "Scans RSS feeds every 2 hours. Critical items (APTs, CVEs, zero-days, ransomware) get researched immediately and delivered as Discord threads."
-2. **No** — "Skip — you can enable this later by telling AEGIS 'enable feed scanning' in chat."
+2. **No** — "Skip — you can enable this later by telling Actionable. 'enable feed scanning' in chat."
 
 Note the user's choice for the next question.
 
@@ -317,7 +317,7 @@ Confirm to user what was enabled and when things will run.
 
 ## Troubleshooting
 
-**Service not starting:** Check `logs/aegis.error.log`. Common: wrong Node path (re-run step 7), credential system not running (Docker: check `curl http://127.0.0.1:10254/api/health`; Apple Container: check `.env` credentials), missing channel credentials (re-invoke channel skill).
+**Service not starting:** Check `logs/actionable.error.log`. Common: wrong Node path (re-run step 7), credential system not running (Docker: check `curl http://127.0.0.1:10254/api/health`; Apple Container: check `.env` credentials), missing channel credentials (re-invoke channel skill).
 
 **Container agent fails ("Claude Code process exited with code 1"):** Ensure the container runtime is running — `open -a Docker` (macOS Docker), `container system start` (Apple Container), or `sudo systemctl start docker` (Linux). Check container logs in `groups/main/logs/container-*.log`.
 
@@ -325,4 +325,4 @@ Confirm to user what was enabled and when things will run.
 
 **Channel not connecting:** Verify the channel's credentials are set in `.env`. Channels auto-enable when their credentials are present. For WhatsApp: check `store/auth/creds.json` exists. For token-based channels: check token values in `.env`. Restart the service after any `.env` change.
 
-**Unload service:** macOS: `launchctl unload ~/Library/LaunchAgents/com.nanoclaw.plist` | Linux: `systemctl --user stop aegis`
+**Unload service:** macOS: `launchctl unload ~/Library/LaunchAgents/com.nanoclaw.plist` | Linux: `systemctl --user stop actionable`

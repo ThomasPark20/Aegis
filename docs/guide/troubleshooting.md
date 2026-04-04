@@ -5,9 +5,9 @@
 1. **Check the token** — `grep BOT_TOKEN .env` should show your token
 2. **Check env sync** — `diff .env data/env/env` should match
 3. **Check channel registered** — `sqlite3 store/messages.db "SELECT * FROM registered_groups"`
-4. **Check service running** — `launchctl list | grep aegis`
-5. **Check logs** — `tail -f logs/aegis.log`
-6. **For non-main channels** — messages must start with `@AEGIS`
+4. **Check service running** — `launchctl list | grep actionable`
+5. **Check logs** — `tail -f logs/actionable.log`
+6. **For non-main channels** — messages must start with `@Actionable.`
 
 ## Bot Responds to @mentions Only
 
@@ -20,19 +20,19 @@ Default for non-main channels. To change:
 Enable **Message Content Intent**:
 1. [Discord Developer Portal](https://discord.com/developers/applications) > your app > **Bot** tab
 2. Under **Privileged Gateway Intents**, enable **Message Content Intent**
-3. Restart AEGIS
+3. Restart Actionable.
 
 ## Research Not Returning Results
 
 1. **Check container** — `docker ps` should show a running container
 2. **Check summaries** — `ls groups/global/summaries/`
-3. **Check container tools** — `docker run --rm --entrypoint bash aegis-agent:latest -c 'sigma --version'`
+3. **Check container tools** — `docker run --rm --entrypoint bash actionable-agent:latest -c 'sigma --version'`
 
 ## Detection Rules Failing Validation
 
 Validation runs inside the container. Check:
 ```bash
-docker run --rm --entrypoint bash aegis-agent:latest -c 'sigma --version && yarac --help | head -1'
+docker run --rm --entrypoint bash actionable-agent:latest -c 'sigma --version && yarac --help | head -1'
 ```
 
 If tools are missing, rebuild: `cd container && bash build.sh`
