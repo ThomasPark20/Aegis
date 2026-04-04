@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
+import { withBase } from 'vitepress'
 
 // ── Chat simulation ──
 const messages = [
@@ -263,7 +264,7 @@ onUnmounted(() => {
     <!-- HERO: full viewport -->
     <section class="hero-section">
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
-        <h1 class="hero-name">Actionable<span class="hero-dot"></span></h1>
+        <img :src="withBase('/actionable-logo-1000.png')" alt="Actionable." class="hero-logo" />
         <p class="hero-text">Threat intelligence that works for you.</p>
         <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">
@@ -414,24 +415,11 @@ claude
   transform: translateY(-20px);
 }
 
-.hero-dot {
-  display: inline-block;
-  width: 0.18em;
-  height: 0.18em;
-  background: #D4760A;
-  border-radius: 50%;
-  margin-left: 0.06em;
-  vertical-align: 0.15em;
-}
-
-.hero-name {
-  font-family: 'Advent Pro', 'Century Gothic', sans-serif;
-  font-size: clamp(4rem, 12vw, 8rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  margin: 0;
-  color: var(--vp-c-text-1);
+.hero-logo {
+  width: clamp(280px, 50vw, 520px);
+  height: auto;
+  margin: 0 auto;
+  display: block;
 }
 
 .hero-text {
