@@ -74,7 +74,7 @@ function initParticles() {
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < connDist) {
           const alpha = (1 - dist / connDist) * 0.15
-          ctx.strokeStyle = `rgba(255, 160, 50, ${alpha})`
+          ctx.strokeStyle = `rgba(212, 118, 10, ${alpha})`
           ctx.lineWidth = 0.5
           ctx.beginPath()
           ctx.moveTo(particles[i].x, particles[i].y)
@@ -86,7 +86,7 @@ function initParticles() {
 
     // Draw particles
     for (const p of particles) {
-      ctx.fillStyle = `rgba(255, 140, 30, ${0.4 + p.r * 0.15})`
+      ctx.fillStyle = `rgba(212, 118, 10, ${0.4 + p.r * 0.15})`
       ctx.beginPath()
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
       ctx.fill()
@@ -263,7 +263,7 @@ onUnmounted(() => {
     <!-- HERO: full viewport -->
     <section class="hero-section">
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
-        <h1 class="hero-name">Actionable<span class="hero-square">&#9632;</span></h1>
+        <h1 class="hero-name">Actionable<span class="hero-dot"></span></h1>
         <p class="hero-text">Threat intelligence that works for you.</p>
         <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">
@@ -414,17 +414,21 @@ claude
   transform: translateY(-20px);
 }
 
-.hero-square {
-  font-size: 0.3em;
-  vertical-align: 0.3em;
-  margin-left: 0.08em;
-  color: var(--vp-c-text-1);
+.hero-dot {
+  display: inline-block;
+  width: 0.18em;
+  height: 0.18em;
+  background: #D4760A;
+  border-radius: 50%;
+  margin-left: 0.06em;
+  vertical-align: 0.15em;
 }
 
 .hero-name {
+  font-family: 'Advent Pro', 'Century Gothic', sans-serif;
   font-size: clamp(4rem, 12vw, 8rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1;
   margin: 0;
   color: var(--vp-c-text-1);
@@ -464,22 +468,25 @@ claude
 }
 
 .btn-primary {
-  background: var(--vp-c-text-1);
-  color: var(--vp-c-bg);
+  background: #D4760A;
+  color: #FFFFFF;
+  border-radius: 8px;
 }
 
 .btn-primary:hover {
-  opacity: 0.85;
+  background: #E8943A;
 }
 
 .btn-secondary {
-  background: var(--vp-c-bg-soft);
+  background: transparent;
   color: var(--vp-c-text-1);
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--vp-c-text-1);
+  border-radius: 8px;
 }
 
 .btn-secondary:hover {
-  border-color: var(--vp-c-text-3);
+  border-color: #D4760A;
+  color: #D4760A;
 }
 
 .scroll-hint {
@@ -654,7 +661,7 @@ claude
 }
 
 .step-check {
-  color: #393;
+  color: #3AAE5C;
   font-weight: 700;
   margin-right: 4px;
 }

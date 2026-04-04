@@ -7,9 +7,17 @@ export default withMermaid(defineConfig({
   base: '/Aegis/',
   ignoreDeadLinks: true,
   appearance: 'dark',
-  head: [],
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/Aegis/actionable-logo-128.png' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Advent+Pro:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap'
+    }],
+  ],
   themeConfig: {
-    siteTitle: 'Actionable■',
+    siteTitle: 'ACTIONABLE.',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },
