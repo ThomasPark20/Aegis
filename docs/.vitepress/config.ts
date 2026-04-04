@@ -21,7 +21,7 @@ export default withMermaid(defineConfig({
   ],
   themeConfig: {
     logo: '/favicon-32x32.png',
-    siteTitle: 'ACTIONABLE.',
+    siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture' },
