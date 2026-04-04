@@ -1,8 +1,8 @@
 <div align="center">
 
-# Actionable.
+# Actionable&#9632;
 
-**Autonomous Threat Intelligence**
+**Threat intelligence that works for you.**
 
 Research threats, generate validated detection rules, deliver reports — through Discord and Telegram.
 
