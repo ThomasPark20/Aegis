@@ -157,7 +157,7 @@ const sections = [
   {
     id: 'research',
     title: 'Research on Demand',
-    text: 'Ask Actionable to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
+    text: 'Ask Actioner to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
   },
   {
     id: 'dual-agent',
@@ -268,16 +268,16 @@ onUnmounted(() => {
       <div class="hero-content" :class="{ 'hero-faded': !heroVisible }">
         <img
           v-if="isDark"
-          :src="withBase('/actionable-wordmark-white-2x.png')"
-          :srcset="`${withBase('/actionable-wordmark-white-1x.png')} 1x, ${withBase('/actionable-wordmark-white-2x.png')} 2x`"
-          alt="Actionable."
+          :src="withBase('/actioner-wordmark-white-2x.png')"
+          :srcset="`${withBase('/actioner-wordmark-white-1x.png')} 1x, ${withBase('/actioner-wordmark-white-2x.png')} 2x`"
+          alt="Actioner"
           class="hero-logo"
         />
         <img
           v-else
-          :src="withBase('/actionable-wordmark-dark-2x.png')"
-          :srcset="`${withBase('/actionable-wordmark-dark-1x.png')} 1x, ${withBase('/actionable-wordmark-dark-2x.png')} 2x`"
-          alt="Actionable."
+          :src="withBase('/actioner-wordmark-dark-2x.png')"
+          :srcset="`${withBase('/actioner-wordmark-dark-1x.png')} 1x, ${withBase('/actioner-wordmark-dark-2x.png')} 2x`"
+          alt="Actioner"
           class="hero-logo"
         />
         <p class="hero-text">Threat intelligence that works for you.</p>

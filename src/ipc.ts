@@ -567,7 +567,7 @@ export async function processTaskIpc(
       deps.registerGroup(threadJid, {
         name: data.threadName,
         folder: threadFolder,
-        trigger: '@Actionable■',
+        trigger: '@Actioner',
         added_at: new Date().toISOString(),
         requiresTrigger: false,
         idleExpiryMs: THREAD_IDLE_EXPIRY_MS,
@@ -607,7 +607,7 @@ export async function processTaskIpc(
         id: `research-init-${Date.now()}`,
         chat_jid: threadJid,
         sender: 'system',
-        sender_name: 'Actionable■',
+        sender_name: 'Actioner',
         content: data.prompt,
         timestamp: now,
         is_from_me: false,

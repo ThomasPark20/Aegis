@@ -1,11 +1,11 @@
 ---
 name: add-discord
-description: Configure Discord bot channel integration for Actionable. No code changes needed — Discord support is bundled.
+description: Configure Discord bot channel integration for Actioner. No code changes needed — Discord support is bundled.
 ---
 
 # Add Discord Channel
 
-This skill configures a Discord bot for Actionable. The Discord channel code is already bundled in the repo — this skill just collects your token and registers the channel.
+This skill configures a Discord bot for Actioner. The Discord channel code is already bundled in the repo — this skill just collects your token and registers the channel.
 
 ## Phase 1: Pre-flight Check
 
@@ -33,7 +33,7 @@ If the user doesn't have a bot token, walk them through each step:
 >
 > 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
 > 2. Click **New Application** in the top right
-> 3. Give it a name — e.g., **"Actionable."** — and click Create
+> 3. Give it a name — e.g., **"Actioner"** — and click Create
 >
 > **Step 2 — Configure the Bot**
 >
@@ -128,18 +128,18 @@ Wait for the user to provide the server name, channel name, and channel ID.
 For a main channel (responds to all messages):
 
 ```bash
-npx tsx setup/index.ts --step register -- --jid "dc:<channel-id>" --name "<server-name> #<channel-name>" --folder "discord_main" --trigger "@Actionable." --channel discord --no-trigger-required --is-main
+npx tsx setup/index.ts --step register -- --jid "dc:<channel-id>" --name "<server-name> #<channel-name>" --folder "discord_main" --trigger "@Actioner" --channel discord --no-trigger-required --is-main
 ```
 
 For additional channels (trigger-only):
 
 ```bash
-npx tsx setup/index.ts --step register -- --jid "dc:<channel-id>" --name "<server-name> #<channel-name>" --folder "discord_<channel-name>" --trigger "@Actionable." --channel discord
+npx tsx setup/index.ts --step register -- --jid "dc:<channel-id>" --name "<server-name> #<channel-name>" --folder "discord_<channel-name>" --trigger "@Actioner" --channel discord
 ```
 
 ## Phase 4: Seed Scheduled Tasks
 
-After registration, seed the default Actionable. tasks. **Only seed if they don't already exist** — check with `list_tasks` first.
+After registration, seed the default Actioner tasks. **Only seed if they don't already exist** — check with `list_tasks` first.
 
 1. **Daily briefing** — runs every morning at 8am local time:
 
@@ -191,7 +191,7 @@ tail -f logs/nanoclaw.log
 1. Check `DISCORD_BOT_TOKEN` is set in `.env` AND synced to `data/env/env`
 2. Check channel is registered: `sqlite3 store/messages.db "SELECT * FROM registered_groups WHERE jid LIKE 'dc:%'"`
 3. For non-main channels: message must include trigger pattern (@mention the bot)
-4. Service is running: `launchctl list | grep actionable`
+4. Service is running: `launchctl list | grep actioner`
 5. Verify the bot has been invited to the server (check OAuth2 URL was used)
 
 ### Bot only responds to @mentions
@@ -206,7 +206,7 @@ If the bot connects but can't read messages, ensure:
 1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Select your application > **Bot** tab
 3. Under **Privileged Gateway Intents**, enable **Message Content Intent**
-4. Restart Actionable.
+4. Restart Actioner
 
 ### Getting Channel ID
 
@@ -223,7 +223,7 @@ The Discord bot supports:
 - **Daily briefing thread** — at your configured time (default 8am), a "Daily Brief — YYYY-MM-DD" thread is created with an executive summary and full compiled report.
 - Attachment descriptions (images, videos, files shown as placeholders)
 - Reply context (shows who the user is replying to)
-- @mention translation (Discord `<@botId>` → Actionable. trigger format)
+- @mention translation (Discord `<@botId>` → Actioner trigger format)
 - Message splitting for responses over 2000 characters
 - Typing indicators while the agent processes
 - File sending for reports and exports

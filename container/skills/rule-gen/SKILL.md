@@ -44,7 +44,7 @@ Generate all applicable rules in a single pass. For each rule, derive detection 
 - `status: experimental` (always for new rules)
 - `description` — what the rule detects and why
 - `references` — URLs from the topic summary's Sources section
-- `author: Actionable. CTI Agent Swarm`
+- `author: Actioner CTI Agent Swarm`
 - `date` — today's date in YYYY/MM/DD format
 - `tags` — MITRE ATT&CK tags in `attack.tXXXX` format (e.g., `attack.t1059.001`)
 - `logsource` — with `category`, `product`, and optionally `service`
@@ -52,7 +52,7 @@ Generate all applicable rules in a single pass. For each rule, derive detection 
 - `level` — one of: informational, low, medium, high, critical
 
 **YARA rules must include:**
-- `meta` section: `description`, `author = "Actionable. CTI Agent Swarm"`, `date`, `reference`, `hash` (if available from summary)
+- `meta` section: `description`, `author = "Actioner CTI Agent Swarm"`, `date`, `reference`, `hash` (if available from summary)
 - `strings` section: with appropriate modifiers (`ascii`, `wide`, `nocase`, `fullword`, etc.)
 - `condition` section: logical combination of string matches, optionally using `filesize`, PE module checks
 
@@ -218,7 +218,7 @@ status: experimental
 description: Detects certutil.exe abuse for file download consistent with observed campaign TTPs
 references:
     - https://blog.talosintelligence.com/example-report
-author: Actionable. CTI Agent Swarm
+author: Actioner CTI Agent Swarm
 date: 2026/04/01
 tags:
     - attack.command_and_control

@@ -3,7 +3,7 @@
 ## Create a Discord Bot
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click **New Application** — name it "Actionable Agent" (or whatever you like)
+2. Click **New Application** — name it "Actioner" (or whatever you like)
 3. Go to the **Bot** tab
 4. Click **Reset Token** — copy it immediately (you only see it once)
 5. Under **Privileged Gateway Intents**, enable:
@@ -46,4 +46,4 @@ Send any message in your registered channel. <Wordmark /> should respond within 
 
 ## Adding More Channels
 
-Run `/add-discord` again. The first channel is registered as the main channel (responds to all messages). Additional channels are trigger-only — prefix messages with `@Actionable■`.
+Run `/add-discord` again. The first channel is registered as the main channel (responds to all messages). Additional channels are trigger-only — prefix messages with `@Actioner`.

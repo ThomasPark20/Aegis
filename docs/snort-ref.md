@@ -74,7 +74,7 @@ Options appear inside parentheses, separated by semicolons.
 | `classtype` | Attack classification | `classtype:trojan-activity;` |
 | `reference` | External reference | `reference:url,example.com/report;` |
 | `priority` | Override default classtype priority (1–10) | `priority:1;` |
-| `metadata` | Key-value metadata | `metadata:author Actionable■, created 2026-04-01;` |
+| `metadata` | Key-value metadata | `metadata:author Actioner, created 2026-04-01;` |
 
 ### Flow Options
 
@@ -181,7 +181,7 @@ Fires only after 10 matches from the same source within 60 seconds — useful fo
 
 ```
 alert http $HOME_NET any -> $EXTERNAL_NET any (
-    msg:"Actionable■ - HTTP C2 Beacon Check-in to /api/update Endpoint";
+    msg:"Actioner - HTTP C2 Beacon Check-in to /api/update Endpoint";
     flow:established, to_server;
     http_method;
     content:"POST";
@@ -194,7 +194,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (
     detection_filter:track by_src, count 5, seconds 300;
     classtype:trojan-activity;
     reference:url,example.com/c2-beacon-analysis;
-    metadata:author Actionable■, created 2026-04-01;
+    metadata:author Actioner, created 2026-04-01;
     sid:2100001;
     rev:1;
 )
@@ -204,13 +204,13 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (
 
 ```
 alert dns $HOME_NET any -> any $DNS_PORTS (
-    msg:"Actionable■ - DNS Query to Known C2 Domain evil-update[.]xyz";
+    msg:"Actioner - DNS Query to Known C2 Domain evil-update[.]xyz";
     flow:to_server;
     dns.query;
     content:"evil-update.xyz"; nocase; fast_pattern;
     classtype:trojan-activity;
     reference:url,example.com/threat-report;
-    metadata:author Actionable■, created 2026-04-01;
+    metadata:author Actioner, created 2026-04-01;
     sid:2100002;
     rev:1;
 )
@@ -220,7 +220,7 @@ alert dns $HOME_NET any -> any $DNS_PORTS (
 
 ```
 alert tls $HOME_NET any -> $EXTERNAL_NET any (
-    msg:"Actionable■ - TLS Connection to Self-Signed C2 with Anomalous CN";
+    msg:"Actioner - TLS Connection to Self-Signed C2 with Anomalous CN";
     flow:established, to_server;
     tls.sni;
     content:"cdn-static"; fast_pattern;
@@ -231,7 +231,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (
     content:"CN=cdn-static";
     classtype:trojan-activity;
     reference:url,example.com/tls-anomaly-report;
-    metadata:author Actionable■, created 2026-04-01;
+    metadata:author Actioner, created 2026-04-01;
     sid:2100003;
     rev:1;
 )

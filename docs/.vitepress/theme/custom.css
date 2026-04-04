@@ -5,10 +5,10 @@
   --vp-font-family-mono: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
 
   /* Brand */
-  --actionable-ember: #D4760A;
-  --actionable-ember-light: #E8943A;
-  --actionable-ember-dim: #8B4D06;
-  --actionable-void: #0A0A0A;
+  --actioner-ember: #D4760A;
+  --actioner-ember-light: #E8943A;
+  --actioner-ember-dim: #8B4D06;
+  --actioner-void: #0A0A0A;
 
   --vp-c-brand-1: #D4760A;
   --vp-c-brand-2: #8B4D06;
@@ -205,7 +205,7 @@
 }
 
 .VPFeature:hover {
-  border-color: var(--actionable-ember) !important;
+  border-color: var(--actioner-ember) !important;
 }
 
 .VPFeature .title {
