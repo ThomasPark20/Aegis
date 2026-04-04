@@ -223,7 +223,7 @@ function onNodeClick(event) {
       <template #node-host="{ data }">
         <Handle type="target" :position="'top'" />
         <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <img :src="withBase('/favicon/dark/favicon-128x128.png')" alt="" style="height: 22px; width: 22px; border-radius: 4px;" />
+          <img :src="withBase('/favicon/dark/favicon-128x128.png')" alt="" style="height: 32px; width: 32px; border-radius: 4px;" />
           <span>{{ data.label }}</span>
         </div>
         <Handle type="source" :position="'bottom'" />
