@@ -1,4 +1,8 @@
+import fs from 'fs';
+import path from 'path';
+
 import {
+  Attachment,
   AttachmentBuilder,
   ChannelType,
   Client,
@@ -11,6 +15,7 @@ import {
 
 import { ASSISTANT_NAME, TRIGGER_PATTERN } from '../config.js';
 import { readEnvFile } from '../env.js';
+import { resolveGroupFolderPath } from '../group-folder.js';
 import { logger } from '../logger.js';
 import { registerChannel, ChannelOpts } from './registry.js';
 import {
@@ -37,6 +42,45 @@ export class DiscordChannel implements Channel {
   constructor(botToken: string, opts: DiscordChannelOpts) {
     this.botToken = botToken;
     this.opts = opts;
+  }
+
+  /**
+   * Download a Discord attachment to the group's attachments directory.
+   * Returns the container-relative path (e.g. /workspace/group/attachments/photo.png)
+   * or null if the download fails.
+   */
+  private async downloadAttachment(
+    att: Attachment,
+    groupFolder: string,
+  ): Promise<string | null> {
+    try {
+      const groupDir = resolveGroupFolderPath(groupFolder);
+      const attachDir = path.join(groupDir, 'attachments');
+      fs.mkdirSync(attachDir, { recursive: true });
+
+      const safeName = (att.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_');
+      // Prefix with attachment ID to avoid collisions
+      const finalName = `${att.id}_${safeName}`;
+      const destPath = path.join(attachDir, finalName);
+
+      const resp = await fetch(att.url);
+      if (!resp.ok) {
+        logger.warn(
+          { url: att.url, status: resp.status },
+          'Discord attachment download failed',
+        );
+        return null;
+      }
+
+      const buffer = Buffer.from(await resp.arrayBuffer());
+      fs.writeFileSync(destPath, buffer);
+
+      logger.info({ name: att.name, dest: destPath }, 'Discord attachment downloaded');
+      return `/workspace/group/attachments/${finalName}`;
+    } catch (err) {
+      logger.error({ name: att.name, err }, 'Failed to download Discord attachment');
+      return null;
+    }
   }
 
   async connect(): Promise<void> {
@@ -96,29 +140,6 @@ export class DiscordChannel implements Channel {
         }
       }
 
-      // Handle attachments — store placeholders so the agent knows something was sent
-      if (message.attachments.size > 0) {
-        const attachmentDescriptions = [...message.attachments.values()].map(
-          (att) => {
-            const contentType = att.contentType || '';
-            if (contentType.startsWith('image/')) {
-              return `[Image: ${att.name || 'image'}]`;
-            } else if (contentType.startsWith('video/')) {
-              return `[Video: ${att.name || 'video'}]`;
-            } else if (contentType.startsWith('audio/')) {
-              return `[Audio: ${att.name || 'audio'}]`;
-            } else {
-              return `[File: ${att.name || 'file'}]`;
-            }
-          },
-        );
-        if (content) {
-          content = `${content}\n${attachmentDescriptions.join('\n')}`;
-        } else {
-          content = attachmentDescriptions.join('\n');
-        }
-      }
-
       // Handle reply context — include who the user is replying to
       if (message.reference?.messageId) {
         try {
@@ -158,6 +179,33 @@ export class DiscordChannel implements Channel {
             'Message from unregistered Discord channel',
           );
           return;
+        }
+      }
+
+      // Handle attachments — download files to group folder so the agent can read them
+      if (message.attachments.size > 0) {
+        const attachmentDescriptions = await Promise.all(
+          [...message.attachments.values()].map(async (att) => {
+            const contentType = att.contentType || '';
+            const label = contentType.startsWith('image/')
+              ? 'Image'
+              : contentType.startsWith('video/')
+                ? 'Video'
+                : contentType.startsWith('audio/')
+                  ? 'Audio'
+                  : 'File';
+
+            const filePath = await this.downloadAttachment(att, group.folder);
+            if (filePath) {
+              return `[${label}: ${att.name || label.toLowerCase()}] (${filePath})`;
+            }
+            return `[${label}: ${att.name || label.toLowerCase()}]`;
+          }),
+        );
+        if (content) {
+          content = `${content}\n${attachmentDescriptions.join('\n')}`;
+        } else {
+          content = attachmentDescriptions.join('\n');
         }
       }
 
