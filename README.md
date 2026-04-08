@@ -14,7 +14,7 @@
 
 ---
 
-Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.
+<p align="center"><em>Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.</em></p>
 
 ## See It Work
 
@@ -61,7 +61,7 @@ Setup walks you through everything: dependencies, Docker, API credentials, Disco
 
 Once it's running, you have four workflows. **Research on demand**: message Actioner about any threat and get a full report with IOCs, MITRE mappings, and validated detection rules. While research runs in the background, a fast chat agent handles your follow-ups in seconds. Every follow-up becomes a mandatory requirement the report must satisfy before delivery.
 
-**Automated monitoring**: 11 RSS feeds are scanned every 2 hours. Critical items (zero-days, active exploitation, CISA advisories) get their own research thread immediately. Everything else compiles into a daily executive briefing delivered at your configured time.
+**Automated monitoring**: RSS feeds (11 included by default) are scanned every 2 hours. Critical items (zero-days, active exploitation, CISA advisories) get their own research thread immediately. Everything else compiles into a daily executive briefing delivered at your configured time.
 
 ## Prerequisites
 
