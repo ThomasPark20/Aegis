@@ -12,7 +12,7 @@ const messages = [
   { sender: 'step', text: 'Mapping TTPs to MITRE ATT&CK', delay: 500 },
   { sender: 'step', text: 'Generating Sigma rules — validating with sigma-cli', delay: 800 },
   { sender: 'step', text: 'Generating YARA rules — validating with yarac', delay: 600 },
-  { sender: 'step', text: 'Generating Snort rules — validating with snort', delay: 600 },
+  { sender: 'step', text: 'Generating Snort/Suricata rules — validating with snort', delay: 600 },
   { sender: 'step', text: 'Compiling topic summary with sources', delay: 500 },
   { sender: 'bot', name: 'Research Agent', text: 'Report ready.', thread: true, delay: 400, file: 'scattered-spider-2026-04-03.md' },
   { sender: 'user', name: 'You', text: 'Are any of them on FBI most wanted?', thread: true, delay: 1500 },

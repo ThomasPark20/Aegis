@@ -24,7 +24,7 @@ The research agent runs this pipeline inside an isolated container:
 2. Follow links to technical writeups, IOC repos, PDFs
 3. Extract IOCs (IPs, domains, hashes, URLs) and defang them
 4. Map TTPs to MITRE ATT&CK techniques
-5. Generate detection rules (Sigma, YARA, Snort)
+5. Generate detection rules (Sigma, YARA, Snort/Suricata)
 6. Validate every rule with CLI tools
 7. Compile structured topic summary
 8. Deliver via `send_file` in the thread

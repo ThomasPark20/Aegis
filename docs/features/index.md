@@ -7,7 +7,7 @@ Ask <Wordmark /> to research any threat. It creates a Discord thread, runs the f
 Every research request gets its own Discord thread with a dual-agent model: a fast chat agent for immediate Q&A and steering, plus a deep research agent working in the background. Threads soft-expire after inactivity and re-activate on demand.
 
 ## [Validated Detection Rules](./detection-rules)
-Sigma, YARA, and Snort rules validated with real CLI tools before delivery.
+Sigma, YARA, Snort, and Suricata rules validated with real CLI tools before delivery.
 
 ## [Daily Briefing](./daily-briefing)
 Compiles all research from the day into an executive report, delivered as a thread at your configured time.
