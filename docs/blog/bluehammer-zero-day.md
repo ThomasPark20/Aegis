@@ -1,5 +1,5 @@
 ---
-title: "BlueHammer — Windows Defender Zero-Day (CVE-2026-21513)"
+title: "BlueHammer — Windows Defender Zero-Day"
 date: 2026-04-07
 description: "Analysis of the BlueHammer zero-day exploiting a TOCTOU race condition in Windows Defender's signature update mechanism."
 ---
@@ -8,14 +8,13 @@ description: "Analysis of the BlueHammer zero-day exploiting a TOCTOU race condi
 **Disclaimer:** This is OSINT summarized by AI. Trust, but verify.
 :::
 
-# BlueHammer — Windows Defender TOCTOU Local Privilege Escalation Zero-Day (CVE-2026-21513)
-
+# BlueHammer — Windows Defender TOCTOU Local Privilege Escalation Zero-Day
 ## Executive Summary
 
 BlueHammer is a publicly disclosed zero-day local privilege escalation (LPE) exploit targeting a TOCTOU (Time-of-Check-Time-of-Use) race condition combined with path confusion in the Windows Defender signature update mechanism. Released on April 3, 2026 by a researcher operating as "Nightmare Eclipse" (GitHub: Nightmare-Eclipse, Twitter: @ChaoticEclipse0), the exploit chains multiple Windows primitives — Cloud Files API, NTFS junctions, Object Manager symbolic links, and Volume Shadow Copies — to redirect Defender's privileged file operations toward the SAM registry hive. This allows a low-privileged local attacker to extract and swap NTLM password hashes, create a SYSTEM-level service, and achieve full system compromise. As of April 7, 2026, **Microsoft has not released a patch** and no fix is in the current pipeline. Security analyst Will Dormann of Tharros independently confirmed the exploit is functional, though not 100% reliable.
 
 **Severity:** Critical
-**CVE:** CVE-2026-21513
+**CVE:** None assigned
 **Affected Systems:** Windows 11 (confirmed), Windows Server (less reliable)
 **Patch Status:** Unpatched zero-day
 **Exploit Availability:** Full PoC source code public on GitHub
@@ -186,7 +185,6 @@ date: 2026-04-07
 tags:
     - attack.privilege_escalation
     - attack.t1068
-    - cve.2026-21513
 logsource:
     category: process_creation
     product: windows
@@ -292,7 +290,6 @@ tags:
     - attack.t1003.002
     - attack.privilege_escalation
     - attack.t1068
-    - cve.2026-21513
 logsource:
     category: file_access
     product: windows
@@ -423,7 +420,7 @@ level: high
 ```yara
 rule BlueHammer_POC_Exploit {
     meta:
-        description = "Detects the BlueHammer proof-of-concept exploit targeting Windows Defender signature update TOCTOU vulnerability (CVE-2026-21513)"
+        description = "Detects the BlueHammer proof-of-concept exploit targeting Windows Defender signature update TOCTOU vulnerability (BlueHammer)"
         author = "Actioner Research"
         date = "2026-04-07"
         reference = "https://github.com/Nightmare-Eclipse/BlueHammer"
@@ -531,7 +528,7 @@ rule BlueHammer_SAM_Credential_Theft_Strings {
 ## Sources
 
 - [Nightmare-Eclipse/BlueHammer GitHub Repository](https://github.com/Nightmare-Eclipse/BlueHammer) — Primary source: full PoC source code, README, and project files
-- [Security Affairs — Experts published unpatched Windows zero-day BlueHammer](https://securityaffairs.com/190400/breaking-news/experts-published-unpatched-windows-zero-day-bluehammer.html) — CVE-2026-21513 assignment, Will Dormann confirmation, exploit impact analysis
+- [Security Affairs — Experts published unpatched Windows zero-day BlueHammer](https://securityaffairs.com/190400/breaking-news/experts-published-unpatched-windows-zero-day-bluehammer.html) — BlueHammer assignment, Will Dormann confirmation, exploit impact analysis
 - [DeepWiki — BlueHammer Technical Analysis](https://deepwiki.com/Nightmare-Eclipse/BlueHammer) — Comprehensive code-level analysis of all 5 exploit phases, API usage, data structures
 - [BleepingComputer — Disgruntled researcher leaks BlueHammer Windows zero-day exploit](https://www.bleepingcomputer.com/news/security/disgruntled-researcher-leaks-bluehammer-windows-zero-day-exploit/) — Disclosure timeline, researcher context, Microsoft response status
 - [Heise Online — BlueHammer: Zero-Day vulnerability in Windows grants elevated privileges](https://www.heise.de/en/news/BlueHammer-Zero-Day-vulnerability-in-Windows-grants-elevated-privileges-11247262.html) — Affected versions (Windows 11 confirmed, Server less reliable), no patch timeline

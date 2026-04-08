@@ -1,6 +1,6 @@
 ---
 title: "Scattered Spider — Recent Campaigns & Evolving TTPs"
-date: 2026-04-07
+date: 2026-04-02
 description: "Analysis of Scattered Spider's 2025-2026 campaigns including UK retail attacks, aviation targeting, and DragonForce ransomware pivot."
 ---
 

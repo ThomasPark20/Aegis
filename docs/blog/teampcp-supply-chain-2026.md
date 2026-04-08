@@ -1,6 +1,6 @@
 ---
 title: "TeamPCP Supply Chain Campaign"
-date: 2026-04-07
+date: 2026-04-04
 description: "How TeamPCP compromised Trivy, KICS, LiteLLM, and 47+ npm packages in a cascading supply chain attack."
 ---
 

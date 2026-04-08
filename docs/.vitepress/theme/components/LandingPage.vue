@@ -155,31 +155,27 @@ function showNext() {
 // ── Research posts ──
 const researchPosts = [
   {
-    title: 'Scattered Spider — Recent Campaigns & Evolving TTPs',
-    date: '2026-04-07',
-    summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
-    severity: 'Critical',
-    link: '/Aegis/blog/scattered-spider-2026',
-  },
-  {
     title: 'BlueHammer — Windows Defender Zero-Day',
     date: '2026-04-07',
     summary: 'Unpatched TOCTOU race condition in Defender. Full PoC public, no patch.',
-    severity: 'Critical',
-    link: '/Aegis/blog/bluehammer-cve-2026-21513',
+    link: '/Aegis/blog/bluehammer-zero-day',
   },
   {
     title: 'TeamPCP Supply Chain Campaign',
-    date: '2026-04-07',
+    date: '2026-04-04',
     summary: 'Cascading compromise of Trivy, KICS, LiteLLM, and 47+ npm packages.',
-    severity: 'Critical',
     link: '/Aegis/blog/teampcp-supply-chain-2026',
+  },
+  {
+    title: 'Scattered Spider — Recent Campaigns & Evolving TTPs',
+    date: '2026-04-02',
+    summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
+    link: '/Aegis/blog/scattered-spider-2026',
   },
   {
     title: 'Lazarus Group — Threat Actor Profile',
     date: '2026-04-02',
     summary: '$1.5B Bybit heist, Medusa ransomware, developer supply chain attacks.',
-    severity: 'Critical',
     link: '/Aegis/blog/lazarus-group-2026',
   },
 ]
@@ -424,7 +420,6 @@ onUnmounted(() => {
           <span class="research-date">{{ post.date }}</span>
           <h3>{{ post.title }}</h3>
           <p>{{ post.summary }}</p>
-          <span class="research-tag">{{ post.severity }}</span>
         </a>
       </div>
       <div class="research-links">

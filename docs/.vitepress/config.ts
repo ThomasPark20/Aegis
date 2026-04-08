@@ -77,7 +77,7 @@ export default withMermaid(defineConfig({
           items: [
             { text: 'All Reports', link: '/blog/' },
             { text: 'Scattered Spider (2026)', link: '/blog/scattered-spider-2026' },
-            { text: 'BlueHammer Zero-Day', link: '/blog/bluehammer-cve-2026-21513' },
+            { text: 'BlueHammer Zero-Day', link: '/blog/bluehammer-zero-day' },
             { text: 'TeamPCP Supply Chain', link: '/blog/teampcp-supply-chain-2026' },
             { text: 'Lazarus Group', link: '/blog/lazarus-group-2026' },
           ],
