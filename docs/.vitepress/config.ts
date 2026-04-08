@@ -27,7 +27,7 @@ export default withMermaid(defineConfig({
     siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
-      { text: 'Research', link: '/blog/' },
+      { text: 'Research', link: '/research/' },
       { text: 'Architecture', link: '/architecture' },
       { text: 'GitHub', link: 'https://github.com/ThomasPark20/Aegis' },
     ],
@@ -71,15 +71,15 @@ export default withMermaid(defineConfig({
           ],
         },
       ],
-      '/blog/': [
+      '/research/': [
         {
           text: 'Research',
           items: [
-            { text: 'All Reports', link: '/blog/' },
-            { text: 'Scattered Spider: Recent Campaigns and Evolving TTPs', link: '/blog/scattered-spider-2026' },
-            { text: 'BlueHammer: Windows Defender Zero-Day', link: '/blog/bluehammer-zero-day' },
-            { text: 'TeamPCP Supply Chain Campaign', link: '/blog/teampcp-supply-chain-2026' },
-            { text: 'Lazarus Group: Comprehensive Threat Actor Profile', link: '/blog/lazarus-group-2026' },
+            { text: 'All Reports', link: '/research/' },
+            { text: 'Scattered Spider: Recent Campaigns and Evolving TTPs', link: '/research/scattered-spider-2026' },
+            { text: 'BlueHammer: Windows Defender Zero-Day', link: '/research/bluehammer-zero-day' },
+            { text: 'TeamPCP Supply Chain Campaign', link: '/research/teampcp-supply-chain-2026' },
+            { text: 'Lazarus Group: Comprehensive Threat Actor Profile', link: '/research/lazarus-group-2026' },
           ],
         },
       ],

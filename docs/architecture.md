@@ -37,10 +37,12 @@ Each message spawns a **new container**. Research runs in its own container tied
 | Container Path | Host Path | Access |
 |----------------|-----------|--------|
 | `/workspace/project` | Project root | read-only |
+| `/workspace/project/.env` | `/dev/null` | read-only (shadow) |
 | `/workspace/group` | `groups/{folder}/` | read-write |
-| `/workspace/global` | `groups/global/` | read-only |
 | `/home/node/.claude` | `data/sessions/{group}/.claude/` | read-write |
 | `/workspace/ipc` | `data/ipc/{group}/` | read-write |
+
+The main group does **not** receive `/workspace/global`. The `.env` file is shadowed with `/dev/null` so containers never see host secrets.
 
 ### Research thread
 
@@ -48,8 +50,11 @@ Each message spawns a **new container**. Research runs in its own container tied
 |----------------|-----------|--------|
 | `/workspace/group` | `groups/{folder}/` | read-write |
 | `/workspace/global` | `groups/global/` | read-only |
+| `/workspace/global/summaries` | `groups/global/summaries/` | read-write (overlay) |
 | `/home/node/.claude` | `data/sessions/{group}/.claude/` | read-write |
 | `/workspace/ipc` | `data/ipc/{group}/` | read-write |
+
+The summaries directory is overlaid as read-write so research agents can save reports to the shared global directory.
 
 ### Thread-chat sub-group
 
@@ -57,6 +62,7 @@ Each message spawns a **new container**. Research runs in its own container tied
 |----------------|-----------|--------|
 | `/workspace/group` | `groups/{folder}_chat/` | read-write |
 | `/workspace/global` | `groups/global/` | read-only |
+| `/workspace/global/summaries` | `groups/global/summaries/` | read-write (overlay) |
 | `/workspace/research` | `groups/{research_folder}/` | read-write (for `requirements.md`) |
 | `/home/node/.claude` | `data/sessions/{folder}_chat/.claude/` | read-write |
 | `/workspace/ipc` | `data/ipc/{folder}_chat/` | read-write |
@@ -112,7 +118,8 @@ Each thread group gets:
 The container image includes:
 - **sigma-cli** — `sigma check` + `sigma convert --without-pipeline -t splunk`
 - **yarac** — compiles YARA rules
-- **snort** — validates Snort rules
+- **snort** — validates Snort rules (when available)
+- **suricata** — validates Suricata rules (when available)
 
 Rules validate before inclusion. Failed rules retry 3 times. If still failing, marked `<!-- UNVALIDATED -->`.
 

@@ -1,15 +1,20 @@
 # Custom Skills
 
-<Wordmark /> comes with 4 built-in CTI skills. You can add your own.
+<Wordmark /> comes with 9 built-in skills. You can add your own.
 
 ## Built-in Skills
 
 | Skill | Path | Purpose |
 |-------|------|---------|
-| Ingest | `container/skills/ingest/` | Fetch and filter RSS feeds |
-| Research | `container/skills/research/` | Deep-dive threat research |
-| IOC Extract | `container/skills/ioc-extract/` | Extract and defang IOCs, map TTPs |
-| Rule Gen | `container/skills/rule-gen/` | Generate and validate detection rules |
+| Research | `container/skills/research/` | Web research and primary source chasing for threat intelligence |
+| Ingest | `container/skills/ingest/` | RSS feed ingestion, article triage, deduplication, and topic grouping |
+| IOC Extract | `container/skills/ioc-extract/` | Extract and defang IOCs, map TTPs to MITRE ATT&CK |
+| Rule Gen | `container/skills/rule-gen/` | Generate and validate Sigma, YARA, Snort, and Suricata rules |
+| Threat Scan | `container/skills/threat-scan/` | 2-hour RSS scan cycle with LLM triage and proactive search |
+| Schedule Report | `container/skills/schedule-report/` | Set up or manage daily briefing schedule |
+| Agent Browser | `container/skills/agent-browser/` | Browse the web, read articles, interact with pages |
+| Capabilities | `container/skills/capabilities/` | Show installed skills, tools, and system info |
+| Status | `container/skills/status/` | Quick health check on session, workspace, and tasks |
 
 ## Creating a Skill
 

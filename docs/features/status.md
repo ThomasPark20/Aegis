@@ -5,7 +5,7 @@ Send `/status` in any Discord channel or Telegram chat to get an instant system 
 ## Example Output
 
 ```
-AEGIS Status
+Actioner Status
 
 System
   Uptime: 2d 5h 12m
@@ -23,11 +23,11 @@ Scheduled Tasks
 Messages: 1,234 stored
 
 Running Now
-  task:rss-scan (0h 2m)
+  task:threat-scan (0h 2m)
   dc:1234567890 (0h 45m)
 
 Recent Task Runs
-  rss-scan: ok 2.3s (5m ago)
+  threat-scan: ok 2.3s (5m ago)
   daily-report: ok 45.1s (3h ago)
 ```
 

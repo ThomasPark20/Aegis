@@ -9,6 +9,7 @@ Every detection rule <Wordmark /> generates is validated with real CLI tools bef
 | **Sigma** | Almost always — behavioral/technical indicators | `sigma check` + `sigma convert --without-pipeline -t splunk` |
 | **YARA** | File-level indicators (malware, byte patterns) | `yarac rule.yar /dev/null` |
 | **Snort** | Network indicators (IPs, domains, HTTP patterns) | `snort -T` |
+| **Suricata** | Network indicators (IDS/IPS deployments) | `suricata -T -S rule.rules` |
 
 ## Validation Flow
 
@@ -31,3 +32,4 @@ The agent reads format specifications before generating:
 - `docs/sigma-spec.md` — Sigma rule specification
 - `docs/yara-ref.md` — YARA rule reference
 - `docs/snort-ref.md` — Snort 3 rule reference
+- `docs/suricata-ref.md` — Suricata rule reference

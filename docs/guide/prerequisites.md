@@ -9,7 +9,7 @@
 | Docker | Any | `docker --version` |
 | Claude Code | Latest | `claude --version` |
 
-**Anthropic API access** — either an API key from [console.anthropic.com](https://console.anthropic.com) or an OAuth token.
+**Anthropic API access** — either an API key from [console.anthropic.com](https://console.anthropic.com) or a Claude Pro/Max subscription.
 
 ## Installing Node.js
 

@@ -39,7 +39,7 @@ feeds:
 
 ## Feed Processing
 
-During the daily briefing (8am ET), <Wordmark />:
+During the daily briefing (at your configured time), <Wordmark />:
 1. Fetches all feeds
 2. Filters noise (listicles, vendor marketing, job posts, memes)
 3. Deduplicates against existing summaries

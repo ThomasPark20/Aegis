@@ -11,7 +11,7 @@ npm run build
 
 Restart the service if running:
 ```bash
-launchctl kickstart -k gui/$(id -u)/com.actioner
+launchctl kickstart -k gui/$(id -u)/com.nanoclaw
 ```
 
 ## Rebuilding the Container

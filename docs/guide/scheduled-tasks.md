@@ -45,9 +45,13 @@ schedule_task(
 
 ## Managing Tasks
 
+Ask <Wordmark /> in chat to manage your tasks:
+
 ```
-list_tasks          # see all scheduled tasks
-pause_task(id)      # pause a task
-resume_task(id)     # resume a paused task
-cancel_task(id)     # delete a task
+"Show my scheduled tasks"
+"Pause the daily report"
+"Resume the threat scan"
+"Cancel the daily report task"
 ```
+
+The agent reads the current task list and uses IPC to pause, resume, or cancel tasks.
