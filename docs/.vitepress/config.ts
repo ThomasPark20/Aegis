@@ -27,6 +27,7 @@ export default withMermaid(defineConfig({
     siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'Research', link: '/blog/' },
       { text: 'Architecture', link: '/architecture' },
       { text: 'GitHub', link: 'https://github.com/ThomasPark20/Aegis' },
     ],
@@ -67,6 +68,18 @@ export default withMermaid(defineConfig({
             { text: 'Critical Alerts', link: '/features/critical-alerts' },
             { text: 'Research Threads', link: '/features/threads' },
             { text: 'Status Command', link: '/features/status' },
+          ],
+        },
+      ],
+      '/blog/': [
+        {
+          text: 'Research',
+          items: [
+            { text: 'All Reports', link: '/blog/' },
+            { text: 'Scattered Spider (2026)', link: '/blog/scattered-spider-2026' },
+            { text: 'BlueHammer Zero-Day', link: '/blog/bluehammer-cve-2026-21513' },
+            { text: 'TeamPCP Supply Chain', link: '/blog/teampcp-supply-chain-2026' },
+            { text: 'Lazarus Group', link: '/blog/lazarus-group-2026' },
           ],
         },
       ],

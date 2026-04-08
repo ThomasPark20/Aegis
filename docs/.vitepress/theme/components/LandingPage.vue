@@ -152,6 +152,40 @@ function showNext() {
   }
 }
 
+// ── Research posts ──
+const researchPosts = [
+  {
+    title: 'Scattered Spider — Recent Campaigns & Evolving TTPs',
+    date: '2026-04-07',
+    summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
+    severity: 'Critical',
+    link: '/Aegis/blog/scattered-spider-2026',
+  },
+  {
+    title: 'BlueHammer — Windows Defender Zero-Day',
+    date: '2026-04-07',
+    summary: 'Unpatched TOCTOU race condition in Defender. Full PoC public, no patch.',
+    severity: 'Critical',
+    link: '/Aegis/blog/bluehammer-cve-2026-21513',
+  },
+  {
+    title: 'TeamPCP Supply Chain Campaign',
+    date: '2026-04-07',
+    summary: 'Cascading compromise of Trivy, KICS, LiteLLM, and 47+ npm packages.',
+    severity: 'Critical',
+    link: '/Aegis/blog/teampcp-supply-chain-2026',
+  },
+  {
+    title: 'Lazarus Group — Threat Actor Profile',
+    date: '2026-04-02',
+    summary: '$1.5B Bybit heist, Medusa ransomware, developer supply chain attacks.',
+    severity: 'Critical',
+    link: '/Aegis/blog/lazarus-group-2026',
+  },
+]
+
+const researchVisible = ref(false)
+
 // ── Scroll-driven sections ──
 const sections = [
   {
@@ -226,6 +260,13 @@ function onScroll() {
       chatStarted = true
       timeoutId = setTimeout(showNext, 600)
     }
+  }
+
+  // Research section visibility
+  const resEl = document.querySelector('.research-section')
+  if (resEl) {
+    const rect = resEl.getBoundingClientRect()
+    researchVisible.value = rect.top < window.innerHeight * 0.7
   }
 
   // Get Running section visibility — also fade out demo as Get Running enters
@@ -366,6 +407,28 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- LATEST RESEARCH -->
+    <section class="research-section" :class="{ 'research-visible': researchVisible }">
+      <h2>Latest Research</h2>
+      <p class="research-sub">Threat intelligence reports from Actioner's automated research pipeline.</p>
+      <div class="research-grid">
+        <a
+          v-for="post in researchPosts"
+          :key="post.link"
+          :href="post.link"
+          class="research-card"
+        >
+          <span class="research-date">{{ post.date }}</span>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.summary }}</p>
+          <span class="research-tag">{{ post.severity }}</span>
+        </a>
+      </div>
+      <div class="research-links">
+        <a href="/Aegis/blog/" class="btn btn-secondary">View All Research</a>
       </div>
     </section>
 
@@ -715,6 +778,94 @@ claude
   line-height: 1.7;
   color: var(--vp-c-text-2);
   margin: 0;
+}
+
+/* ── Research section ── */
+.research-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.research-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.research-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.75rem;
+}
+
+.research-sub {
+  font-size: 1.05rem;
+  color: var(--vp-c-text-2);
+  margin: 0 0 2.5rem;
+}
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.research-card {
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--vp-c-bg-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.research-card:hover {
+  border-color: #D4760A;
+  transform: translateY(-2px);
+}
+
+.research-card h3 {
+  margin: 0.4rem 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  line-height: 1.4;
+}
+
+.research-card p {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.5;
+}
+
+.research-date {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+}
+
+.research-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(220, 38, 38, 0.15);
+  color: #ef4444;
+}
+
+.research-links {
+  margin-top: 2rem;
 }
 
 /* ── Get Running ── */
