@@ -112,6 +112,16 @@ function buildVolumeMounts(
         containerPath: '/workspace/global',
         readonly: true,
       });
+
+      // Summaries subdirectory mounted read-write so research agents can save reports.
+      // This overlays the read-only global mount at /workspace/global/summaries.
+      const summariesDir = path.join(globalDir, 'summaries');
+      fs.mkdirSync(summariesDir, { recursive: true });
+      mounts.push({
+        hostPath: summariesDir,
+        containerPath: '/workspace/global/summaries',
+        readonly: false,
+      });
     }
 
     // Thread-chat sub-groups get the parent research folder mounted
