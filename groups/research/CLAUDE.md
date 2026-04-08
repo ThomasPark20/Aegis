@@ -44,6 +44,7 @@ Your capabilities are defined by skills in `.claude/skills/`. Read each SKILL.md
 | `../global/docs/sigma-spec.md` | Sigma rule specification — load before generating Sigma rules |
 | `../global/docs/yara-ref.md` | YARA rule reference — load when file-level indicators are present |
 | `../global/docs/snort-ref.md` | Snort 3 rule reference — load when network indicators are present |
+| `../global/docs/suricata-ref.md` | Suricata rule reference — load when network/TLS/JA3 indicators are present |
 | `investigation.md` | Ephemeral scratch file — overwritten each run |
 | `mcp.yaml` | MCP integrations — check for available enrichment tools |
 
@@ -141,10 +142,10 @@ When dispatched by the daily-report scheduled task, compile a comprehensive dail
 
    ## Detection Rules Summary
 
-   | Topic | Sigma | YARA | Snort | Total |
-   |-------|-------|------|-------|-------|
-   | [Topic 1] | N | N | N | N |
-   | **Total** | **N** | **N** | **N** | **N** |
+   | Topic | Sigma | Snort | Suricata | YARA | Total |
+   |-------|-------|-------|----------|------|-------|
+   | [Topic 1] | N | N | N | N | N |
+   | **Total** | **N** | **N** | **N** | **N** | **N** |
 
    ## Sources
 
@@ -185,6 +186,7 @@ When dispatched by the daily-report scheduled task, compile a comprehensive dail
 |-----------|-----------------|----------|
 | **Sigma** | Almost always — any technical/behavioral indicators | Process creation, registry changes, DNS queries, auth anomalies |
 | **Snort** | Network indicators present | IPs, domains, URLs, HTTP patterns, TLS cert anomalies |
+| **Suricata** | Network indicators present (especially TLS/JA3/cert IOCs) | Same as Snort, plus: JA3/JA4 fingerprints, TLS cert fingerprints, dataset-based bulk IOC matching |
 | **YARA** | File-level indicators only | Malware samples, string patterns, byte sequences |
 | **None** | Purely strategic intel with no technical indicators | Geopolitical analysis, actor profiles without IOCs/TTPs |
 
@@ -199,6 +201,7 @@ Rules **must** be validated using CLI tools before appending:
 | Sigma | `sigma check rule.yml && sigma convert --without-pipeline -t splunk rule.yml` | Exit code 0 |
 | YARA | `yarac rule.yar /dev/null` | Exit code 0 |
 | Snort | `snort -T -c snort.lua --rule-path rule.rules` | Exit code 0 (fallback: snort may not be installed) |
+| Suricata | `suricata -T -S rule.rules -l /tmp` | Exit code 0 (fallback: structural validation if not installed) |
 
 ---
 
@@ -270,7 +273,7 @@ In this case, you cannot deliver until the Kimsuky cross-reference is done.
 
 - NEVER claim a rule validates without running the validation command and observing exit 0
 - NEVER skip sources — if an article cites a primary source, follow the link
-- NEVER generate rules without reading reference docs (sigma-spec.md, yara-ref.md, snort-ref.md) first
+- NEVER generate rules without reading reference docs (sigma-spec.md, yara-ref.md, snort-ref.md, suricata-ref.md) first
 - NEVER produce a summary with fewer than 3 sources without explicit justification
 - NEVER leave the Detection Rules section empty without explanation
 - ALWAYS defang IOCs in output (hxxps://, [.], [at])

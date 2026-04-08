@@ -1,6 +1,6 @@
 # Skill: Rule Generator
 
-Generation, validation, and appending of Sigma, YARA, and Snort detection rules to topic summaries.
+Generation, validation, and appending of Sigma, YARA, Snort, and Suricata detection rules to topic summaries.
 
 ## When to Use
 
@@ -16,10 +16,11 @@ Read the topic summary and decide which rule types to generate based on availabl
 |-----------|-----------------|----------------------|
 | **Sigma** | Almost always — any technical/behavioral indicators | Process creation, registry changes, scheduled tasks, network connections, DNS queries, authentication events, file events, cloud audit logs, web server logs |
 | **Snort** | Network indicators present | IP addresses, domains, URLs, HTTP request patterns, DNS query patterns, TLS certificate anomalies, C2 communication patterns |
+| **Suricata** | Network indicators present (especially TLS/JA3/certificate IOCs) | Same as Snort, plus: JA3/JA4 fingerprints, TLS certificate fingerprints, dataset-based bulk IOC matching, SSH/SMTP/QUIC protocol detection |
 | **YARA** | File-level indicators only (narrowest scope) | Malware samples, string patterns in binaries, byte sequences, PE structure anomalies, embedded configs, file hashes with associated string/byte context |
 | **None** | Purely strategic intel with no technical indicators | Geopolitical analysis, trend reports, policy advisories with no IOCs or TTPs |
 
-**Key principle:** Sigma and Snort often overlap on network topics — that's fine. They serve different detection points (log analysis vs. network tap). Generate both when applicable.
+**Key principle:** Sigma, Snort, and Suricata often overlap on network topics — that's fine. They serve different detection points (log analysis vs. network tap). Generate Snort AND Suricata when network indicators are present — many orgs run one or the other. Suricata is preferred when JA3/JA4 fingerprints, TLS certificate fingerprints, or dataset-based IOC matching is needed.
 
 ---
 
@@ -30,6 +31,7 @@ For each applicable rule type, load the corresponding reference document into co
 - **Sigma:** Read `./docs/sigma-spec.md`
 - **YARA:** Read `./docs/yara-ref.md`
 - **Snort:** Read `./docs/snort-ref.md`
+- **Suricata:** Read `./docs/suricata-ref.md`
 
 Generate all applicable rules in a single pass. For each rule, derive detection logic from:
 1. **TTPs** (primary) — behavioral patterns are the strongest detection basis
@@ -67,6 +69,21 @@ Generate all applicable rules in a single pass. For each rule, derive detection 
 - `rev:1`
 - `classtype` — e.g., `trojan-activity`, `policy-violation`, `attempted-recon`
 - `reference` — URL from topic summary
+
+**Suricata rules must include:**
+- `alert` action (use `alert` unless specific reason for `drop`)
+- Protocol: `tcp`, `udp`, `http`, `dns`, `tls`, `ssh`, `smtp` as appropriate
+- Source/destination using variables: `$HOME_NET`, `$EXTERNAL_NET`, `$HTTP_PORTS`, `$DNS_PORTS`
+- `msg` — descriptive message string prefixed with `"AEGIS - "`
+- `content` matches using **dot-notation** sticky buffers (`http.uri`, NOT `http_uri`)
+- `flow` — typically `established,to_server` or `established,to_client`
+- `sid` — in range 2200000+ (custom Suricata rule range, separate from Snort)
+- `rev:1`
+- `classtype` — e.g., `trojan-activity`, `policy-violation`, `attempted-recon`
+- `reference` — URL from topic summary
+- `metadata` — include `author AEGIS, created_at YYYY-MM-DD`
+- When TLS/JA3 indicators are available: use `ja3.hash`, `ja3s.hash`, `tls.cert_fingerprint`, `tls.sni`
+- When bulk IOCs are available: consider `dataset` keyword for efficient matching
 
 ---
 
@@ -114,6 +131,20 @@ snort -T -c /etc/snort/snort.lua --rule-path /tmp/rule.rules
 Exit code 0 = valid.
 
 > **Note:** If `snort` is not installed, perform LLM-based structural validation as fallback: verify semicolons terminate all options, protocol matches sticky buffers used, parentheses are balanced, and all required fields are present.
+
+### Suricata Validation
+```bash
+# Write rule to temp file
+cat > /tmp/suricata.rules << 'EOF'
+<suricata rule content>
+EOF
+
+# Syntax validation
+suricata -T -S /tmp/suricata.rules -l /tmp 2>&1
+```
+Exit code 0 = valid. The `-T` flag runs test mode, `-S` specifies the rule file.
+
+> **Note:** If `suricata` is not installed, perform LLM-based structural validation as fallback: verify semicolons terminate all options, **dot-notation** sticky buffers are used (NOT underscore), protocol matches the buffers used, JA3/JA4 keywords use `tls` protocol, parentheses are balanced, and all required fields (`msg`, `sid`, `rev`) are present.
 
 ---
 
@@ -177,6 +208,7 @@ Where `[language]` is:
 - `yaml` for Sigma rules
 - `yara` for YARA rules
 - `snort` for Snort rules
+- `suricata` for Suricata rules
 
 ### For unvalidated rules:
 ```markdown
@@ -197,7 +229,8 @@ No [file-level|network|behavioral] indicators suitable for [RuleType] detection 
 ### Rule ordering within the section:
 1. Sigma rules first (most common)
 2. Snort rules second (network detection)
-3. YARA rules last (file-level, least common)
+3. Suricata rules third (network detection with extended features)
+4. YARA rules last (file-level, least common)
 
 Each rule should have a brief description line between the heading and the status line explaining what it detects.
 
@@ -251,6 +284,25 @@ alert http $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (
     sid:2100001; rev:1;
     classtype:trojan-activity;
     reference:url,blog.talosintelligence.com/example-report;
+)
+```​
+
+### Suricata: TLS C2 Beacon with JA3 Fingerprint
+Detects TLS connections matching a known malicious JA3 fingerprint and suspicious SNI pattern associated with this campaign.
+**Status:** ✅ Validated
+```suricata
+alert tls $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"AEGIS - TLS C2 Beacon with Known JA3 Hash";
+    flow:established,to_server;
+    ja3.hash;
+    content:"e7d705a3286e19ea42f587b344ee6865";
+    tls.sni;
+    content:".top"; endswith;
+    classtype:trojan-activity;
+    reference:url,blog.talosintelligence.com/example-report;
+    metadata:author AEGIS, created_at 2026-04-01;
+    sid:2200001;
+    rev:1;
 )
 ```​
 

@@ -39,6 +39,7 @@ RUN apt-get update && apt-get install -y \
     yara \
     && pip3 install --break-system-packages sigma-cli pySigma-backend-splunk \
     && (apt-get install -y snort || echo "WARNING: snort3 not available — skipping") \
+    && (apt-get install -y suricata || echo "WARNING: suricata not available — skipping") \
     && rm -rf /var/lib/apt/lists/*
 # --- End validation tools patch ---
 
