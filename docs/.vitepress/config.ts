@@ -79,9 +79,10 @@ export default withMermaid(defineConfig({
           text: 'Research',
           items: [
             { text: 'All Reports', link: '/research/' },
-            { text: 'Scattered Spider: Recent Campaigns and Evolving TTPs', link: '/research/scattered-spider-2026' },
+            { text: 'Axios npm Supply Chain Compromise', link: '/research/axios-supply-chain' },
             { text: 'BlueHammer: Windows Defender Zero-Day', link: '/research/bluehammer-zero-day' },
             { text: 'TeamPCP Supply Chain Campaign', link: '/research/teampcp-supply-chain-2026' },
+            { text: 'Scattered Spider: Recent Campaigns and Evolving TTPs', link: '/research/scattered-spider-2026' },
             { text: 'Lazarus Group: Comprehensive Threat Actor Profile', link: '/research/lazarus-group-2026' },
           ],
         },

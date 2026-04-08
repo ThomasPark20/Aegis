@@ -155,26 +155,27 @@ function showNext() {
 // ── Research posts ──
 const researchPosts = [
   {
+    title: 'Axios npm Supply Chain Compromise',
+    summary: 'North Korean state-sponsored compromise of axios. Cross-platform RAT via postinstall hook.',
+    link: '/Aegis/research/axios-supply-chain',
+  },
+  {
     title: 'BlueHammer: Windows Defender Zero-Day',
-    date: '2026-04-07',
     summary: 'Unpatched TOCTOU race condition in Defender. Full PoC public, no patch.',
     link: '/Aegis/research/bluehammer-zero-day',
   },
   {
     title: 'TeamPCP Supply Chain Campaign',
-    date: '2026-04-04',
     summary: 'Cascading compromise of Trivy, KICS, LiteLLM, and 47+ npm packages.',
     link: '/Aegis/research/teampcp-supply-chain-2026',
   },
   {
     title: 'Scattered Spider: Recent Campaigns and Evolving TTPs',
-    date: '2026-04-02',
     summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
     link: '/Aegis/research/scattered-spider-2026',
   },
   {
     title: 'Lazarus Group: Threat Actor Profile',
-    date: '2026-04-02',
     summary: '$1.5B Bybit heist, Medusa ransomware, developer supply chain attacks.',
     link: '/Aegis/research/lazarus-group-2026',
   },
@@ -412,7 +413,6 @@ onUnmounted(() => {
           :href="post.link"
           class="research-card"
         >
-          <span class="research-date">{{ post.date }}</span>
           <h3>{{ post.title }}</h3>
           <p>{{ post.summary }}</p>
         </a>
@@ -833,12 +833,6 @@ claude
   font-size: 0.85rem;
   color: var(--vp-c-text-2);
   line-height: 1.5;
-}
-
-.research-date {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
-  font-family: var(--vp-font-family-mono);
 }
 
 .research-tag {
