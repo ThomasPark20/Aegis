@@ -14,7 +14,7 @@
 
 ---
 
-<p align="center"><em>Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.</em></p>
+<p align="center"><em>You know I'm not getting up at midnight to write detections for another supply chain vuln.</em></p>
 
 ## See It Work
 
