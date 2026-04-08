@@ -8,15 +8,45 @@
 
 **Threat intelligence that works for you.**
 
-Research threats, generate validated detection rules, deliver reports, all through Discord and Telegram.
-
-[Documentation](https://thomaspark20.github.io/Aegis/) &nbsp;&middot;&nbsp; [Getting Started](https://thomaspark20.github.io/Aegis/guide/getting-started) &nbsp;&middot;&nbsp; [Architecture](https://thomaspark20.github.io/Aegis/architecture) &nbsp;&middot;&nbsp; [Features](https://thomaspark20.github.io/Aegis/features/)
+[Documentation](https://thomaspark20.github.io/Aegis/) · [Getting Started](https://thomaspark20.github.io/Aegis/guide/getting-started) · [Architecture](https://thomaspark20.github.io/Aegis/architecture)
 
 </div>
 
 ---
 
-## Quick Start
+Automated actionable intel. Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.
+
+Actioner lives in your Discord or Telegram. Ask it about a threat, or let it watch RSS feeds on its own. Either way, you get a researched report and detection rules that actually compile.
+
+## See It Work
+
+```
+You: Research Scattered Spider's latest campaign
+
+Actioner: On it — spinning up a research thread.
+
+  [Thread: Research: Scattered Spider]
+  Searching primary sources...
+  Extracting IOCs — 12 IPs, 8 domains, 3 hashes
+  Mapping TTPs to MITRE ATT&CK
+  Generating Sigma rules — validating with sigma-cli
+  Generating YARA rules — validating with yarac
+
+  Report ready. [attached: scattered-spider-2026-04-03.md]
+
+You: Are any of them on FBI most wanted?
+Actioner (chat): Good question, yes, several members have been
+  indicted. Added to research requirements.
+
+You: Also focus on their SIM swapping TTPs
+Actioner (chat): Added to requirements. The research agent will
+  cover this before delivering the report.
+
+Actioner (research): Updated report. All requirements satisfied.
+  [attached: scattered-spider-2026-04-03-v2.md]
+```
+
+## Get Running
 
 ```bash
 git clone https://github.com/ThomasPark20/Aegis.git
@@ -27,100 +57,15 @@ claude
 
 Setup walks you through everything: dependencies, Docker, API credentials, Discord/Telegram bot creation, and feed configuration.
 
-## Features
+## What Happens Next
 
-### Research on Demand
+Once it's running, you have four workflows. **Research on demand**: message Actioner about any threat and get a full report with IOCs, MITRE mappings, and validated detection rules. While research runs in the background, a fast chat agent handles your follow-ups in seconds. Every follow-up becomes a mandatory requirement the report must satisfy before delivery.
 
-Ask Actioner to research any threat. It spins up a dedicated thread, investigates primary sources, extracts IOCs, maps MITRE ATT&CK TTPs, and delivers a structured report with validated detection rules.
-
-### Dual-Agent Threads
-
-Every research thread runs two agents concurrently: a fast chat agent that answers follow-ups in seconds and a deep research agent that performs thorough investigation in the background.
-
-### Requirements Contract
-
-Follow-up messages in a research thread become mandatory checklist items. The report will not ship until every requirement is addressed.
-
-### Validated Detection Rules
-
-Rules are generated and validated with real CLI tools before delivery:
-
-- **Sigma** for log-based detection (process, registry, network, auth, file, cloud audit)
-- **YARA** for file-level detection (malware samples, byte patterns, PE structures)
-- **Snort / Suricata** for network detection (IPs, domains, URLs, JA3/JA4 fingerprints, TLS)
-
-If validation fails, the generator retries up to 3 times. Rules that still fail are marked `UNVALIDATED` with the error attached.
-
-### Automated Feed Monitoring
-
-11 RSS feeds (BleepingComputer, Unit42, Krebs on Security, Cisco Talos, Microsoft Security, Google TAG, and more) are polled every 2 hours. Critical items (APTs, CVEs, active exploitation, zero-days, ransomware) automatically spawn research threads. Non-critical items are saved for the daily briefing.
-
-### Daily Briefing
-
-An executive summary delivered at a configured time each day, compiling all research and new articles into a single report.
-
-### IOC Extraction
-
-Indicators of compromise are automatically identified, normalized, and defanged from source material during research.
-
-## Architecture
-
-```mermaid
-graph TD
-    subgraph Channels
-        D[Discord]
-        T[Telegram]
-    end
-
-    subgraph Runtime["Node.js Runtime"]
-        R[Router]
-        CR[Container Runner]
-        TS[Task Scheduler]
-        DB[(SQLite)]
-    end
-
-    subgraph Scheduler["Scheduled Tasks"]
-        F[RSS Feeds<br><i>11 sources, every 2h</i>]
-        B[Daily Briefing<br><i>executive summary</i>]
-    end
-
-    subgraph Container["Docker Container <i>(per thread)</i>"]
-        SDK[Claude Agent SDK<br><i>claude-opus-4-6</i>]
-        subgraph Skills
-            S1[Research]
-            S2[Rule Gen]
-            S3[IOC Extract]
-            S4[Browser]
-        end
-    end
-
-    D & T -->|messages| R
-    F & B --> TS
-    TS -->|tasks| R
-    R --> CR
-    CR -->|spawn| Container
-    Container <-->|JSON IPC| Runtime
-    SDK --> Skills
-    CR -.->|mounts| DB
-
-    style Runtime fill:#1a1a2e,stroke:#e94560,color:#fff
-    style Container fill:#16213e,stroke:#0f3460,color:#fff
-    style Channels fill:#0f3460,stroke:#533483,color:#fff
-    style Scheduler fill:#0f3460,stroke:#533483,color:#fff
-    style Skills fill:#1a1a2e,stroke:#e94560,color:#fff
-```
-
-Each research thread gets its own Docker container with isolated filesystem and memory. Containers communicate with the runtime via JSON-based IPC. Groups are soft-deleted after 10 minutes of inactivity but can be reactivated.
+**Automated monitoring**: 11 RSS feeds are scanned every 2 hours. Critical items (zero-days, active exploitation, CISA advisories) get their own research thread immediately. Everything else compiles into a daily executive briefing delivered at your configured time.
 
 ## Prerequisites
 
-- Git, Node.js 22+, Docker
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-- Anthropic API key or Claude Pro/Max subscription
-
-## Learn More
-
-Full documentation, architecture diagrams, and feature guides at **[thomaspark20.github.io/Aegis](https://thomaspark20.github.io/Aegis/)**.
+Git, Node.js 22+, Docker, [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and an Anthropic API key or Claude Pro/Max subscription. Full setup guide in the [docs](https://thomaspark20.github.io/Aegis/guide/prerequisites).
 
 ## Built on NanoClaw
 

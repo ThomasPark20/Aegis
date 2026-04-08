@@ -2,6 +2,22 @@
 
 <Wordmark /> compiles all research from the day into an executive report, delivered as a Discord thread at your configured time.
 
+## Example
+
+```
+Thread: Daily Brief — 2026-04-02
+────────────────────────────────
+Actioner: Daily CTI Briefing — April 2, 2026
+
+  - CVE-2026-1234: Critical RCE in Apache Struts (CVSS 9.8, active exploitation)
+  - Scattered Spider: New social engineering campaign targeting telecom
+  - BlackCat ransomware: Updated encryptor variant with Linux support
+
+  3 reports, 7 detection rules generated.
+
+  [attached: 2026-04-02-daily-report.md]
+```
+
 ## Setup
 
 During `/setup`, <Wordmark /> asks what time you want your daily report. You can also configure it anytime:
@@ -24,22 +40,6 @@ At your scheduled time:
 4. Creates a **"Daily Brief — YYYY-MM-DD"** Discord thread
 5. Posts the executive summary as the opening message
 6. Attaches the full compiled report as a `.md` file
-
-## Example
-
-```
-Thread: Daily Brief — 2026-04-02
-────────────────────────────────
-<Wordmark />: Daily CTI Briefing — April 2, 2026
-
-  - CVE-2026-1234: Critical RCE in Apache Struts (CVSS 9.8, active exploitation)
-  - Scattered Spider: New social engineering campaign targeting telecom
-  - BlackCat ransomware: Updated encryptor variant with Linux support
-
-  3 reports, 7 detection rules generated.
-
-  [attached: 2026-04-02-daily-report.md]
-```
 
 ## Quiet Days
 

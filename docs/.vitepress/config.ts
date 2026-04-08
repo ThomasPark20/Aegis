@@ -7,6 +7,11 @@ export default withMermaid(defineConfig({
   base: '/Aegis/',
   ignoreDeadLinks: true,
   appearance: 'dark',
+  rewrites: {
+    'features/research.md': 'features/research-pipeline.md',
+    'features/threads.md': 'features/research-pipeline.md',
+    'features/attachments.md': 'features/index.md',
+  },
   head: [
     ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Aegis/favicon/favicon-dark.png', media: '(prefers-color-scheme: dark)' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Aegis/favicon/favicon-light.png', media: '(prefers-color-scheme: light)' }],
@@ -60,13 +65,11 @@ export default withMermaid(defineConfig({
         {
           text: 'Features',
           items: [
-            { text: 'Overview', link: '/features/' },
-            { text: 'Research on Demand', link: '/features/research' },
-            { text: 'Detection Rules', link: '/features/detection-rules' },
-            { text: 'File Attachments', link: '/features/attachments' },
-            { text: 'Daily Briefing', link: '/features/daily-briefing' },
+            { text: 'How Actioner Works', link: '/features/' },
+            { text: 'Research Pipeline', link: '/features/research-pipeline' },
             { text: 'Critical Alerts', link: '/features/critical-alerts' },
-            { text: 'Research Threads', link: '/features/threads' },
+            { text: 'Daily Briefing', link: '/features/daily-briefing' },
+            { text: 'Detection Rules', link: '/features/detection-rules' },
             { text: 'Status Command', link: '/features/status' },
           ],
         },
@@ -87,13 +90,11 @@ export default withMermaid(defineConfig({
         {
           text: 'Features',
           items: [
-            { text: 'Overview', link: '/features/' },
-            { text: 'Research on Demand', link: '/features/research' },
-            { text: 'Detection Rules', link: '/features/detection-rules' },
-            { text: 'File Attachments', link: '/features/attachments' },
-            { text: 'Daily Briefing', link: '/features/daily-briefing' },
+            { text: 'How Actioner Works', link: '/features/' },
+            { text: 'Research Pipeline', link: '/features/research-pipeline' },
             { text: 'Critical Alerts', link: '/features/critical-alerts' },
-            { text: 'Research Threads', link: '/features/threads' },
+            { text: 'Daily Briefing', link: '/features/daily-briefing' },
+            { text: 'Detection Rules', link: '/features/detection-rules' },
             { text: 'Status Command', link: '/features/status' },
           ],
         },

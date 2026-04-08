@@ -1,6 +1,6 @@
 # /status Command
 
-Send `/status` in any Discord channel or Telegram chat to get an instant system dashboard. This is a bot-level command — it responds immediately without spinning up an agent container.
+Send `/status` in any Discord channel or Telegram chat to get an instant system dashboard. This is a bot-level command: it responds immediately without spinning up an agent container.
 
 ## Example Output
 
@@ -45,11 +45,11 @@ Recent Task Runs
 
 ## How It Works
 
-Unlike agent commands that route through the container pipeline, `/status` is handled directly by the bot at the channel adapter level — the same way `/ping` and `/chatid` work. This means:
+Unlike agent commands that route through the container pipeline, `/status` is handled directly by the bot at the channel adapter level, the same way `/ping` and `/chatid` work. This means:
 
-- **Instant response** — no container spin-up, no agent processing
-- **Works when things are broken** — if containers are stuck or the agent is down, `/status` still responds
-- **No registration required** — works in any channel where the bot is present (Discord) or any chat (Telegram)
+- **Instant response**: no container spin-up, no agent processing
+- **Works when things are broken**: if containers are stuck or the agent is down, `/status` still responds
+- **No registration required**: works in any channel where the bot is present (Discord) or any chat (Telegram)
 
 ## Other Bot Commands
 

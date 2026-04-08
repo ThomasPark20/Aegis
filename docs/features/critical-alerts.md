@@ -2,6 +2,21 @@
 
 <Wordmark /> scans all RSS feeds every 2 hours. Critical items get immediate research in dedicated threads.
 
+## Example
+
+```
+Thread: Critical: CVE-2026-1234 Active Exploitation
+──────────────────────────────────────────────────
+Actioner: A critical zero-day vulnerability (CVE-2026-1234) in Apache
+       Struts is under active exploitation. CISA has issued an
+       emergency directive.
+
+       [attached: 2026-04-02-critical-cve-2026-1234.md]
+
+You: "Generate detection rules"
+Actioner: "Here are 2 Sigma rules targeting the exploitation TTPs..."
+```
+
 ## How It Works
 
 A lightweight script runs first (zero tokens):
@@ -14,28 +29,15 @@ A lightweight script runs first (zero tokens):
 
 **If nothing critical:** `{wakeAgent: false}`. No agent invocation. Zero cost.
 
-**If critical items found:** Agent wakes up and creates a thread for each critical topic:
-
-```
-Thread: Critical: CVE-2026-1234 Active Exploitation
-──────────────────────────────────────────────────
-<Wordmark />: A critical zero-day vulnerability (CVE-2026-1234) in Apache
-       Struts is under active exploitation. CISA has issued an
-       emergency directive.
-
-       [attached: 2026-04-02-critical-cve-2026-1234.md]
-
-You: "Generate detection rules"
-<Wordmark />: "Here are 2 Sigma rules targeting the exploitation TTPs..."
-```
+**If critical items found:** Agent wakes up and creates a research thread for each critical topic, running the full [research pipeline](./research-pipeline).
 
 ## Cost
 
-Most scans cost nothing — just a Node.js script fetching RSS feeds. You only pay for agent tokens when something genuinely critical appears.
+Most scans cost nothing. Just a Node.js script fetching RSS feeds. You only pay for agent tokens when something genuinely critical appears.
 
 ## Non-Critical Items
 
-New non-critical articles are saved for the daily report compilation. They don't trigger immediate research or threads.
+New non-critical articles are saved for the [daily briefing](./daily-briefing). They don't trigger immediate research.
 
 ## Deduplication
 
@@ -44,4 +46,4 @@ Before creating a thread, <Wordmark /> checks:
 - Active research threads with similar names
 - Duplicate articles from multiple feeds about the same event
 
-One topic = one thread. No spam.
+One topic, one thread.
