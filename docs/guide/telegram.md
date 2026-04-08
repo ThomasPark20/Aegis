@@ -23,3 +23,13 @@ You'll be asked for:
 ## Verify
 
 Send a message to your bot in Telegram. <Wordmark /> should respond within a few seconds.
+
+## Bot Commands
+
+These commands work instantly in any chat — no registration needed.
+
+| Command | Description |
+|---------|-------------|
+| `/status` | System dashboard — uptime, active containers, scheduled tasks, recent runs |
+| `/ping` | Quick online check |
+| `/chatid` | Get the chat ID for registration |

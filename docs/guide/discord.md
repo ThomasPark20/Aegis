@@ -44,6 +44,14 @@ You'll be asked for:
 
 Send any message in your registered channel. <Wordmark /> should respond within a few seconds.
 
+## Bot Commands
+
+These commands work instantly in any channel where the bot is present — no registration needed.
+
+| Command | Description |
+|---------|-------------|
+| `/status` | System dashboard — uptime, active containers, scheduled tasks, recent runs |
+
 ## Adding More Channels
 
 Run `/add-discord` again. The first channel is registered as the main channel (responds to all messages). Additional channels are trigger-only — prefix messages with `@Actioner`.
