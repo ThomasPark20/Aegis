@@ -186,28 +186,23 @@ const researchVisible = ref(false)
 const sections = [
   {
     id: 'research',
-    title: 'Research on Demand',
-    text: 'Ask Actioner to research any threat. It creates a Discord thread, runs a full investigation pipeline — primary sources, IOC extraction, TTP mapping — and delivers a structured report with validated detection rules.',
+    title: 'Describe a threat. Get a finished report.',
+    text: 'Ask Actioner to research any threat. It creates a thread, investigates primary sources, extracts IOCs, maps MITRE ATT&CK TTPs, and delivers a structured report. Send follow-ups while it works: a fast chat agent responds in seconds, the research agent keeps going.',
   },
   {
-    id: 'dual-agent',
-    title: 'Dual-Agent Threads',
-    text: 'Each research thread runs two agents: a fast chat agent for instant Q&A, and a deep research agent working in the background. Send follow-ups and get immediate responses while research continues.',
+    id: 'critical',
+    title: 'Critical threats trigger immediate research.',
+    text: 'RSS feeds scanned every 2 hours. When something critical drops (APTs, zero-days, active exploitation), Actioner wakes up and starts researching before you even see the advisory. Most scans cost nothing.',
   },
   {
-    id: 'requirements',
-    title: 'Requirements Contract',
-    text: 'Follow-up messages become mandatory requirements. The research agent checks every item in requirements.md before delivering — it\'s a contract, not a suggestion. The report won\'t ship until all requirements are satisfied.',
+    id: 'briefing',
+    title: 'Daily briefing, zero effort.',
+    text: 'Everything from the last 24 hours, compiled into an executive summary and delivered at your configured time. Top items by severity, IOC counts, detection rules generated. Quiet days get a one-liner.',
   },
   {
     id: 'detection',
-    title: 'Validated Detection Rules',
-    text: 'Sigma, YARA, Snort, and Suricata rules generated and validated with real CLI tools. Failed rules retry 3 times. Nothing is silently dropped — unvalidated rules are clearly marked.',
-  },
-  {
-    id: 'monitoring',
-    title: 'Automated Monitoring',
-    text: 'RSS feeds scanned every 2 hours. Critical items — APTs, zero-days, CVEs, ransomware — get their own research thread automatically. Daily briefings compile everything into an executive summary.',
+    title: 'Detection rules that actually compile.',
+    text: 'Sigma, YARA, Snort, and Suricata rules generated and validated with real CLI tools inside the container. Failed rules retry up to 3 times. Nothing is silently dropped.',
   },
 ]
 
@@ -551,9 +546,8 @@ claude
 }
 
 .scroll-hint {
-  position: absolute;
   z-index: 1;
-  bottom: 2rem;
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
