@@ -230,13 +230,6 @@
   border-radius: 3px;
 }
 
-/* ── Research cards (override .vp-doc a underline) ── */
-
-.research-card,
-.research-card:hover {
-  text-decoration: none !important;
-}
-
 /* ── Footer ── */
 
 .VPFooter .message, .VPFooter .copyright {
