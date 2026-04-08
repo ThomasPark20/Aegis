@@ -1,5 +1,5 @@
 ---
-title: "Lazarus Group — Comprehensive Threat Actor Profile"
+title: "Lazarus Group: Comprehensive Threat Actor Profile"
 date: 2026-04-02
 description: "Full profile of North Korea's Lazarus Group including the $1.5B Bybit heist, Medusa ransomware, and supply chain attacks."
 ---

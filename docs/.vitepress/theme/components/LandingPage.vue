@@ -155,7 +155,7 @@ function showNext() {
 // ── Research posts ──
 const researchPosts = [
   {
-    title: 'BlueHammer — Windows Defender Zero-Day',
+    title: 'BlueHammer: Windows Defender Zero-Day',
     date: '2026-04-07',
     summary: 'Unpatched TOCTOU race condition in Defender. Full PoC public, no patch.',
     link: '/Aegis/blog/bluehammer-zero-day',
@@ -167,13 +167,13 @@ const researchPosts = [
     link: '/Aegis/blog/teampcp-supply-chain-2026',
   },
   {
-    title: 'Scattered Spider — Recent Campaigns & Evolving TTPs',
+    title: 'Scattered Spider: Recent Campaigns and Evolving TTPs',
     date: '2026-04-02',
     summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
     link: '/Aegis/blog/scattered-spider-2026',
   },
   {
-    title: 'Lazarus Group — Threat Actor Profile',
+    title: 'Lazarus Group: Threat Actor Profile',
     date: '2026-04-02',
     summary: '$1.5B Bybit heist, Medusa ransomware, developer supply chain attacks.',
     link: '/Aegis/blog/lazarus-group-2026',
@@ -817,7 +817,7 @@ claude
   border: 1px solid var(--vp-c-divider);
   border-radius: 10px;
   background: var(--vp-c-bg-soft);
-  text-decoration: none;
+  text-decoration: none !important;
   transition: border-color 0.2s, transform 0.2s;
 }
 

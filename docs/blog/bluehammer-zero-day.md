@@ -1,5 +1,5 @@
 ---
-title: "BlueHammer — Windows Defender Zero-Day"
+title: "BlueHammer: Windows Defender Zero-Day"
 date: 2026-04-07
 description: "Analysis of the BlueHammer zero-day exploiting a TOCTOU race condition in Windows Defender's signature update mechanism."
 ---
