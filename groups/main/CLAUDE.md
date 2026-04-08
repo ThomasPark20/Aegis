@@ -634,3 +634,61 @@ EOF
 - NEVER dump the full article list as a message — only send brief alerts
 - Critical keywords: APT, CVE, active exploitation, zero-day, ransomware, data breach, CISA advisory, emergency directive, critical vulnerability, RCE
 - The scan script is at `container/skills/rss-scan/scan.mjs` — it reads `feeds.yaml` and `groups/global/summaries/` from the project root
+
+---
+
+## Feed Management
+
+Users can add, remove, or list RSS/Atom feed sources via chat. Changes take effect on the next 2-hour scan — no restart needed.
+
+### Listing feeds
+
+Read `../global/feeds.yaml` (mounted read-only at `/workspace/project/feeds.yaml`) and present the list. Example response:
+
+> **Active feeds (11):**
+> 1. BleepingComputer
+> 2. The Record
+> 3. Unit42
+> ...
+>
+> Say "add feed [name] [url]" to add a new source, or "remove feed [name]" to remove one.
+
+### Adding a feed
+
+When a user says "add feed", "track this feed", "monitor this RSS", or provides an RSS/Atom URL to add:
+
+1. Validate the URL looks like a valid RSS/Atom feed URL (must start with `https://`)
+2. Determine a short display name — use what the user provides, or derive from the domain
+3. Write an IPC task file:
+   ```bash
+   cat > /workspace/ipc/tasks/add_feed_$(date +%s).json << EOF
+   {
+     "type": "add_feed",
+     "name": "Feed Name",
+     "url": "https://example.com/feed/"
+   }
+   EOF
+   ```
+4. Confirm: "Added **Feed Name** to the watch list. It'll be picked up on the next scan."
+
+### Removing a feed
+
+When a user says "remove feed", "stop tracking", "unsubscribe from", or similar:
+
+1. Match the feed by name (case-insensitive) — read `../global/feeds.yaml` first to confirm it exists
+2. Write an IPC task file:
+   ```bash
+   cat > /workspace/ipc/tasks/remove_feed_$(date +%s).json << EOF
+   {
+     "type": "remove_feed",
+     "name": "Feed Name"
+   }
+   EOF
+   ```
+3. Confirm: "Removed **Feed Name** from the watch list."
+
+### Important notes
+- NEVER expose file paths, YAML structure, or IPC details to users
+- Feeds are picked up on the next 2-hour scan cycle — no restart required
+- Validate URLs before adding — reject non-HTTPS URLs
+- If the user provides a website URL (not an RSS feed URL), try appending `/feed/`, `/rss/`, or `/feed.xml` and suggest the likely feed URL

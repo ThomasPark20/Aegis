@@ -3,7 +3,12 @@ import path from 'path';
 
 import { CronExpressionParser } from 'cron-parser';
 
-import { DATA_DIR, GROUPS_DIR, IPC_POLL_INTERVAL, TIMEZONE } from './config.js';
+import {
+  DATA_DIR,
+  GROUPS_DIR,
+  IPC_POLL_INTERVAL,
+  TIMEZONE,
+} from './config.js';
 import { AvailableGroup } from './container-runner.js';
 import { createTask, deleteTask, getTaskById, updateTask } from './db.js';
 import { isValidGroupFolder, resolveGroupFolderPath } from './group-folder.js';
@@ -236,6 +241,8 @@ export async function processTaskIpc(
     parentJid?: string;
     threadName?: string;
     researchTopic?: string;
+    // For add_feed / remove_feed
+    url?: string;
   },
   sourceGroup: string, // Verified identity from IPC directory
   isMain: boolean, // Verified from directory path
@@ -622,6 +629,130 @@ export async function processTaskIpc(
         },
         'Research thread created and research initiated',
       );
+      break;
+    }
+
+    case 'add_feed': {
+      // Only main group can modify feeds
+      if (!isMain) {
+        logger.warn({ sourceGroup }, 'Unauthorized add_feed attempt blocked');
+        break;
+      }
+      if (!data.name || !data.url) {
+        logger.warn({ data }, 'Invalid add_feed request - missing name or url');
+        break;
+      }
+      const feedsPath = path.join(path.resolve(process.cwd()), 'feeds.yaml');
+      try {
+        let feedsContent = '';
+        try {
+          feedsContent = fs.readFileSync(feedsPath, 'utf-8');
+        } catch {
+          feedsContent = 'feeds:\n';
+        }
+        // Check if feed URL already exists
+        if (feedsContent.includes(data.url)) {
+          logger.info(
+            { url: data.url },
+            'Feed already exists, skipping add',
+          );
+          break;
+        }
+        // Append new feed entry before any trailing comments or at end
+        const newEntry = `  - name: ${data.name}\n    url: ${data.url}\n`;
+        // Find the last feed entry and append after it
+        const lines = feedsContent.split('\n');
+        let insertIndex = lines.length;
+        for (let i = lines.length - 1; i >= 0; i--) {
+          const trimmed = lines[i].trim();
+          if (trimmed.startsWith('- name:') || trimmed.startsWith('url:')) {
+            insertIndex = i + 1;
+            break;
+          }
+        }
+        lines.splice(insertIndex, 0, newEntry.trimEnd());
+        fs.writeFileSync(feedsPath, lines.join('\n'));
+        logger.info(
+          { name: data.name, url: data.url },
+          'Feed added via IPC',
+        );
+      } catch (err) {
+        logger.error({ err, name: data.name }, 'Failed to add feed');
+      }
+      break;
+    }
+
+    case 'remove_feed': {
+      // Only main group can modify feeds
+      if (!isMain) {
+        logger.warn(
+          { sourceGroup },
+          'Unauthorized remove_feed attempt blocked',
+        );
+        break;
+      }
+      if (!data.name && !data.url) {
+        logger.warn(
+          { data },
+          'Invalid remove_feed request - need name or url',
+        );
+        break;
+      }
+      const removeFeedsPath = path.join(
+        path.resolve(process.cwd()),
+        'feeds.yaml',
+      );
+      try {
+        const content = fs.readFileSync(removeFeedsPath, 'utf-8');
+        const lines = content.split('\n');
+        const filtered: string[] = [];
+        let skipNext = false;
+        for (const line of lines) {
+          if (skipNext) {
+            // This should be the url: line following the matched name
+            if (line.trim().startsWith('url:')) {
+              skipNext = false;
+              continue;
+            }
+            skipNext = false;
+          }
+          const trimmed = line.trim();
+          // Match by name or URL
+          if (
+            data.name &&
+            trimmed.startsWith('- name:') &&
+            trimmed.toLowerCase().includes(data.name.toLowerCase())
+          ) {
+            skipNext = true; // skip the following url: line
+            continue;
+          }
+          if (
+            data.url &&
+            trimmed.startsWith('url:') &&
+            trimmed.includes(data.url)
+          ) {
+            // Also remove the preceding - name: line if it's the last in filtered
+            if (
+              filtered.length > 0 &&
+              filtered[filtered.length - 1].trim().startsWith('- name:')
+            ) {
+              filtered.pop();
+            }
+            continue;
+          }
+          filtered.push(line);
+        }
+        fs.writeFileSync(removeFeedsPath, filtered.join('\n'));
+        logger.info(
+          { name: data.name, url: data.url },
+          'Feed removed via IPC',
+        );
+      } catch (err) {
+        logger.error(
+          { err, name: data.name, url: data.url },
+          'Failed to remove feed',
+        );
+      }
       break;
     }
 
