@@ -14,9 +14,9 @@
 
 ---
 
-Automated actionable intel. Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.
+### Automated actionable intel. Built because I know I'm not getting up at midnight to write detections for a supply chain vuln.
 
-Actioner lives in your Discord or Telegram. Ask it about a threat, or let it watch RSS feeds on its own. Either way, you get a researched report and detection rules that actually compile.
+<sub>Actioner lives in your Discord or Telegram. Ask it about a threat, or let it watch RSS feeds on its own. Either way, you get a researched report and detection rules that actually compile. Everything is configurable through chat: add feeds, change your briefing time, connect new channels, all just by asking.</sub>
 
 ## See It Work
 
