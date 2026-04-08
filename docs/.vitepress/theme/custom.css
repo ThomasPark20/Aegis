@@ -163,7 +163,7 @@
 .VPDocAsideOutline .outline-title {
   font-weight: 600;
   letter-spacing: 0.02em;
-  padding-left: 0;
+  padding-left: 8px;
 }
 
 .VPDocAside {
