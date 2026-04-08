@@ -369,18 +369,22 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     'Processing messages',
   );
 
-  // Track idle timer for closing stdin when agent is idle
+  // Track idle timer for closing stdin when agent is idle.
+  // Research thread containers use a short timeout since follow-ups
+  // are handled by the chat agent, not piped to this container.
+  const isResearchThread = !!group.idleExpiryMs && !group.parentResearchFolder;
+  const containerIdleTimeout = isResearchThread ? 60_000 : IDLE_TIMEOUT; // 1 min vs 30 min
   let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
   const resetIdleTimer = () => {
     if (idleTimer) clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
       logger.debug(
-        { group: group.name },
+        { group: group.name, timeoutMs: containerIdleTimeout },
         'Idle timeout, closing container stdin',
       );
       queue.closeStdin(chatJid);
-    }, IDLE_TIMEOUT);
+    }, containerIdleTimeout);
   };
 
   await channel.setTyping?.(outputJid, true);
