@@ -6,8 +6,6 @@
   <img alt="Actioner" src="docs/public/actioner-wordmark-dark-2x.png" width="360">
 </picture>
 
-<br><br>
-
 **Threat intelligence that works for you.**
 
 Research threats, generate validated detection rules, deliver reports, all through Discord and Telegram.
@@ -67,40 +65,49 @@ Indicators of compromise are automatically identified, normalized, and defanged 
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────────────┐
-│                     Node.js Runtime                  │
-│                                                      │
-│  ┌─────────┐  ┌───────────┐  ┌────────────────────┐ │
-│  │ Discord │  │ Telegram  │  │  Task Scheduler    │ │
-│  │ Channel │  │ Channel   │  │  (feeds, briefing) │ │
-│  └────┬────┘  └─────┬─────┘  └─────────┬──────────┘ │
-│       │             │                   │            │
-│       └─────────────┼───────────────────┘            │
-│                     │                                │
-│              ┌──────▼──────┐                         │
-│              │   Router    │                         │
-│              └──────┬──────┘                         │
-│                     │                                │
-│           ┌─────────▼──────────┐                     │
-│           │  Container Runner  │                     │
-│           └─────────┬──────────┘                     │
-└─────────────────────┼────────────────────────────────┘
-                      │
-          ┌───────────▼───────────┐
-          │   Docker Container    │
-          │                       │
-          │  Claude Agent SDK     │
-          │  (claude-opus-4-6)    │
-          │                       │
-          │  Skills:              │
-          │  - Research           │
-          │  - Rule Generation    │
-          │  - IOC Extraction     │
-          │  - Browser            │
-          │                       │
-          │  IPC ◄──► Runtime     │
-          └───────────────────────┘
+```mermaid
+graph TD
+    subgraph Channels
+        D[Discord]
+        T[Telegram]
+    end
+
+    subgraph Runtime["Node.js Runtime"]
+        R[Router]
+        CR[Container Runner]
+        TS[Task Scheduler]
+        DB[(SQLite)]
+    end
+
+    subgraph Scheduler["Scheduled Tasks"]
+        F[RSS Feeds<br><i>11 sources, every 2h</i>]
+        B[Daily Briefing<br><i>executive summary</i>]
+    end
+
+    subgraph Container["Docker Container <i>(per thread)</i>"]
+        SDK[Claude Agent SDK<br><i>claude-opus-4-6</i>]
+        subgraph Skills
+            S1[Research]
+            S2[Rule Gen]
+            S3[IOC Extract]
+            S4[Browser]
+        end
+    end
+
+    D & T -->|messages| R
+    F & B --> TS
+    TS -->|tasks| R
+    R --> CR
+    CR -->|spawn| Container
+    Container <-->|JSON IPC| Runtime
+    SDK --> Skills
+    CR -.->|mounts| DB
+
+    style Runtime fill:#1a1a2e,stroke:#e94560,color:#fff
+    style Container fill:#16213e,stroke:#0f3460,color:#fff
+    style Channels fill:#0f3460,stroke:#533483,color:#fff
+    style Scheduler fill:#0f3460,stroke:#533483,color:#fff
+    style Skills fill:#1a1a2e,stroke:#e94560,color:#fff
 ```
 
 Each research thread gets its own Docker container with isolated filesystem and memory. Containers communicate with the runtime via JSON-based IPC. Groups are soft-deleted after 10 minutes of inactivity but can be reactivated.
