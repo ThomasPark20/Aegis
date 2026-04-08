@@ -8,12 +8,14 @@ import { ASSISTANT_NAME, TRIGGER_PATTERN } from '../config.js';
 import { readEnvFile } from '../env.js';
 import { resolveGroupFolderPath } from '../group-folder.js';
 import { logger } from '../logger.js';
+import { formatStatusMessage } from '../status-formatter.js';
 import { registerChannel, ChannelOpts } from './registry.js';
 import {
   Channel,
   OnChatMetadata,
   OnInboundMessage,
   RegisteredGroup,
+  SystemStats,
 } from '../types.js';
 
 export interface TelegramChannelOpts {
@@ -21,6 +23,7 @@ export interface TelegramChannelOpts {
   onChatMetadata: OnChatMetadata;
   registeredGroups: () => Record<string, RegisteredGroup>;
   tryReactivate?: (jid: string) => boolean;
+  getSystemStats?: () => SystemStats;
 }
 
 /**
@@ -136,9 +139,19 @@ export class TelegramChannel implements Channel {
       ctx.reply(`${ASSISTANT_NAME} is online.`);
     });
 
+    // Command to show system dashboard
+    this.bot.command('status', (ctx) => {
+      const stats = this.opts.getSystemStats?.();
+      if (!stats) {
+        ctx.reply('Status not available.');
+        return;
+      }
+      sendTelegramMessage(this.bot!.api, ctx.chat.id, formatStatusMessage(stats));
+    });
+
     // Telegram bot commands handled above — skip them in the general handler
     // so they don't also get stored as messages. All other /commands flow through.
-    const TELEGRAM_BOT_COMMANDS = new Set(['chatid', 'ping']);
+    const TELEGRAM_BOT_COMMANDS = new Set(['chatid', 'ping', 'status']);
 
     this.bot.on('message:text', async (ctx) => {
       if (ctx.message.text.startsWith('/')) {

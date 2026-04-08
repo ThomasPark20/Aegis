@@ -85,6 +85,31 @@ export interface TaskRunLog {
   error: string | null;
 }
 
+// --- System stats (for /status command) ---
+
+export interface SystemStats {
+  uptime: number; // seconds
+  activeContainers: number;
+  maxContainers: number;
+  registeredGroups: number;
+  connectedChannels: string[];
+  scheduledTasks: { active: number; paused: number; total: number };
+  messageCount: number;
+  activeGroups: Array<{
+    jid: string;
+    containerName: string | null;
+    startedAt: number | null;
+    isTask: boolean;
+    taskId: string | null;
+  }>;
+  recentTaskRuns: Array<{
+    taskId: string;
+    status: string;
+    durationMs: number;
+    runAt: string;
+  }>;
+}
+
 // --- Channel abstraction ---
 
 export interface Channel {

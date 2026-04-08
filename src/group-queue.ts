@@ -25,6 +25,19 @@ interface GroupState {
   containerName: string | null;
   groupFolder: string | null;
   retryCount: number;
+  startedAt: number | null;
+}
+
+export interface QueueStats {
+  activeContainers: number;
+  maxContainers: number;
+  activeGroups: Array<{
+    jid: string;
+    containerName: string | null;
+    startedAt: number | null;
+    isTask: boolean;
+    taskId: string | null;
+  }>;
 }
 
 export class GroupQueue {
@@ -49,6 +62,7 @@ export class GroupQueue {
         containerName: null,
         groupFolder: null,
         retryCount: 0,
+      startedAt: null,
       };
       this.groups.set(groupJid, state);
     }
@@ -208,6 +222,7 @@ export class GroupQueue {
     state.idleWaiting = false;
     state.isTaskContainer = false;
     state.pendingMessages = false;
+    state.startedAt = Date.now();
     this.activeCount++;
 
     logger.debug(
@@ -232,6 +247,7 @@ export class GroupQueue {
       state.process = null;
       state.containerName = null;
       state.groupFolder = null;
+      state.startedAt = null;
       this.activeCount--;
       this.drainGroup(groupJid);
     }
@@ -243,6 +259,7 @@ export class GroupQueue {
     state.idleWaiting = false;
     state.isTaskContainer = true;
     state.runningTaskId = task.id;
+    state.startedAt = Date.now();
     this.activeCount++;
 
     logger.debug(
@@ -261,6 +278,7 @@ export class GroupQueue {
       state.process = null;
       state.containerName = null;
       state.groupFolder = null;
+      state.startedAt = null;
       this.activeCount--;
       this.drainGroup(groupJid);
     }
@@ -348,6 +366,26 @@ export class GroupQueue {
       }
       // If neither pending, skip this group
     }
+  }
+
+  getStats(): QueueStats {
+    const activeGroups: QueueStats['activeGroups'] = [];
+    for (const [jid, state] of this.groups) {
+      if (state.active) {
+        activeGroups.push({
+          jid,
+          containerName: state.containerName,
+          startedAt: state.startedAt,
+          isTask: state.isTaskContainer,
+          taskId: state.runningTaskId,
+        });
+      }
+    }
+    return {
+      activeContainers: this.activeCount,
+      maxContainers: MAX_CONCURRENT_CONTAINERS,
+      activeGroups,
+    };
   }
 
   async shutdown(_gracePeriodMs: number): Promise<void> {

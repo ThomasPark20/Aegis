@@ -41,8 +41,10 @@ import {
   getAllTasks,
   getChatByJid,
   getLastBotMessageTimestamp,
+  getMessageCount,
   getMessagesSince,
   getNewMessages,
+  getRecentTaskRuns,
   getRouterState,
   initDatabase,
   setRegisteredGroup,
@@ -67,7 +69,7 @@ import {
   shouldDropMessage,
 } from './sender-allowlist.js';
 import { startSchedulerLoop } from './task-scheduler.js';
-import { Channel, NewMessage, RegisteredGroup } from './types.js';
+import { Channel, NewMessage, RegisteredGroup, SystemStats } from './types.js';
 import { logger } from './logger.js';
 
 // Re-export for backwards compatibility during refactor
@@ -758,6 +760,31 @@ async function main(): Promise<void> {
     }
   }
 
+  function getSystemStats(): SystemStats {
+    const queueStats = queue.getStats();
+    const tasks = getAllTasks();
+    const recentRuns = getRecentTaskRuns(5);
+    const activeTasks = tasks.filter((t) => t.status === 'active').length;
+    const pausedTasks = tasks.filter((t) => t.status === 'paused').length;
+
+    return {
+      uptime: process.uptime(),
+      activeContainers: queueStats.activeContainers,
+      maxContainers: queueStats.maxContainers,
+      registeredGroups: Object.keys(registeredGroups).length,
+      connectedChannels: channels.filter((c) => c.isConnected()).map((c) => c.name),
+      scheduledTasks: { active: activeTasks, paused: pausedTasks, total: tasks.length },
+      messageCount: getMessageCount(),
+      activeGroups: queueStats.activeGroups,
+      recentTaskRuns: recentRuns.map((r) => ({
+        taskId: r.task_id,
+        status: r.status,
+        durationMs: r.duration_ms,
+        runAt: r.run_at,
+      })),
+    };
+  }
+
   // Channel callbacks (shared by all channels)
   const channelOpts = {
     onMessage: (chatJid: string, msg: NewMessage) => {
@@ -796,6 +823,7 @@ async function main(): Promise<void> {
       isGroup?: boolean,
     ) => storeChatMetadata(chatJid, timestamp, name, channel, isGroup),
     registeredGroups: () => registeredGroups,
+    getSystemStats,
     tryReactivate: (jid: string): boolean => {
       const expired = getExpiredThread(jid);
       if (!expired) return false;

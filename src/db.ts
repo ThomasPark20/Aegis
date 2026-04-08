@@ -581,6 +581,23 @@ export function logTaskRun(log: TaskRunLog): void {
   );
 }
 
+// --- Stats accessors ---
+
+export function getMessageCount(): number {
+  const row = db
+    .prepare('SELECT COUNT(*) as count FROM messages')
+    .get() as { count: number };
+  return row.count;
+}
+
+export function getRecentTaskRuns(limit: number = 5): TaskRunLog[] {
+  return db
+    .prepare(
+      'SELECT task_id, run_at, duration_ms, status, result, error FROM task_run_logs ORDER BY run_at DESC LIMIT ?',
+    )
+    .all(limit) as TaskRunLog[];
+}
+
 // --- Router state accessors ---
 
 export function getRouterState(key: string): string | undefined {

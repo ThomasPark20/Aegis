@@ -17,12 +17,14 @@ import { ASSISTANT_NAME, TRIGGER_PATTERN } from '../config.js';
 import { readEnvFile } from '../env.js';
 import { resolveGroupFolderPath } from '../group-folder.js';
 import { logger } from '../logger.js';
+import { formatStatusMessage } from '../status-formatter.js';
 import { registerChannel, ChannelOpts } from './registry.js';
 import {
   Channel,
   OnChatMetadata,
   OnInboundMessage,
   RegisteredGroup,
+  SystemStats,
 } from '../types.js';
 
 export interface DiscordChannelOpts {
@@ -30,6 +32,7 @@ export interface DiscordChannelOpts {
   onChatMetadata: OnChatMetadata;
   registeredGroups: () => Record<string, RegisteredGroup>;
   tryReactivate?: (jid: string) => boolean;
+  getSystemStats?: () => SystemStats;
 }
 
 export class DiscordChannel implements Channel {
@@ -96,6 +99,19 @@ export class DiscordChannel implements Channel {
     this.client.on(Events.MessageCreate, async (message: Message) => {
       // Ignore bot messages (including own)
       if (message.author.bot) return;
+
+      // Bot-level commands — respond instantly, no container needed
+      if (message.content.trim() === '/status') {
+        const stats = this.opts.getSystemStats?.();
+        if (stats) {
+          try {
+            await message.reply(formatStatusMessage(stats));
+          } catch (err) {
+            logger.debug({ err }, 'Failed to reply with status');
+          }
+        }
+        return;
+      }
 
       const channelId = message.channelId;
       const chatJid = `dc:${channelId}`;
