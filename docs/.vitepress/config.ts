@@ -1,18 +1,24 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'AEGIS',
-  description: 'Autonomous CTI Research & Detection Platform',
+  title: 'Actioner',
+  description: 'Threat intelligence that works for you.',
   base: '/Aegis/',
   ignoreDeadLinks: true,
+  appearance: 'dark',
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/shield.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/logo-dark.svg', media: '(prefers-color-scheme: dark)' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Aegis/logo-light.svg', media: '(prefers-color-scheme: light)' }],
   ],
   themeConfig: {
-    logo: '/shield.svg',
-    siteTitle: 'AEGIS',
+    logo: {
+      light: '/logo-light.svg',
+      dark: '/logo-dark.svg',
+    },
+    siteTitle: false,
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'Research', link: '/research/' },
       { text: 'Architecture', link: '/architecture' },
       { text: 'Features', link: '/features/' },
       { text: 'GitHub', link: 'https://github.com/ThomasPark20/Aegis' },
@@ -44,6 +50,20 @@ export default defineConfig({
           ],
         },
       ],
+      '/research/': [
+        {
+          text: 'Research',
+          items: [
+            { text: 'All Reports', link: '/research/' },
+            { text: 'Redsun: Defender Cloud File LPE', link: '/research/redsun-defender-lpe' },
+            { text: 'Axios npm Supply Chain Compromise', link: '/research/axios-supply-chain' },
+            { text: 'BlueHammer: Windows Defender Zero-Day', link: '/research/bluehammer-zero-day' },
+            { text: 'TeamPCP Supply Chain Campaign', link: '/research/teampcp-supply-chain-2026' },
+            { text: 'Scattered Spider: Recent Campaigns', link: '/research/scattered-spider-2026' },
+            { text: 'Lazarus Group: Threat Actor Profile', link: '/research/lazarus-group-2026' },
+          ],
+        },
+      ],
       '/features/': [
         {
           text: 'Core Features',
@@ -64,7 +84,6 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/ThomasPark20/Aegis' },
     ],
     footer: {
-      message: 'Built on NanoClaw',
       copyright: 'MIT License',
     },
     search: {
