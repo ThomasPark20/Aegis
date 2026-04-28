@@ -157,27 +157,27 @@ const researchPosts = [
   {
     title: 'Axios npm Supply Chain Compromise',
     summary: 'North Korean state-sponsored compromise of axios. Cross-platform RAT via postinstall hook.',
-    link: '/Aegis/research/axios-supply-chain',
+    link: '/Actioner/research/axios-supply-chain',
   },
   {
     title: 'BlueHammer: Windows Defender Zero-Day',
     summary: 'Unpatched TOCTOU race condition in Defender. Full PoC public, no patch.',
-    link: '/Aegis/research/bluehammer-zero-day',
+    link: '/Actioner/research/bluehammer-zero-day',
   },
   {
     title: 'TeamPCP Supply Chain Campaign',
     summary: 'Cascading compromise of Trivy, KICS, LiteLLM, and 47+ npm packages.',
-    link: '/Aegis/research/teampcp-supply-chain-2026',
+    link: '/Actioner/research/teampcp-supply-chain-2026',
   },
   {
     title: 'Scattered Spider: Recent Campaigns and Evolving TTPs',
     summary: 'UK retail attacks, aviation targeting, and DragonForce ransomware pivot.',
-    link: '/Aegis/research/scattered-spider-2026',
+    link: '/Actioner/research/scattered-spider-2026',
   },
   {
     title: 'Lazarus Group: Threat Actor Profile',
     summary: '$1.5B Bybit heist, Medusa ransomware, developer supply chain attacks.',
-    link: '/Aegis/research/lazarus-group-2026',
+    link: '/Actioner/research/lazarus-group-2026',
   },
 ]
 
@@ -316,8 +316,8 @@ onUnmounted(() => {
         <p class="hero-text">Threat intelligence that works for you.</p>
         <p class="hero-tagline">Research threats, generate detection rules, deliver reports — all through Discord or Telegram.</p>
         <div class="hero-actions">
-          <a href="/Aegis/guide/getting-started" class="btn btn-primary">Get Started</a>
-          <a href="/Aegis/architecture" class="btn btn-secondary">Architecture</a>
+          <a href="/Actioner/guide/getting-started" class="btn btn-primary">Get Started</a>
+          <a href="/Actioner/architecture" class="btn btn-secondary">Architecture</a>
         </div>
       </div>
       <div class="scroll-hint" :class="{ 'hint-hidden': !heroVisible }">
@@ -418,7 +418,7 @@ onUnmounted(() => {
         </a>
       </div>
       <div class="research-links">
-        <a href="/Aegis/research/" class="btn btn-secondary">View All Research</a>
+        <a href="/Actioner/research/" class="btn btn-secondary">View All Research</a>
       </div>
     </section>
 
@@ -426,15 +426,15 @@ onUnmounted(() => {
     <section class="getrunning-section" :class="{ 'getrunning-visible': getRunningVisible }">
       <h2>Get Running</h2>
       <div class="code-block">
-        <pre><code>git clone https://github.com/ThomasPark20/Aegis.git
-cd Aegis
+        <pre><code>git clone https://github.com/ThomasPark20/Actioner.git
+cd Actioner
 claude
 /setup</code></pre>
       </div>
       <p class="getrunning-sub">Setup handles everything: dependencies, Docker, API keys, Discord bot, feed scanning, and daily reports.</p>
       <div class="getrunning-links">
-        <a href="https://github.com/ThomasPark20/Aegis" class="btn btn-primary">GitHub</a>
-        <a href="/Aegis/guide/getting-started" class="btn btn-secondary">Full Guide</a>
+        <a href="https://github.com/ThomasPark20/Actioner" class="btn btn-primary">GitHub</a>
+        <a href="/Actioner/guide/getting-started" class="btn btn-secondary">Full Guide</a>
       </div>
     </section>
 

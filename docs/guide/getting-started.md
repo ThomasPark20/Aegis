@@ -3,8 +3,8 @@
 ## Quick Start
 
 ```bash
-git clone https://github.com/ThomasPark20/Aegis.git
-cd Aegis
+git clone https://github.com/ThomasPark20/Actioner.git
+cd Actioner
 claude
 /setup
 ```

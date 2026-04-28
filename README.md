@@ -8,7 +8,7 @@
 
 **Threat intelligence that works for you.**
 
-[Documentation](https://thomaspark20.github.io/Aegis/) · [Getting Started](https://thomaspark20.github.io/Aegis/guide/getting-started) · [Architecture](https://thomaspark20.github.io/Aegis/architecture)
+[Documentation](https://thomaspark20.github.io/Actioner/) · [Getting Started](https://thomaspark20.github.io/Actioner/guide/getting-started) · [Architecture](https://thomaspark20.github.io/Actioner/architecture)
 
 </div>
 
@@ -49,8 +49,8 @@ Actioner (research): Updated report. All requirements satisfied.
 ## Get Running
 
 ```bash
-git clone https://github.com/ThomasPark20/Aegis.git
-cd Aegis
+git clone https://github.com/ThomasPark20/Actioner.git
+cd Actioner
 claude
 /setup
 ```
@@ -65,7 +65,7 @@ Once it's running, you have four workflows. **Research on demand**: message Acti
 
 ## Prerequisites
 
-Git, Node.js 22+, Docker, [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and an Anthropic API key or Claude Pro/Max subscription. Full setup guide in the [docs](https://thomaspark20.github.io/Aegis/guide/prerequisites).
+Git, Node.js 22+, Docker, [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and an Anthropic API key or Claude Pro/Max subscription. Full setup guide in the [docs](https://thomaspark20.github.io/Actioner/guide/prerequisites).
 
 ## Built on NanoClaw
 

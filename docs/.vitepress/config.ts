@@ -4,7 +4,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 export default withMermaid(defineConfig({
   title: 'Actioner',
   description: 'Threat intelligence that works for you.',
-  base: '/Aegis/',
+  base: '/Actioner/',
   ignoreDeadLinks: true,
   appearance: 'dark',
   rewrites: {
@@ -13,9 +13,9 @@ export default withMermaid(defineConfig({
     'features/attachments.md': 'features/index.md',
   },
   head: [
-    ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Aegis/favicon/favicon-dark.png', media: '(prefers-color-scheme: dark)' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Aegis/favicon/favicon-light.png', media: '(prefers-color-scheme: light)' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '256x256', href: '/Aegis/favicon/favicon-dark.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Actioner/favicon/favicon-dark.png', media: '(prefers-color-scheme: dark)' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '256x256', href: '/Actioner/favicon/favicon-light.png', media: '(prefers-color-scheme: light)' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '256x256', href: '/Actioner/favicon/favicon-dark.png' }],
     ['meta', { name: 'theme-color', content: '#0A0A0A' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
@@ -34,7 +34,7 @@ export default withMermaid(defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Research', link: '/research/' },
       { text: 'Architecture', link: '/architecture' },
-      { text: 'GitHub', link: 'https://github.com/ThomasPark20/Aegis' },
+      { text: 'GitHub', link: 'https://github.com/ThomasPark20/Actioner' },
     ],
     sidebar: {
       '/guide/': [
@@ -103,7 +103,7 @@ export default withMermaid(defineConfig({
       ],
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/ThomasPark20/Aegis' },
+      { icon: 'github', link: 'https://github.com/ThomasPark20/Actioner' },
     ],
     footer: {
       copyright: 'MIT License',
